@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huisou.mapper.MaterialPoMapper">
+  <resultMap id="BaseResultMap" type="com.huisou.po.MaterialPo">
+    <id column="material_id" jdbcType="INTEGER" property="materialId" />
+    <result column="material_name" jdbcType="VARCHAR" property="materialName" />
+    <result column="material_intro" jdbcType="VARCHAR" property="materialIntro" />
+    <result column="material_url" jdbcType="VARCHAR" property="materialUrl" />
+    <result column="material_level_id" jdbcType="INTEGER" property="materialLevelId" />
+    <result column="material_integral" jdbcType="DECIMAL" property="materialIntegral" />
+    <result column="material_ispay" jdbcType="VARCHAR" property="materialIspay" />
+    <result column="material_down_num" jdbcType="INTEGER" property="materialDownNum" />
+    <result column="material_url_status" jdbcType="VARCHAR" property="materialUrlStatus" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="standby1" jdbcType="VARCHAR" property="standby1" />
+    <result column="standby2" jdbcType="VARCHAR" property="standby2" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    material_id, material_name, material_intro, material_url, material_level_id, material_integral, 
+    material_ispay, material_down_num, material_url_status, create_by, create_time, standby1, 
+    standby2
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from busi_material
+    where material_id = #{materialId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from busi_material
+    where material_id = #{materialId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.MaterialPo">
+    <selectKey keyProperty="materialId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_material (material_name, material_intro, material_url, 
+      material_level_id, material_integral, material_ispay, 
+      material_down_num, material_url_status, create_by, 
+      create_time, standby1, standby2
+      )
+    values (#{materialName,jdbcType=VARCHAR}, #{materialIntro,jdbcType=VARCHAR}, #{materialUrl,jdbcType=VARCHAR}, 
+      #{materialLevelId,jdbcType=INTEGER}, #{materialIntegral,jdbcType=DECIMAL}, #{materialIspay,jdbcType=VARCHAR}, 
+      #{materialDownNum,jdbcType=INTEGER}, #{materialUrlStatus,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.MaterialPo">
+    <selectKey keyProperty="materialId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_material
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="materialName != null">
+        material_name,
+      </if>
+      <if test="materialIntro != null">
+        material_intro,
+      </if>
+      <if test="materialUrl != null">
+        material_url,
+      </if>
+      <if test="materialLevelId != null">
+        material_level_id,
+      </if>
+      <if test="materialIntegral != null">
+        material_integral,
+      </if>
+      <if test="materialIspay != null">
+        material_ispay,
+      </if>
+      <if test="materialDownNum != null">
+        material_down_num,
+      </if>
+      <if test="materialUrlStatus != null">
+        material_url_status,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="standby1 != null">
+        standby1,
+      </if>
+      <if test="standby2 != null">
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="materialName != null">
+        #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialIntro != null">
+        #{materialIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="materialUrl != null">
+        #{materialUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="materialLevelId != null">
+        #{materialLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="materialIntegral != null">
+        #{materialIntegral,jdbcType=DECIMAL},
+      </if>
+      <if test="materialIspay != null">
+        #{materialIspay,jdbcType=VARCHAR},
+      </if>
+      <if test="materialDownNum != null">
+        #{materialDownNum,jdbcType=INTEGER},
+      </if>
+      <if test="materialUrlStatus != null">
+        #{materialUrlStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null">
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null">
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.MaterialPo">
+    update busi_material
+    <set>
+      <if test="materialName != null">
+        material_name = #{materialName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialIntro != null">
+        material_intro = #{materialIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="materialUrl != null">
+        material_url = #{materialUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="materialLevelId != null">
+        material_level_id = #{materialLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="materialIntegral != null">
+        material_integral = #{materialIntegral,jdbcType=DECIMAL},
+      </if>
+      <if test="materialIspay != null">
+        material_ispay = #{materialIspay,jdbcType=VARCHAR},
+      </if>
+      <if test="materialDownNum != null">
+        material_down_num = #{materialDownNum,jdbcType=INTEGER},
+      </if>
+      <if test="materialUrlStatus != null">
+        material_url_status = #{materialUrlStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null">
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null">
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where material_id = #{materialId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.MaterialPo">
+    update busi_material
+    set material_name = #{materialName,jdbcType=VARCHAR},
+      material_intro = #{materialIntro,jdbcType=VARCHAR},
+      material_url = #{materialUrl,jdbcType=VARCHAR},
+      material_level_id = #{materialLevelId,jdbcType=INTEGER},
+      material_integral = #{materialIntegral,jdbcType=DECIMAL},
+      material_ispay = #{materialIspay,jdbcType=VARCHAR},
+      material_down_num = #{materialDownNum,jdbcType=INTEGER},
+      material_url_status = #{materialUrlStatus,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where material_id = #{materialId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="deleteOne" parameterType="java.util.List">
+  	update busi_material
+    set material_url_status = "2"
+  	where material_id in 
+  	<foreach item="item" index="index" open="(" separator="," close=")" collection="materialId">
+  		#{item}
+  	</foreach>
+  </update>
+  <select id="findAll" parameterType="Map" resultType="com.huisou.vo.MaterialVo">
+    select 
+    t1.material_id as materialId,
+    t1.material_name as materialName,
+    t1.material_intro as materialIntro,
+    t1.material_url as materialUrl,
+    t1.material_level_id as materialLevelId,
+    t2.material_level_name as materialLevelName,
+    t1.material_integral as materialIntegral,
+    t1.material_ispay as materialIspay,
+    t1.material_down_num as materialDownNum,
+    t1.material_url_status as materialUrlStatus,
+    t1.create_by as createBy,
+    t1.create_time as createTime
+    from busi_material t1
+    left join busi_material_level t2
+    on t1.material_level_id = t2.material_level_id
+    where material_url_status = '1'
+    <if test='materialLevelId != null and materialLevelId != ""'>
+    	and t1.material_level_id = #{materialLevelId}
+    </if>
+    <if test='materialName != null and nickName !=""'>
+  		and t1.material_name like CONCAT('%', #{materialName},'%')
+  	</if>
+    <if test="beginDate!=null and beginDate!=''">
+    	<![CDATA[   and DATE_FORMAT(t1.create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
+	</if>
+	<if test="endDate!=null and endDate!=''">
+   		<![CDATA[  and DATE_FORMAT(t1.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
+	</if>
+	<if test='orderFactor!= null and orderFactor != ""'>
+		<if test='orderFactor == "0" '>
+			order by t1.create_time desc
+		</if>
+		<if test='orderFactor == "1" '>
+			order by t1.material_down_num desc
+		</if>
+		<if test='orderFactor == "2" '>
+			order by t1.material_down_num asc
+		</if>
+	</if>
+  </select>
+  <update id="increaseNum" parameterType="java.lang.Integer" >
+    update busi_material
+    set material_down_num = material_down_num + 1
+    where material_id = #{materialId}
+  </update>
+</mapper>

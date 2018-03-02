@@ -1,0 +1,196 @@
+package com.huisou.vo;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+/** 
+* @author 作者 :yuhao 
+* @version 创建时间：2018年2月9日 下午3:41:52 
+* 类说明 
+*/
+public class CourseVo {
+	  private Integer courseId;
+
+	    private String courseTitle;
+
+	    private BigDecimal coursePrice;
+
+	    private String courseIntro;
+
+	    private String courseSpeaker;
+
+	    private String courseDuration;
+	    /**
+	     * 课程图片
+	     */
+	    private String coursePicture;
+
+	    private String courseLogo;
+
+	    private Integer createBy;
+
+	    private Date createTime;
+
+	    private Integer updateBy;
+
+	    private Date updateTime;
+
+	    private String courseStatus;
+
+	    private String standby1;
+
+	    private String standby2;
+
+	    private String courseDetail;
+	    
+	    private String videoaudioIds;
+	    
+	    private String introvideoUrl;
+	    
+	    
+		public String getIntrovideoUrl() {
+			return introvideoUrl;
+		}
+
+		public void setIntrovideoUrl(String introvideoUrl) {
+			this.introvideoUrl = introvideoUrl;
+		}
+
+		public Integer getCourseId() {
+			return courseId;
+		}
+
+		public void setCourseId(Integer courseId) {
+			this.courseId = courseId;
+		}
+
+		public String getCourseTitle() {
+			return courseTitle;
+		}
+
+		public void setCourseTitle(String courseTitle) {
+			this.courseTitle = courseTitle;
+		}
+
+		public BigDecimal getCoursePrice() {
+			return coursePrice;
+		}
+
+		public void setCoursePrice(BigDecimal coursePrice) {
+			this.coursePrice = coursePrice;
+		}
+
+		public String getCourseIntro() {
+			return courseIntro;
+		}
+
+		public void setCourseIntro(String courseIntro) {
+			this.courseIntro = courseIntro;
+		}
+
+		public String getCourseSpeaker() {
+			return courseSpeaker;
+		}
+
+		public void setCourseSpeaker(String courseSpeaker) {
+			this.courseSpeaker = courseSpeaker;
+		}
+
+		public String getCourseDuration() {
+			return courseDuration;
+		}
+
+		public void setCourseDuration(String courseDuration) {
+			this.courseDuration = courseDuration;
+		}
+
+		public String getCoursePicture() {
+			return coursePicture;
+		}
+
+		public void setCoursePicture(String coursePicture) {
+			this.coursePicture = coursePicture;
+		}
+
+		public String getCourseLogo() {
+			return courseLogo;
+		}
+
+		public void setCourseLogo(String courseLogo) {
+			this.courseLogo = courseLogo;
+		}
+
+		public Integer getCreateBy() {
+			return createBy;
+		}
+
+		public void setCreateBy(Integer createBy) {
+			this.createBy = createBy;
+		}
+
+		public Date getCreateTime() {
+			return createTime;
+		}
+
+		public void setCreateTime(Date createTime) {
+			this.createTime = createTime;
+		}
+
+		public Integer getUpdateBy() {
+			return updateBy;
+		}
+
+		public void setUpdateBy(Integer updateBy) {
+			this.updateBy = updateBy;
+		}
+
+		public Date getUpdateTime() {
+			return updateTime;
+		}
+
+		public void setUpdateTime(Date updateTime) {
+			this.updateTime = updateTime;
+		}
+
+		public String getCourseStatus() {
+			return courseStatus;
+		}
+
+		public void setCourseStatus(String courseStatus) {
+			this.courseStatus = courseStatus;
+		}
+
+		public String getStandby1() {
+			return standby1;
+		}
+
+		public void setStandby1(String standby1) {
+			this.standby1 = standby1;
+		}
+
+		public String getStandby2() {
+			return standby2;
+		}
+
+		public void setStandby2(String standby2) {
+			this.standby2 = standby2;
+		}
+
+		public String getCourseDetail() {
+			return courseDetail;
+		}
+
+		public void setCourseDetail(String courseDetail) {
+			this.courseDetail = courseDetail;
+		}
+
+		public String getVideoaudioIds() {
+			return videoaudioIds;
+		}
+
+		public void setVideoaudioIds(String videoaudioIds) {
+			this.videoaudioIds = videoaudioIds;
+		}
+	    
+	    
+}

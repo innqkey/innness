@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.PayRecordPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.PayRecordPo" >
+    <id column="pay_record_id" property="payRecordId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="res_id" property="resId" jdbcType="INTEGER" />
+    <result column="res_title" property="resTitle" jdbcType="VARCHAR" />
+    <result column="res_price" property="resPrice" jdbcType="DECIMAL" />
+    <result column="res_type" property="resType" jdbcType="VARCHAR" />
+    <result column="pay_money" property="payMoney" jdbcType="DECIMAL" />
+    <result column="weixin_record" property="weixinRecord" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="pay_status" property="payStatus" jdbcType="VARCHAR" />
+    <result column="pay_fail_cause" property="payFailCause" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    pay_record_id, order_id, res_id, res_title, res_price, res_type, pay_money, weixin_record, 
+    user_id, create_time, update_time, pay_status, pay_fail_cause, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_pay_record
+    where pay_record_id = #{payRecordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_pay_record
+    where pay_record_id = #{payRecordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.PayRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="payRecordId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_pay_record (order_id, res_id, res_title, 
+      res_price, res_type, pay_money, 
+      weixin_record, user_id, create_time, 
+      update_time, pay_status, pay_fail_cause, 
+      standby2)
+    values (#{orderId,jdbcType=INTEGER}, #{resId,jdbcType=INTEGER}, #{resTitle,jdbcType=VARCHAR}, 
+      #{resPrice,jdbcType=DECIMAL}, #{resType,jdbcType=VARCHAR}, #{payMoney,jdbcType=DECIMAL}, 
+      #{weixinRecord,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{payStatus,jdbcType=VARCHAR}, #{payFailCause,jdbcType=VARCHAR}, 
+      #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.PayRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="payRecordId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_pay_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="resId != null" >
+        res_id,
+      </if>
+      <if test="resTitle != null" >
+        res_title,
+      </if>
+      <if test="resPrice != null" >
+        res_price,
+      </if>
+      <if test="resType != null" >
+        res_type,
+      </if>
+      <if test="payMoney != null" >
+        pay_money,
+      </if>
+      <if test="weixinRecord != null" >
+        weixin_record,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="payFailCause != null" >
+        pay_fail_cause,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="resId != null" >
+        #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resTitle != null" >
+        #{resTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="resPrice != null" >
+        #{resPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="resType != null" >
+        #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="payMoney != null" >
+        #{payMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="weixinRecord != null" >
+        #{weixinRecord,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="payFailCause != null" >
+        #{payFailCause,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.PayRecordPo" >
+    update busi_pay_record
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="resId != null" >
+        res_id = #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resTitle != null" >
+        res_title = #{resTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="resPrice != null" >
+        res_price = #{resPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="resType != null" >
+        res_type = #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="payMoney != null" >
+        pay_money = #{payMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="weixinRecord != null" >
+        weixin_record = #{weixinRecord,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="payFailCause != null" >
+        pay_fail_cause = #{payFailCause,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where pay_record_id = #{payRecordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.PayRecordPo" >
+    update busi_pay_record
+    set order_id = #{orderId,jdbcType=INTEGER},
+      res_id = #{resId,jdbcType=INTEGER},
+      res_title = #{resTitle,jdbcType=VARCHAR},
+      res_price = #{resPrice,jdbcType=DECIMAL},
+      res_type = #{resType,jdbcType=VARCHAR},
+      pay_money = #{payMoney,jdbcType=DECIMAL},
+      weixin_record = #{weixinRecord,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      pay_status = #{payStatus,jdbcType=VARCHAR},
+      pay_fail_cause = #{payFailCause,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where pay_record_id = #{payRecordId,jdbcType=INTEGER}
+  </update>
+  
+    
+<select id="search" resultType="com.huisou.vo.PayRecordVo">
+  	SELECT
+		t1.pay_record_id payRecordId,
+		t1.order_id orderId,
+		t1.pay_money payMoney,
+		t1.res_id resId,
+		t1.res_title resTitle,
+		t1.res_price resPrice,
+		t1.res_type resType,
+		t1.weixin_record weixinRecord,
+		t1.create_time createTime,
+		t1.pay_status payStatus,
+		t2.user_id userId,
+		t2.nickname,
+		t2.phone
+	FROM
+		busi_pay_record t1
+	LEFT JOIN busi_user t2 ON t1.user_id = t2.user_id
+	<where>
+		<if test="nickname!=null and nickname!=''">
+  		and t2.nickname like CONCAT('%',#{nickname},'%')
+  		</if>
+  		<if test="phone!=null and phone!=''">
+  		and t2.phone like CONCAT('%',#{phone},'%')
+  		</if>
+  		<if test="startDate!=null">
+  		and t1.create_time &gt;= #{startDate}
+  		</if>
+  		<if test="endDate!=null">
+  		and t1.create_time &lt;= #{endDate}
+  		</if>
+	</where>
+	ORDER BY
+	t1.create_time DESC
+  </select>
+  
+</mapper>

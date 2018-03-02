@@ -1,0 +1,162 @@
+package com.huisou.po;
+
+import java.util.Date;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+@Table(name = "busi_say")
+public class SayPo {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer sayId;
+
+    private String sayTitle;
+
+    private String sayContext;
+
+    private String sayLogo;
+
+    private String sayHeadImg;
+
+    private String sayName;
+
+    private Integer sayEvalNum;
+
+    private Integer sayThumbsNum;
+
+    private Integer createBy;
+
+    private Date createTime;
+
+    private Integer updateBy;
+
+    private Date updateTime;
+
+    private String sayStatus;
+
+    private String standby1;
+
+    private String standby2;
+
+    public Integer getSayId() {
+        return sayId;
+    }
+
+    public void setSayId(Integer sayId) {
+        this.sayId = sayId;
+    }
+
+    public String getSayTitle() {
+        return sayTitle;
+    }
+
+    public void setSayTitle(String sayTitle) {
+        this.sayTitle = sayTitle == null ? null : sayTitle.trim();
+    }
+
+    public String getSayContext() {
+        return sayContext;
+    }
+
+    public void setSayContext(String sayContext) {
+        this.sayContext = sayContext == null ? null : sayContext.trim();
+    }
+
+    public String getSayLogo() {
+        return sayLogo;
+    }
+
+    public void setSayLogo(String sayLogo) {
+        this.sayLogo = sayLogo == null ? null : sayLogo.trim();
+    }
+
+    public String getSayHeadImg() {
+        return sayHeadImg;
+    }
+
+    public void setSayHeadImg(String sayHeadImg) {
+        this.sayHeadImg = sayHeadImg == null ? null : sayHeadImg.trim();
+    }
+
+    public String getSayName() {
+        return sayName;
+    }
+
+    public void setSayName(String sayName) {
+        this.sayName = sayName == null ? null : sayName.trim();
+    }
+
+    public Integer getSayEvalNum() {
+        return sayEvalNum;
+    }
+
+    public void setSayEvalNum(Integer sayEvalNum) {
+        this.sayEvalNum = sayEvalNum;
+    }
+
+    public Integer getSayThumbsNum() {
+        return sayThumbsNum;
+    }
+
+    public void setSayThumbsNum(Integer sayThumbsNum) {
+        this.sayThumbsNum = sayThumbsNum;
+    }
+
+    public Integer getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(Integer createBy) {
+        this.createBy = createBy;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getUpdateBy() {
+        return updateBy;
+    }
+
+    public void setUpdateBy(Integer updateBy) {
+        this.updateBy = updateBy;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getSayStatus() {
+        return sayStatus;
+    }
+
+    public void setSayStatus(String sayStatus) {
+        this.sayStatus = sayStatus == null ? null : sayStatus.trim();
+    }
+
+    public String getStandby1() {
+        return standby1;
+    }
+
+    public void setStandby1(String standby1) {
+        this.standby1 = standby1 == null ? null : standby1.trim();
+    }
+
+    public String getStandby2() {
+        return standby2;
+    }
+
+    public void setStandby2(String standby2) {
+        this.standby2 = standby2 == null ? null : standby2.trim();
+    }
+}

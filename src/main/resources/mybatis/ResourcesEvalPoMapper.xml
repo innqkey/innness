@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.ResourcesEvalPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.ResourcesEvalPo" >
+    <id column="eval_id" property="evalId" jdbcType="INTEGER" />
+    <result column="eval_context" property="evalContext" jdbcType="VARCHAR" />
+    <result column="eval_level" property="evalLevel" jdbcType="INTEGER" />
+    <result column="res_id" property="resId" jdbcType="INTEGER" />
+    <result column="res_type" property="resType" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="eval_status" property="evalStatus" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    eval_id, eval_context, eval_level, res_id, res_type, user_id, create_time, update_by, 
+    update_time, eval_status, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_resources_eval
+    where eval_id = #{evalId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_resources_eval
+    where eval_id = #{evalId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.ResourcesEvalPo" >
+    insert into busi_resources_eval (eval_id, eval_context, eval_level, 
+      res_id, res_type, user_id, 
+      create_time, update_by, update_time, 
+      eval_status, standby1, standby2
+      )
+    values (#{evalId,jdbcType=INTEGER}, #{evalContext,jdbcType=VARCHAR}, #{evalLevel,jdbcType=INTEGER}, 
+      #{resId,jdbcType=INTEGER}, #{resType,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{evalStatus,jdbcType=VARCHAR}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.ResourcesEvalPo" >
+    insert into busi_resources_eval
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="evalId != null" >
+        eval_id,
+      </if>
+      <if test="evalContext != null" >
+        eval_context,
+      </if>
+      <if test="evalLevel != null" >
+        eval_level,
+      </if>
+      <if test="resId != null" >
+        res_id,
+      </if>
+      <if test="resType != null" >
+        res_type,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="evalStatus != null" >
+        eval_status,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="evalId != null" >
+        #{evalId,jdbcType=INTEGER},
+      </if>
+      <if test="evalContext != null" >
+        #{evalContext,jdbcType=VARCHAR},
+      </if>
+      <if test="evalLevel != null" >
+        #{evalLevel,jdbcType=INTEGER},
+      </if>
+      <if test="resId != null" >
+        #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resType != null" >
+        #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="evalStatus != null" >
+        #{evalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.ResourcesEvalPo" >
+    update busi_resources_eval
+    <set >
+      <if test="evalContext != null" >
+        eval_context = #{evalContext,jdbcType=VARCHAR},
+      </if>
+      <if test="evalLevel != null" >
+        eval_level = #{evalLevel,jdbcType=INTEGER},
+      </if>
+      <if test="resId != null" >
+        res_id = #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resType != null" >
+        res_type = #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="evalStatus != null" >
+        eval_status = #{evalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where eval_id = #{evalId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.ResourcesEvalPo" >
+    update busi_resources_eval
+    set eval_context = #{evalContext,jdbcType=VARCHAR},
+      eval_level = #{evalLevel,jdbcType=INTEGER},
+      res_id = #{resId,jdbcType=INTEGER},
+      res_type = #{resType,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      eval_status = #{evalStatus,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where eval_id = #{evalId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findAll" parameterType="Map" resultType="com.huisou.vo.ResourcesEvalVo">
+  	SELECT 
+		t1.eval_id AS evalId,
+		t1.eval_context As evalContext,
+		t1.res_id AS resId,
+		t1.eval_level AS evalLevel,
+		t1.res_type AS resType,
+		t1.user_id AS userId,
+		t1.create_time AS createTime,
+		t1.eval_status AS evalStatus,
+		t2.nickname AS nickName,
+		t2.username AS userName,
+		t2.headimgurl AS headimgUrl
+	FROM
+		busi_resources_eval t1
+	LEFT JOIN busi_user t2 ON t2.user_id = t1.user_id
+	WHERE t1.eval_status != 2
+	<if test="resId != null and resId != ''">
+		and t1.res_id = #{resId}
+	</if>
+	<if test="nickName != null and nickName !=''">
+  		and t2.nickname like CONCAT('%', #{nickName},'%')
+  	</if>
+  	<if test="beginDate!=null and beginDate!=''">
+    	<![CDATA[   and DATE_FORMAT(t1.create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
+	</if>
+	<if test="endDate!=null and endDate!=''">
+   		<![CDATA[  and DATE_FORMAT(t1.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
+	</if>
+	<if test="resType != null and resType != ''">
+		<if test="resType == 'YL'.toString()">
+			and t1.res_type = "YL"
+		</if>
+		<if test="resType == 'SP'.toString()">
+			and t1.res_type = "SP"
+		</if>
+	</if>
+	ORDER BY t1.create_time desc
+  </select>
+  <select id="selectAll" parameterType="java.lang.Integer" resultType="com.huisou.vo.ResourcesEvalVo">
+  	SELECT 
+		t1.eval_id AS evalId,
+		t1.eval_context As evalContext,
+		t1.res_id AS resId,
+		t1.eval_level AS evalLevel,
+		t1.res_type AS resType,
+		t1.user_id AS userId,
+		t1.create_time AS createTime,
+		t2.nickname AS nickName,
+		t2.username AS userName,
+		t2.headimgurl AS headimgUrl
+	FROM
+		busi_resources_eval t1
+	LEFT JOIN busi_user t2 ON t2.user_id = t1.user_id
+	WHERE t1.eval_status = 1
+	AND t1.res_id = #{sayId}
+	AND t1.res_type = 'YL'
+	ORDER BY t1.create_time DESC
+  </select>
+  <update id="updateStatus" parameterType="java.util.HashMap">
+  	update busi_resources_eval
+  	set 
+  	<if test='type == "1"'>
+  		eval_status = '1'
+  	</if>
+  	<if test='type == "2"'>
+  		eval_status = '2'
+  	</if>
+  	where eval_id in 
+  	<foreach item="item" index="index" open="(" separator="," close=")" collection="evalId">
+  		#{item}
+  	</foreach>
+  </update>
+  <select id="selectavgEvalLevel" resultType="java.lang.Integer">
+  	SELECT AVG(eval_level) FROM busi_resources_eval WHERE res_id =#{videoAudioId} AND res_type=#{videoAudioType}
+  </select>
+  
+   
+  <select id="findAllByMap" parameterType="Map" resultType="com.huisou.vo.ResourcesEvalVo">
+  	SELECT 
+		t1.eval_id AS evalId,
+		t1.eval_context As evalContext,
+		t1.res_id AS resId,
+		t1.eval_level AS evalLevel,
+		t1.res_type AS resType,
+		t1.user_id AS userId,
+		t1.create_time AS createTime,
+		t1.eval_status AS evalStatus,
+		t2.nickname AS nickName,
+		t2.username AS userName,
+		t2.headimgurl AS headimgUrl
+	FROM
+		busi_resources_eval t1
+	LEFT JOIN busi_user t2 ON t2.user_id = t1.user_id
+	WHERE t1.eval_status != 2
+	<if test="resId != null and resId != ''">
+		and t1.res_id = #{resId}
+	</if>
+	<if test="nickName != null and nickName !=''">
+  		and t2.nickname like CONCAT('%', #{nickName},'%')
+  	</if>
+  	<if test="beginDate!=null and beginDate!=''">
+    	<![CDATA[   and DATE_FORMAT(t1.create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
+	</if>
+	<if test="endDate!=null and endDate!=''">
+   		<![CDATA[  and DATE_FORMAT(t1.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
+	</if>
+	<if test="resType != null and resType != ''">
+		<if test="resType == 'YL'.toString()">
+			and t1.res_type = "YL"
+		</if>
+		<if test="resType == 'SP'.toString()">
+			and t1.res_type = "SP"
+		</if>
+	</if>
+	ORDER BY t1.create_time desc
+  </select>
+  
+  <select id="findAllByMapAndStatus" parameterType="Map" resultType="com.huisou.vo.ResourcesEvalVo">
+  	SELECT 
+		t1.eval_id AS evalId,
+		t1.eval_context As evalContext,
+		t1.res_id AS resId,
+		t1.eval_level AS evalLevel,
+		t1.res_type AS resType,
+		t1.user_id AS userId,
+		t1.create_time AS createTime,
+		t1.eval_status AS evalStatus,
+		t2.nickname AS nickName,
+		t2.username AS userName,
+		t2.headimgurl AS headimgUrl
+	FROM
+		busi_resources_eval t1
+	LEFT JOIN busi_user t2 ON t2.user_id = t1.user_id
+	WHERE t1.eval_status = 1
+	<if test="resId != null and resId != ''">
+		and t1.res_id = #{resId}
+	</if>
+	<if test="nickName != null and nickName !=''">
+  		and t2.nickname like CONCAT('%', #{nickName},'%')
+  	</if>
+  	<if test="beginDate!=null and beginDate!=''">
+    	<![CDATA[   and DATE_FORMAT(t1.create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
+	</if>
+	<if test="endDate!=null and endDate!=''">
+   		<![CDATA[  and DATE_FORMAT(t1.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
+	</if>
+	<if test="resType != null and resType != ''">
+		<if test="resType == 'YL'.toString()">
+			and t1.res_type = "YL"
+		</if>
+		<if test="resType == 'SP'.toString()">
+			and t1.res_type = "SP"
+		</if>
+	</if>
+	ORDER BY t1.create_time desc
+  </select>
+</mapper>

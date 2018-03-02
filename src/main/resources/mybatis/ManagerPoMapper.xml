@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.ManagerPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.ManagerPo" >
+    <id column="manager_id" property="managerId" jdbcType="INTEGER" />
+    <result column="manager_name" property="managerName" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="manager_status" property="managerStatus" jdbcType="INTEGER" />
+    <result column="manager_petname" property="managerPetname" jdbcType="VARCHAR" />
+    <result column="manager_logo" property="managerLogo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    manager_id, manager_name, password, manager_status, manager_petname, manager_logo
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_manager
+    where manager_id = #{managerId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_manager
+    where manager_id = #{managerId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.ManagerPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="managerId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_manager (manager_name, password, manager_status, 
+      manager_petname, manager_logo)
+    values (#{managerName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{managerStatus,jdbcType=INTEGER}, 
+      #{managerPetname,jdbcType=VARCHAR}, #{managerLogo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.ManagerPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="managerId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_manager
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="managerName != null" >
+        manager_name,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="managerStatus != null" >
+        manager_status,
+      </if>
+      <if test="managerPetname != null" >
+        manager_petname,
+      </if>
+      <if test="managerLogo != null" >
+        manager_logo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="managerName != null" >
+        #{managerName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="managerStatus != null" >
+        #{managerStatus,jdbcType=INTEGER},
+      </if>
+      <if test="managerPetname != null" >
+        #{managerPetname,jdbcType=VARCHAR},
+      </if>
+      <if test="managerLogo != null" >
+        #{managerLogo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.ManagerPo" >
+    update busi_manager
+    <set >
+      <if test="managerName != null" >
+        manager_name = #{managerName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="managerStatus != null" >
+        manager_status = #{managerStatus,jdbcType=INTEGER},
+      </if>
+      <if test="managerPetname != null" >
+        manager_petname = #{managerPetname,jdbcType=VARCHAR},
+      </if>
+      <if test="managerLogo != null" >
+        manager_logo = #{managerLogo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where manager_id = #{managerId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.ManagerPo" >
+    update busi_manager
+    set manager_name = #{managerName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      manager_status = #{managerStatus,jdbcType=INTEGER},
+      manager_petname = #{managerPetname,jdbcType=VARCHAR},
+      manager_logo = #{managerLogo,jdbcType=VARCHAR}
+    where manager_id = #{managerId,jdbcType=INTEGER}
+  </update>
+</mapper>

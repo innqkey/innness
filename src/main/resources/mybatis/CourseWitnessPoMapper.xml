@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.CourseWitnessPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.CourseWitnessPo" >
+    <id column="witness_id" property="witnessId" jdbcType="INTEGER" />
+    <result column="witness_context" property="witnessContext" jdbcType="VARCHAR" />
+    <result column="witness_logo" property="witnessLogo" jdbcType="VARCHAR" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="create_by" property="createBy" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="witness_status" property="witnessStatus" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    witness_id, witness_context, witness_logo, course_id, create_by, create_time, update_by, 
+    update_time, witness_status, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_course_witness
+    where witness_id = #{witnessId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_course_witness
+    where witness_id = #{witnessId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.CourseWitnessPo" >
+    insert into busi_course_witness (witness_id, witness_context, witness_logo, 
+      course_id, create_by, create_time, 
+      update_by, update_time, witness_status, 
+      standby1, standby2)
+    values (#{witnessId,jdbcType=INTEGER}, #{witnessContext,jdbcType=VARCHAR}, #{witnessLogo,jdbcType=VARCHAR}, 
+      #{courseId,jdbcType=INTEGER}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{witnessStatus,jdbcType=VARCHAR}, 
+      #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.CourseWitnessPo" >
+    insert into busi_course_witness
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="witnessId != null" >
+        witness_id,
+      </if>
+      <if test="witnessContext != null" >
+        witness_context,
+      </if>
+      <if test="witnessLogo != null" >
+        witness_logo,
+      </if>
+      <if test="courseId != null" >
+        course_id,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="witnessStatus != null" >
+        witness_status,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="witnessId != null" >
+        #{witnessId,jdbcType=INTEGER},
+      </if>
+      <if test="witnessContext != null" >
+        #{witnessContext,jdbcType=VARCHAR},
+      </if>
+      <if test="witnessLogo != null" >
+        #{witnessLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="courseId != null" >
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="witnessStatus != null" >
+        #{witnessStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.CourseWitnessPo" >
+    update busi_course_witness
+    <set >
+      <if test="witnessContext != null" >
+        witness_context = #{witnessContext,jdbcType=VARCHAR},
+      </if>
+      <if test="witnessLogo != null" >
+        witness_logo = #{witnessLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="courseId != null" >
+        course_id = #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="witnessStatus != null" >
+        witness_status = #{witnessStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where witness_id = #{witnessId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.CourseWitnessPo" >
+    update busi_course_witness
+    set witness_context = #{witnessContext,jdbcType=VARCHAR},
+      witness_logo = #{witnessLogo,jdbcType=VARCHAR},
+      course_id = #{courseId,jdbcType=INTEGER},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      witness_status = #{witnessStatus,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where witness_id = #{witnessId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findWitnessByCourseId" resultMap="BaseResultMap">
+  	select * from busi_course_witness where course_id = #{courseId} and witness_status=#{witnessStatus}
+  </select>
+</mapper>

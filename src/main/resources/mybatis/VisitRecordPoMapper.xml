@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huisou.mapper.VisitRecordPoMapper">
+  <resultMap id="BaseResultMap" type="com.huisou.po.VisitRecordPo">
+    <id column="visit_id" jdbcType="INTEGER" property="visitId" />
+    <result column="visit_type" jdbcType="VARCHAR" property="visitType" />
+    <result column="res_id" jdbcType="INTEGER" property="resId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="standby1" jdbcType="VARCHAR" property="standby1" />
+    <result column="standby2" jdbcType="VARCHAR" property="standby2" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    visit_id, visit_type, res_id, user_id, create_time, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from busi_visit_record
+    where visit_id = #{visitId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from busi_visit_record
+    where visit_id = #{visitId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.VisitRecordPo">
+    <selectKey keyProperty="visitId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_visit_record (visit_type, res_id, user_id, 
+      create_time, standby1, standby2
+      )
+    values (#{visitType,jdbcType=VARCHAR}, #{resId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.VisitRecordPo">
+    <selectKey keyProperty="visitId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_visit_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="visitType != null">
+        visit_type,
+      </if>
+      <if test="resId != null">
+        res_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="standby1 != null">
+        standby1,
+      </if>
+      <if test="standby2 != null">
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="visitType != null">
+        #{visitType,jdbcType=VARCHAR},
+      </if>
+      <if test="resId != null">
+        #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null">
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null">
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.VisitRecordPo">
+    update busi_visit_record
+    <set>
+      <if test="visitType != null">
+        visit_type = #{visitType,jdbcType=VARCHAR},
+      </if>
+      <if test="resId != null">
+        res_id = #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null">
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null">
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where visit_id = #{visitId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.VisitRecordPo">
+    update busi_visit_record
+    set visit_type = #{visitType,jdbcType=VARCHAR},
+      res_id = #{resId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where visit_id = #{visitId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="select"  parameterType="Map" resultType="com.huisou.vo.VisitRecordVo">
+  		select
+  			t1.visit_id as visitId,
+			t1.visit_type AS visitType,
+			COUNT(t1.visit_type) AS count
+  		from busi_visit_record t1
+  		<where>
+			<if test="beginDate!=null and beginDate!=''">
+	    		<![CDATA[   and DATE_FORMAT(t1.create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
+			</if>
+			<if test="endDate!=null and endDate!=''">
+	   			<![CDATA[  and DATE_FORMAT(t1.create_time, '%Y-%m-%d') < DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
+			</if>
+		</where>
+		GROUP BY t1.visit_type
+  </select>
+</mapper>

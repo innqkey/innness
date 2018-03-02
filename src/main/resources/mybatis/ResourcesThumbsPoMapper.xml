@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.ResourcesThumbsPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.ResourcesThumbsPo" >
+    <id column="thumbs_id" property="thumbsId" jdbcType="INTEGER" />
+    <result column="res_id" property="resId" jdbcType="INTEGER" />
+    <result column="res_type" property="resType" jdbcType="VARCHAR" />
+    <result column="thumbs_status" property="thumbsStatus" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    thumbs_id, res_id, res_type, thumbs_status,user_id, create_time, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_resources_thumbs
+    where thumbs_id = #{thumbsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_resources_thumbs
+    where thumbs_id = #{thumbsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.ResourcesThumbsPo" >
+    insert into busi_resources_thumbs (thumbs_id, res_id, res_type,thumbs_status, 
+      user_id, create_time, standby1, 
+      standby2)
+    values (#{thumbsId,jdbcType=INTEGER}, #{resId,jdbcType=INTEGER}, #{resType,jdbcType=VARCHAR}, 
+    #{thumbsStatus,jdbcType=VARCHAR},
+      #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{standby1,jdbcType=VARCHAR}, 
+      #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.ResourcesThumbsPo" >
+    insert into busi_resources_thumbs
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="thumbsId != null" >
+        thumbs_id,
+      </if>
+      <if test="resId != null" >
+        res_id,
+      </if>
+      <if test="resType != null" >
+        res_type,
+      </if>
+      <if test="thumbsStatus != null" >
+        thumbs_status,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="thumbsId != null" >
+        #{thumbsId,jdbcType=INTEGER},
+      </if>
+      <if test="resId != null" >
+        #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resType != null" >
+        #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbsStatus != null" >
+        #{thumbsStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.ResourcesThumbsPo" >
+    update busi_resources_thumbs
+    <set >
+      <if test="resId != null" >
+        res_id = #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resType != null" >
+        res_type = #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbsStatus != null" >
+        thumbs_status = #{thumbsStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where thumbs_id = #{thumbsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.ResourcesThumbsPo" >
+    update busi_resources_thumbs
+    set res_id = #{resId,jdbcType=INTEGER},
+      res_type = #{resType,jdbcType=VARCHAR},
+      thumbs_status = #{thumbsStatus,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where thumbs_id = #{thumbsId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="deleteOne" parameterType="com.huisou.po.ResourcesThumbsPo" >
+    update busi_resources_thumbs
+    set thumbs_status = 2
+    where thumbs_id = #{thumbsId,jdbcType=INTEGER}
+  </update>
+  <select id="findOne" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from busi_resources_thumbs
+    where res_type = "YL"
+    <if test="resId != null and resId != ''">
+    	and res_id = #{resId}
+    </if>
+    <if test="userId != null and userId != ''">
+    	and user_id = #{userId}
+    </if>
+  </select>
+  <select id="findAll" parameterType="Map" resultType="com.huisou.vo.ResourcesThumbsVo">
+  	SELECT
+  		t1.thumbs_id AS thumbsId,
+		t1.res_id AS resId,
+		t1.res_type AS resType,
+		t1.user_id AS userId,
+		t1.thumbs_status AS thumbsStatus,
+		t1.create_time AS createTime,
+		t2.nickname AS nickName,
+		t2.username AS userName,
+		t2.headimgurl AS headimgUrl
+	FROM
+		busi_resources_thumbs t1
+	LEFT JOIN busi_user t2 ON t2.user_id = t1.user_id
+	WHERE t1.thumbs_status = 1
+	<if test="resId != null and resId != ''">
+		and t1.res_id = #{resId}
+	</if>
+	<if test="nickName != null and nickName !=''">
+  		and t2.nickname like CONCAT('%', #{nickName},'%')
+  	</if>
+  	<if test="beginDate!=null and beginDate!=''">
+    	<![CDATA[   and DATE_FORMAT(t1.create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
+	</if>
+	<if test="endDate!=null and endDate!=''">
+   		<![CDATA[  and DATE_FORMAT(t1.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
+	</if>
+	<if test="resType != null and resType != ''">
+		<if test="resType == 'YL'.toString()">
+			and t1.res_type = "YL"
+		</if>
+		<if test="resType == 'SP'.toString()">
+			and t1.res_type = "SP"
+		</if>
+	</if>
+	ORDER BY t1.create_time
+  </select>
+  <select id="selectAll" parameterType="java.lang.Integer" resultType="com.huisou.vo.ResourcesThumbsVo">
+  	SELECT
+  		t1.thumbs_id AS thumbsId,
+		t1.res_id AS resId,
+		t1.res_type AS resType,
+		t1.user_id AS userId,
+		t1.thumbs_status AS thumbsStatus,
+		t1.create_time AS createTime,
+		t2.nickname AS nickName,
+		t2.username AS userName,
+		t2.headimgurl AS headimgUrl
+	FROM
+		busi_resources_thumbs t1
+	LEFT JOIN busi_user t2 ON t2.user_id = t1.user_id
+	WHERE t1.thumbs_status = '1'
+	AND t1.res_type = 'YL'
+	AND t1.res_id = #{sayId}
+	ORDER BY t1.create_time DESC
+  </select>
+  <update id="updateThumbs" parameterType="java.lang.Integer">
+  	update busi_resources_thumbs 
+  	set thumbs_status = '2'
+  	where res_id = #{resId}
+  	and user_id = #{userId}
+  </update>
+</mapper>

@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.VideoAudioPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.VideoAudioPo" >
+    <id column="video_audio_id" property="videoAudioId" jdbcType="INTEGER" />
+    <result column="video_audio_title" property="videoAudioTitle" jdbcType="VARCHAR" />
+    <result column="video_audio_price" property="videoAudioPrice" jdbcType="DECIMAL" />
+    <result column="video_audio_intro" property="videoAudioIntro" jdbcType="VARCHAR" />
+    <result column="video_audio_logo" property="videoAudioLogo" jdbcType="VARCHAR" />
+    <result column="video_audio_type" property="videoAudioType" jdbcType="VARCHAR" />
+    <result column="video_audio_url" property="videoAudioUrl" jdbcType="VARCHAR" />
+    <result column="video_audio_no" property="videoAudioNo" jdbcType="INTEGER" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="video_audio_iscourse" property="videoAudioIscourse" jdbcType="VARCHAR" />
+    <result column="video_audio_ispay" property="videoAudioIspay" jdbcType="VARCHAR" />
+    <result column="video_audio_istop" property="videoAudioIstop" jdbcType="VARCHAR" />
+    <result column="video_audio_isonline" property="videoAudioIsonline" jdbcType="VARCHAR" />
+    <result column="video_audio_pay_num" property="videoAudioPayNum" jdbcType="INTEGER" />
+    <result column="create_by" property="createBy" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="video_audio_status" property="videoAudioStatus" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    video_audio_id, video_audio_title, video_audio_price, video_audio_intro, video_audio_logo, 
+    video_audio_type,video_audio_url, video_audio_no, course_id, video_audio_iscourse, video_audio_ispay, 
+    video_audio_istop, video_audio_isonline, video_audio_pay_num, create_by, create_time, 
+    update_by, update_time, video_audio_status, standby1, standby2
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_video_audio
+    where video_audio_id = #{videoAudioId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_video_audio
+    where video_audio_id = #{videoAudioId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.VideoAudioPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="videoAudioId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_video_audio (video_audio_title, video_audio_price, 
+      video_audio_intro, video_audio_logo, video_audio_type, video_audio_url,
+      video_audio_no, course_id, video_audio_iscourse, 
+      video_audio_ispay, video_audio_istop, video_audio_isonline, 
+      video_audio_pay_num, create_by, create_time, 
+      update_by, update_time, video_audio_status, 
+      standby1, standby2)
+    values (#{videoAudioTitle,jdbcType=VARCHAR}, #{videoAudioPrice,jdbcType=DECIMAL}, 
+      #{videoAudioIntro,jdbcType=VARCHAR}, #{videoAudioLogo,jdbcType=VARCHAR}, #{videoAudioType,jdbcType=VARCHAR}, 
+      #{videoAudioUrl,jdbcType=VARCHAR}, #{videoAudioNo,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{videoAudioIscourse,jdbcType=VARCHAR}, 
+      #{videoAudioIspay,jdbcType=VARCHAR}, #{videoAudioIstop,jdbcType=VARCHAR}, #{videoAudioIsonline,jdbcType=VARCHAR}, 
+      #{videoAudioPayNum,jdbcType=INTEGER}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{videoAudioStatus,jdbcType=VARCHAR}, 
+      #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.VideoAudioPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="videoAudioId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_video_audio
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="videoAudioTitle != null" >
+        video_audio_title,
+      </if>
+      <if test="videoAudioPrice != null" >
+        video_audio_price,
+      </if>
+      <if test="videoAudioIntro != null" >
+        video_audio_intro,
+      </if>
+      <if test="videoAudioLogo != null" >
+        video_audio_logo,
+      </if>
+      <if test="videoAudioType != null" >
+        video_audio_type,
+      </if>
+      <if test="videoAudioUrl != null" >
+        video_audio_url,
+      </if>
+      <if test="videoAudioNo != null" >
+        video_audio_no,
+      </if>
+      <if test="courseId != null" >
+        course_id,
+      </if>
+      <if test="videoAudioIscourse != null" >
+        video_audio_iscourse,
+      </if>
+      <if test="videoAudioIspay != null" >
+        video_audio_ispay,
+      </if>
+      <if test="videoAudioIstop != null" >
+        video_audio_istop,
+      </if>
+      <if test="videoAudioIsonline != null" >
+        video_audio_isonline,
+      </if>
+      <if test="videoAudioPayNum != null" >
+        video_audio_pay_num,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="videoAudioStatus != null" >
+        video_audio_status,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="videoAudioTitle != null" >
+        #{videoAudioTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioPrice != null" >
+        #{videoAudioPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="videoAudioIntro != null" >
+        #{videoAudioIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioLogo != null" >
+        #{videoAudioLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioType != null" >
+        #{videoAudioType,jdbcType=VARCHAR},
+      </if>
+       <if test="videoAudioUrl != null" >
+        #{videoAudioUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioNo != null" >
+        #{videoAudioNo,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null" >
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="videoAudioIscourse != null" >
+        #{videoAudioIscourse,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioIspay != null" >
+        #{videoAudioIspay,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioIstop != null" >
+        #{videoAudioIstop,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioIsonline != null" >
+        #{videoAudioIsonline,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioPayNum != null" >
+        #{videoAudioPayNum,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="videoAudioStatus != null" >
+        #{videoAudioStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.VideoAudioPo" >
+    update busi_video_audio
+    <set >
+      <if test="videoAudioTitle != null" >
+        video_audio_title = #{videoAudioTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioPrice != null" >
+        video_audio_price = #{videoAudioPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="videoAudioIntro != null" >
+        video_audio_intro = #{videoAudioIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioLogo != null" >
+        video_audio_logo = #{videoAudioLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioType != null" >
+        video_audio_type = #{videoAudioType,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioUrl != null" >
+        video_audio_url = #{videoAudioUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioNo != null" >
+        video_audio_no = #{videoAudioNo,jdbcType=INTEGER},
+      </if>
+      <if test="courseId != null" >
+        course_id = #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="videoAudioIscourse != null" >
+        video_audio_iscourse = #{videoAudioIscourse,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioIspay != null" >
+        video_audio_ispay = #{videoAudioIspay,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioIstop != null" >
+        video_audio_istop = #{videoAudioIstop,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioIsonline != null" >
+        video_audio_isonline = #{videoAudioIsonline,jdbcType=VARCHAR},
+      </if>
+      <if test="videoAudioPayNum != null" >
+        video_audio_pay_num = #{videoAudioPayNum,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="videoAudioStatus != null" >
+        video_audio_status = #{videoAudioStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where video_audio_id = #{videoAudioId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.VideoAudioPo" >
+    update busi_video_audio
+    set video_audio_title = #{videoAudioTitle,jdbcType=VARCHAR},
+      video_audio_price = #{videoAudioPrice,jdbcType=DECIMAL},
+      video_audio_intro = #{videoAudioIntro,jdbcType=VARCHAR},
+      video_audio_logo = #{videoAudioLogo,jdbcType=VARCHAR},
+      video_audio_type = #{videoAudioType,jdbcType=VARCHAR},
+      video_audio_url = #{videoAudioUrl,jdbcType=VARCHAR},
+      video_audio_no = #{videoAudioNo,jdbcType=INTEGER},
+      course_id = #{courseId,jdbcType=INTEGER},
+      video_audio_iscourse = #{videoAudioIscourse,jdbcType=VARCHAR},
+      video_audio_ispay = #{videoAudioIspay,jdbcType=VARCHAR},
+      video_audio_istop = #{videoAudioIstop,jdbcType=VARCHAR},
+      video_audio_isonline = #{videoAudioIsonline,jdbcType=VARCHAR},
+      video_audio_pay_num = #{videoAudioPayNum,jdbcType=INTEGER},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      video_audio_status = #{videoAudioStatus,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where video_audio_id = #{videoAudioId,jdbcType=INTEGER}
+  </update>
+  
+    <update id="updateCourseId">
+   	UPDATE busi_video_audio SET course_id = #{courseId} ,video_audio_iscourse="Y" WHERE video_audio_id=#{videoAudioId}
+  </update>
+   
+   <update id="resettingCourseId">
+   	UPDATE busi_video_audio SET course_id = 0 ,video_audio_iscourse="N" WHERE course_id=#{courseId}
+   </update>
+   
+   <select id="search" resultType="com.huisou.vo.VideoAudioVo">
+    SELECT
+		t1.video_audio_id videoAudioId,
+		t1.video_audio_title videoAudioTitle,
+		t1.video_audio_price videoAudioPrice,
+		t1.video_audio_intro videoAudioIntro,
+		t1.video_audio_logo videoAudioLogo,
+		t1.video_audio_url videoAudioUrl,
+		t1.video_audio_type videoAudioType,
+		t1.video_audio_no videoAudioNo,
+		t1.course_id courseId,
+		t1.video_audio_iscourse videoAudioIscourse,
+		t1.video_audio_ispay videoAudioIspay,
+		t1.video_audio_istop videoAudioIstop,
+		t1.video_audio_isonline videoAudioIsonline,
+		t1.video_audio_pay_num videoAudioPayNum,
+		t1.create_time createTime,
+		t1.video_audio_status videoAudioStatus,
+		t2.course_title courseTitle
+	FROM
+		busi_video_audio t1
+	LEFT JOIN busi_course t2 ON t1.course_id = t2.course_id
+	<where>
+		<if test="courseTitle!=null and courseTitle!=''">
+  		and t2.course_title like CONCAT('%',#{courseTitle},'%')
+  		</if>
+  		<if test="videoAudioTitle!=null and videoAudioTitle!=''">
+  		and t1.video_audio_title like CONCAT('%',#{videoAudioTitle},'%')
+  		</if>
+  		<if test="startDate!=null">
+  		and t1.create_time &gt;= #{startDate}
+  		</if>
+  		<if test="endDate!=null">
+  		and t1.create_time &lt;= #{endDate}
+  		</if>
+  		<if test="videoAudioStatus!=null and videoAudioStatus!=''">
+  			and t1.video_audio_status like CONCAT('%',#{videoAudioStatus},'%')
+  		</if>
+  		<if test="videoAudioType!=null and videoAudioType!=''">
+  			and t1.video_audio_type like CONCAT('%',#{videoAudioType},'%')
+  		</if>
+	</where>
+		<if test="videoAudioNum!=null and videoAudioNum=='max'">
+  		ORDER BY t1.video_audio_pay_num DESC
+  		</if>
+  		<if test="videoAudioNum!=null and videoAudioNum=='min'">
+  		ORDER BY t1.video_audio_pay_num ASC
+  		</if>
+  		<if test="videoAudioNum==null">
+  		ORDER BY t1.create_time DESC
+  		</if>
+  		<if test="videoAudioNum==''">
+  		ORDER BY t1.create_time DESC
+  		</if>
+   </select>
+   <select id="findVideoTop" resultMap="BaseResultMap">
+   	SELECT * FROM busi_video_audio WHERE video_audio_istop = #{videoAudioIstop} AND video_audio_type='SP' AND video_audio_status = '1'
+   </select>
+    <select id="findVideoAudio" resultMap="BaseResultMap">
+   	  SELECT * FROM busi_video_audio
+   	  		where video_audio_status = '1' 
+	  		<if test="videoAudioType!=null and videoAudioType!=''">
+	  			and video_audio_type=#{videoAudioType}
+	  		</if>
+	  		<if test="videoAudioIspay!=null and videoAudioIspay!=''">
+	  			and video_audio_ispay=#{videoAudioIspay}
+	  		</if>
+	  	<if test="videoAudioIspay==null">
+	  			ORDER BY video_audio_pay_num DESC
+	  	</if>
+	  	<if test="videoAudioIspay!=null and videoAudioIspay!=''">
+	  			ORDER BY create_time DESC
+	  	</if>
+   </select>
+   
+   <select id="findVideoAudioByPayNum" resultMap="BaseResultMap">
+   	SELECT * FROM busi_video_audio
+   	<where>
+   		<if test="videoAudioType!=null and videoAudioType!=''">
+	  		and video_audio_type=#{videoAudioType}
+	  	</if>
+   	</where>
+   	ORDER BY video_audio_pay_num DESC
+   </select>
+   
+   <select id="findRelevant"  resultMap="BaseResultMap">
+	  SELECT
+			*
+		FROM
+			busi_video_audio
+		WHERE
+			create_time  &gt;= (
+				SELECT
+					create_time
+				FROM
+					busi_video_audio
+				WHERE
+					video_audio_id = #{videoAudioId}
+				LIMIT 1
+			)
+			AND video_audio_status = '1'
+		ORDER BY
+			create_time ASC
+		LIMIT 5
+   </select>
+   
+   <select id="findByCourseId" resultMap="BaseResultMap">
+   	SELECT * FROM busi_video_audio WHERE course_id= #{courseId} AND video_audio_status = '1'
+   </select>
+   <select id="findVideoAudioByUserId" parameterType="Map" resultMap="BaseResultMap">
+   	SELECT
+		*
+	FROM
+		busi_video_audio t1
+	RIGHT JOIN (
+		SELECT
+			res_id
+		FROM
+			busi_order
+		WHERE
+			res_type = #{resType}
+		AND user_id = #{userId}
+		AND pay_status = #{payStatus}
+	) t2 ON t1.video_audio_id = t2.res_id
+   </select>
+</mapper>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.RegistPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.RegistPo" >
+    <id column="regist_id" property="registId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="regist_name" property="registName" jdbcType="VARCHAR" />
+    <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+    <result column="card_type_name" property="cardTypeName" jdbcType="VARCHAR" />
+    <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+    <result column="card_phone" property="cardPhone" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="regist_status" property="registStatus" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    regist_id, user_id, regist_name, card_type, card_type_name, card_num, card_phone, 
+    create_time, update_time, regist_status, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_regist
+    where regist_id = #{registId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_regist
+    where regist_id = #{registId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.RegistPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="registId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_regist (user_id, regist_name, card_type, 
+      card_type_name, card_num, card_phone, 
+      create_time, update_time, regist_status, 
+      standby1, standby2)
+    values (#{userId,jdbcType=INTEGER}, #{registName,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, 
+      #{cardTypeName,jdbcType=VARCHAR}, #{cardNum,jdbcType=VARCHAR}, #{cardPhone,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{registStatus,jdbcType=VARCHAR}, 
+      #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.RegistPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="registId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_regist
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="registName != null" >
+        regist_name,
+      </if>
+      <if test="cardType != null" >
+        card_type,
+      </if>
+      <if test="cardTypeName != null" >
+        card_type_name,
+      </if>
+      <if test="cardNum != null" >
+        card_num,
+      </if>
+      <if test="cardPhone != null" >
+        card_phone,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="registStatus != null" >
+        regist_status,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="registName != null" >
+        #{registName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardTypeName != null" >
+        #{cardTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNum != null" >
+        #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="cardPhone != null" >
+        #{cardPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registStatus != null" >
+        #{registStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.RegistPo" >
+    update busi_regist
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="registName != null" >
+        regist_name = #{registName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="cardTypeName != null" >
+        card_type_name = #{cardTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNum != null" >
+        card_num = #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="cardPhone != null" >
+        card_phone = #{cardPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="registStatus != null" >
+        regist_status = #{registStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where regist_id = #{registId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.RegistPo" >
+    update busi_regist
+    set user_id = #{userId,jdbcType=INTEGER},
+      regist_name = #{registName,jdbcType=VARCHAR},
+      card_type = #{cardType,jdbcType=VARCHAR},
+      card_type_name = #{cardTypeName,jdbcType=VARCHAR},
+      card_num = #{cardNum,jdbcType=VARCHAR},
+      card_phone = #{cardPhone,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      regist_status = #{registStatus,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where regist_id = #{registId,jdbcType=INTEGER}
+  </update>
+  <select id="findByOrderId" resultMap="BaseResultMap">
+  	SELECT
+		t2.*
+	FROM
+		(
+			SELECT
+				regist_id
+			FROM
+				busi_order_detail
+			WHERE
+				order_id = #{orderId}
+		) t1
+	LEFT JOIN busi_regist t2 ON t1.regist_id = t2.regist_id
+  </select>
+  <select id="findByCardNum" resultMap="BaseResultMap">
+  	SELECT * FROM busi_regist WHERE card_num=#{cardNum}
+  </select>
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	SELECT * FROM busi_regist WHERE user_id=#{userId}
+  </select>
+</mapper>

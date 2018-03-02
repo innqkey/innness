@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.IntegralRecordPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.IntegralRecordPo" >
+    <id column="integral_record_id" property="integralRecordId" jdbcType="INTEGER" />
+    <result column="res_id" property="resId" jdbcType="INTEGER" />
+    <result column="res_title" property="resTitle" jdbcType="VARCHAR" />
+    <result column="res_price" property="resPrice" jdbcType="DECIMAL" />
+    <result column="res_type" property="resType" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="pay_status" property="payStatus" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    integral_record_id, res_id, res_title, res_price, res_type, user_id, create_time, 
+    pay_status, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_integral_record
+    where integral_record_id = #{integralRecordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_integral_record
+    where integral_record_id = #{integralRecordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.IntegralRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="integralRecordId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_integral_record (res_id, res_title, res_price, 
+      res_type, user_id, create_time, 
+      pay_status, standby1, standby2
+      )
+    values (#{resId,jdbcType=INTEGER}, #{resTitle,jdbcType=VARCHAR}, #{resPrice,jdbcType=DECIMAL}, 
+      #{resType,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{payStatus,jdbcType=VARCHAR}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.IntegralRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="integralRecordId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_integral_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="resId != null" >
+        res_id,
+      </if>
+      <if test="resTitle != null" >
+        res_title,
+      </if>
+      <if test="resPrice != null" >
+        res_price,
+      </if>
+      <if test="resType != null" >
+        res_type,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="payStatus != null" >
+        pay_status,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="resId != null" >
+        #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resTitle != null" >
+        #{resTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="resPrice != null" >
+        #{resPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="resType != null" >
+        #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payStatus != null" >
+        #{payStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.IntegralRecordPo" >
+    update busi_integral_record
+    <set >
+      <if test="resId != null" >
+        res_id = #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resTitle != null" >
+        res_title = #{resTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="resPrice != null" >
+        res_price = #{resPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="resType != null" >
+        res_type = #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where integral_record_id = #{integralRecordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.IntegralRecordPo" >
+    update busi_integral_record
+    set res_id = #{resId,jdbcType=INTEGER},
+      res_title = #{resTitle,jdbcType=VARCHAR},
+      res_price = #{resPrice,jdbcType=DECIMAL},
+      res_type = #{resType,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      pay_status = #{payStatus,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where integral_record_id = #{integralRecordId,jdbcType=INTEGER}
+  </update>
+  <select id="search" resultType="com.huisou.vo.IntegralRecordVo">
+  	SELECT
+		t1.integral_record_id integralRecordId,
+		t1.res_id resId,
+		t1.res_type resType,
+		t1.res_title resTitle,
+		t1.res_price resPrice,
+		t1.user_id userId,
+		t1.create_time createTime,
+		t1.pay_status payStatus,
+		t2.nickname nickname,
+		t2.phone phone
+	FROM
+		busi_integral_record t1
+	LEFT JOIN busi_user t2 ON t1.user_id = t2.user_id
+	<where>
+		<if test="nickname!=null and nickname!=''">
+  		and t2.nickname like CONCAT('%',#{nickname},'%')
+  		</if>
+  		<if test="phone!=null and phone!=''">
+  		and t2.phone like CONCAT('%',#{phone},'%')
+  		</if>
+  		<if test="startDate!=null">
+  		and t1.create_time &gt;= #{startDate}
+  		</if>
+  		<if test="endDate!=null">
+  		and t1.create_time &lt;= #{endDate}
+  		</if>
+	</where>
+	ORDER BY
+		t1.create_time DESC
+  </select>
+  
+  <select id="selecAll" parameterType="Map" resultType="com.huisou.vo.IntegralRecordVo">
+    select 
+    	t1.integral_record_id AS integralRecordId,
+		t1.res_id AS resId,
+		t1.res_type AS resType,
+		t1.res_title AS resTitle,
+		t1.res_price AS resPrice,
+		t1.user_id AS userId,
+		t1.create_time AS createTime,
+		t1.pay_status AS payStatus,
+		t2.nickname AS nickname,
+		t2.username AS userName,
+		t2.phone phone
+    from busi_integral_record t1
+    LEFT JOIN busi_user t2 ON t1.user_id = t2.user_id
+    <where>
+	    <if test='resType != null and resType !=""'>
+	  		and t1.res_type = #{resType}
+	  	</if>
+	    <if test='resTitle != null and resTitle !=""'>
+	  		and t1.res_title like CONCAT('%', #{resTitle},'%')
+	  	</if>
+	    <if test='userName != null and userName !=""'>
+	  		and t2.username like CONCAT('%', #{userName},'%')
+	  	</if>
+	    <if test="beginDate!=null and beginDate!=''">
+	    	<![CDATA[   and DATE_FORMAT(t1.create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
+		</if>
+		<if test="endDate!=null and endDate!=''">
+	   		<![CDATA[  and DATE_FORMAT(t1.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
+		</if>
+	</where>
+	order by t1.create_time desc
+  </select>
+</mapper>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.CommonUserPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.CommonUserPo" >
+    <id column="common_user_id" property="commonUserId" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="keyid" property="keyid" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="petname" property="petname" jdbcType="VARCHAR" />
+    <result column="leader" property="leader" jdbcType="INTEGER" />
+    <result column="empid" property="empid" jdbcType="INTEGER" />
+    <result column="postid" property="postid" jdbcType="INTEGER" />
+    <result column="orgid" property="orgid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    common_user_id, username, password, keyid, type, status, petname, leader, empid, 
+    postid, orgid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from common_user
+    where common_user_id = #{commonUserId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from common_user
+    where common_user_id = #{commonUserId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.CommonUserPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="commonUserId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into common_user (username, password, keyid, 
+      type, status, petname, 
+      leader, empid, postid, 
+      orgid)
+    values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{keyid,jdbcType=INTEGER}, 
+      #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{petname,jdbcType=VARCHAR}, 
+      #{leader,jdbcType=INTEGER}, #{empid,jdbcType=INTEGER}, #{postid,jdbcType=INTEGER}, 
+      #{orgid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.CommonUserPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="commonUserId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into common_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="keyid != null" >
+        keyid,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="petname != null" >
+        petname,
+      </if>
+      <if test="leader != null" >
+        leader,
+      </if>
+      <if test="empid != null" >
+        empid,
+      </if>
+      <if test="postid != null" >
+        postid,
+      </if>
+      <if test="orgid != null" >
+        orgid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="keyid != null" >
+        #{keyid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="petname != null" >
+        #{petname,jdbcType=VARCHAR},
+      </if>
+      <if test="leader != null" >
+        #{leader,jdbcType=INTEGER},
+      </if>
+      <if test="empid != null" >
+        #{empid,jdbcType=INTEGER},
+      </if>
+      <if test="postid != null" >
+        #{postid,jdbcType=INTEGER},
+      </if>
+      <if test="orgid != null" >
+        #{orgid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.CommonUserPo" >
+    update common_user
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="keyid != null" >
+        keyid = #{keyid,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="petname != null" >
+        petname = #{petname,jdbcType=VARCHAR},
+      </if>
+      <if test="leader != null" >
+        leader = #{leader,jdbcType=INTEGER},
+      </if>
+      <if test="empid != null" >
+        empid = #{empid,jdbcType=INTEGER},
+      </if>
+      <if test="postid != null" >
+        postid = #{postid,jdbcType=INTEGER},
+      </if>
+      <if test="orgid != null" >
+        orgid = #{orgid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where common_user_id = #{commonUserId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.CommonUserPo" >
+    update common_user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      keyid = #{keyid,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      petname = #{petname,jdbcType=VARCHAR},
+      leader = #{leader,jdbcType=INTEGER},
+      empid = #{empid,jdbcType=INTEGER},
+      postid = #{postid,jdbcType=INTEGER},
+      orgid = #{orgid,jdbcType=INTEGER}
+    where common_user_id = #{commonUserId,jdbcType=INTEGER}
+  </update>
+  <select id="findAll" resultMap="BaseResultMap">
+  	SELECT * FROM common_user order by common_user_id desc
+  </select>
+  <select id="search" resultMap="BaseResultMap">
+  	SELECT * FROM common_user 
+  	<where>
+  		<if test="username !=null and username !=''">
+  		and username=#{username}
+  		</if>
+  		<if test="password !=null and password !=''">
+  		and password=#{password}
+  		</if>
+  	</where>
+  		LIMIT 1
+  </select>
+</mapper>

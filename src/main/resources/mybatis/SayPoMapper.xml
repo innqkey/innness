@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.SayPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.SayPo" >
+    <id column="say_id" property="sayId" jdbcType="INTEGER" />
+    <result column="say_title" property="sayTitle" jdbcType="VARCHAR" />
+    <result column="say_context" property="sayContext" jdbcType="VARCHAR" />
+    <result column="say_logo" property="sayLogo" jdbcType="VARCHAR" />
+    <result column="say_head_img" property="sayHeadImg" jdbcType="VARCHAR" />
+    <result column="say_name" property="sayName" jdbcType="VARCHAR" />
+    <result column="say_eval_num" property="sayEvalNum" jdbcType="INTEGER" />
+    <result column="say_thumbs_num" property="sayThumbsNum" jdbcType="INTEGER" />
+    <result column="create_by" property="createBy" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="say_status" property="sayStatus" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    say_id, say_title, say_context, say_logo, say_head_img, say_name, say_eval_num, say_thumbs_num, 
+    create_by, create_time, update_by, update_time, say_status, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_say
+    where say_id = #{sayId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_say
+    where say_id = #{sayId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.SayPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="sayId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_say (say_title, say_context, say_logo, 
+      say_head_img, say_name, say_eval_num, 
+      say_thumbs_num, create_by, create_time, 
+      update_by, update_time, say_status, 
+      standby1, standby2)
+    values (#{sayTitle,jdbcType=VARCHAR}, #{sayContext,jdbcType=VARCHAR}, #{sayLogo,jdbcType=VARCHAR}, 
+      #{sayHeadImg,jdbcType=VARCHAR}, #{sayName,jdbcType=VARCHAR}, #{sayEvalNum,jdbcType=INTEGER}, 
+      #{sayThumbsNum,jdbcType=INTEGER}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{sayStatus,jdbcType=VARCHAR}, 
+      #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.SayPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="sayId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_say
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sayTitle != null" >
+        say_title,
+      </if>
+      <if test="sayContext != null" >
+        say_context,
+      </if>
+      <if test="sayLogo != null" >
+        say_logo,
+      </if>
+      <if test="sayHeadImg != null" >
+        say_head_img,
+      </if>
+      <if test="sayName != null" >
+        say_name,
+      </if>
+      <if test="sayEvalNum != null" >
+        say_eval_num,
+      </if>
+      <if test="sayThumbsNum != null" >
+        say_thumbs_num,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="sayStatus != null" >
+        say_status,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sayTitle != null" >
+        #{sayTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="sayContext != null" >
+        #{sayContext,jdbcType=VARCHAR},
+      </if>
+      <if test="sayLogo != null" >
+        #{sayLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="sayHeadImg != null" >
+        #{sayHeadImg,jdbcType=VARCHAR},
+      </if>
+      <if test="sayName != null" >
+        #{sayName,jdbcType=VARCHAR},
+      </if>
+      <if test="sayEvalNum != null" >
+        #{sayEvalNum,jdbcType=INTEGER},
+      </if>
+      <if test="sayThumbsNum != null" >
+        #{sayThumbsNum,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sayStatus != null" >
+        #{sayStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.SayPo" >
+    update busi_say
+    <set >
+      <if test="sayTitle != null" >
+        say_title = #{sayTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="sayContext != null" >
+        say_context = #{sayContext,jdbcType=VARCHAR},
+      </if>
+      <if test="sayLogo != null" >
+        say_logo = #{sayLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="sayHeadImg != null" >
+        say_head_img = #{sayHeadImg,jdbcType=VARCHAR},
+      </if>
+      <if test="sayName != null" >
+        say_name = #{sayName,jdbcType=VARCHAR},
+      </if>
+      <if test="sayEvalNum != null" >
+        say_eval_num = #{sayEvalNum,jdbcType=INTEGER},
+      </if>
+      <if test="sayThumbsNum != null" >
+        say_thumbs_num = #{sayThumbsNum,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sayStatus != null" >
+        say_status = #{sayStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where say_id = #{sayId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.SayPo" >
+    update busi_say
+    set say_title = #{sayTitle,jdbcType=VARCHAR},
+      say_context = #{sayContext,jdbcType=VARCHAR},
+      say_logo = #{sayLogo,jdbcType=VARCHAR},
+      say_head_img = #{sayHeadImg,jdbcType=VARCHAR},
+      say_name = #{sayName,jdbcType=VARCHAR},
+      say_eval_num = #{sayEvalNum,jdbcType=INTEGER},
+      say_thumbs_num = #{sayThumbsNum,jdbcType=INTEGER},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      say_status = #{sayStatus,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where say_id = #{sayId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findAll" parameterType="Map" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from busi_say
+    where 1 = 1
+    <if test="sayId != null and sayId != ''">
+    	and say_id = #{sayId} 
+    </if>
+    <if test="beginDate!=null and beginDate!=''">
+    	<![CDATA[   and DATE_FORMAT(create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
+	</if>
+	<if test="endDate!=null and endDate!=''">
+   		<![CDATA[  and DATE_FORMAT(create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
+	</if>
+    <if test="evalMin!=null and evalMin!=''">
+    	<![CDATA[   and  say_eval_num >= #{evalMin}  ]]>
+	</if>
+	<if test="evalMax!=null and evalMax!=''">
+   		<![CDATA[  and  say_eval_num <= #{evalMax}   ]]>
+	</if>
+    <if test="thumbsMin!=null and thumbsMin!=''">
+    	<![CDATA[   and  say_thumbs_num >= #{thumbsMin}  ]]>
+	</if>
+	<if test="thumbsMax!=null and thumbsMax!=''">
+   		<![CDATA[  and  say_thumbs_num <= #{thumbsMax}   ]]>
+	</if>
+    and say_status = 1
+    order by create_time desc
+  </select>
+  <update id="increaseNum" parameterType="java.lang.Integer" >
+    update busi_say
+    <set>
+	    <if test="type != null and type != ''">
+	    	<if test="type == 1">
+	    		say_eval_num = say_eval_num + #{num}
+	    	</if>
+	    	<if test="type == 2">
+	    		say_thumbs_num = say_thumbs_num + #{num}
+	    	</if>
+	    </if>
+    </set> 
+    where say_id = #{sayId}
+  </update>
+  <update id="delete" parameterType="java.util.List">
+  	update busi_say
+  	set say_status = '2'
+  	where say_id in 
+  	<foreach item="item" index="index" open="(" separator="," close=")" collection="list">
+  		#{item}
+  	</foreach>
+  </update>
+  <select id="selectOne" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from busi_say
+    where say_status = "1"
+    ORDER BY create_time DESC
+    LIMIT 1
+  </select>
+</mapper>

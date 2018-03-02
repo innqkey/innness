@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.UserPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.UserPo" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="headimgurl" property="headimgurl" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="integral_num" property="integralNum" jdbcType="DECIMAL" />
+    <result column="auth_status" property="authStatus" jdbcType="VARCHAR" />
+    <result column="user_status" property="userStatus" jdbcType="VARCHAR" />
+    <result column="card_type" property="cardType" jdbcType="VARCHAR" />
+    <result column="classmate_user_id" property="classmateUserId" jdbcType="INTEGER" />
+    <result column="card_num" property="cardNum" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_id, openid, nickname, sex, province, city, country, headimgurl, username, integral_num, 
+    auth_status, user_status, card_type, classmate_user_id, card_num, phone, create_time, 
+    standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.UserPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="userId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_user (openid, nickname, sex, 
+      province, city, country, 
+      headimgurl, username, integral_num, 
+      auth_status, user_status, card_type, 
+      classmate_user_id, card_num, phone, 
+      create_time, standby1, standby2
+      )
+    values (#{openid,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
+      #{headimgurl,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{integralNum,jdbcType=DECIMAL}, 
+      #{authStatus,jdbcType=VARCHAR}, #{userStatus,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, 
+      #{classmateUserId,jdbcType=INTEGER}, #{cardNum,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.UserPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="userId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="openid != null" >
+        openid,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="headimgurl != null" >
+        headimgurl,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="integralNum != null" >
+        integral_num,
+      </if>
+      <if test="authStatus != null" >
+        auth_status,
+      </if>
+      <if test="userStatus != null" >
+        user_status,
+      </if>
+      <if test="cardType != null" >
+        card_type,
+      </if>
+      <if test="classmateUserId != null" >
+        classmate_user_id,
+      </if>
+      <if test="cardNum != null" >
+        card_num,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="headimgurl != null" >
+        #{headimgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="integralNum != null" >
+        #{integralNum,jdbcType=DECIMAL},
+      </if>
+      <if test="authStatus != null" >
+        #{authStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="userStatus != null" >
+        #{userStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="classmateUserId != null" >
+        #{classmateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="cardNum != null" >
+        #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.UserPo" >
+    update busi_user
+    <set >
+      <if test="openid != null" >
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="headimgurl != null" >
+        headimgurl = #{headimgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="integralNum != null" >
+        integral_num = #{integralNum,jdbcType=DECIMAL},
+      </if>
+      <if test="authStatus != null" >
+        auth_status = #{authStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="userStatus != null" >
+        user_status = #{userStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="cardType != null" >
+        card_type = #{cardType,jdbcType=VARCHAR},
+      </if>
+      <if test="classmateUserId != null" >
+        classmate_user_id = #{classmateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="cardNum != null" >
+        card_num = #{cardNum,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.UserPo" >
+    update busi_user
+    set openid = #{openid,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      headimgurl = #{headimgurl,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      integral_num = #{integralNum,jdbcType=DECIMAL},
+      auth_status = #{authStatus,jdbcType=VARCHAR},
+      user_status = #{userStatus,jdbcType=VARCHAR},
+      card_type = #{cardType,jdbcType=VARCHAR},
+      classmate_user_id = #{classmateUserId,jdbcType=INTEGER},
+      card_num = #{cardNum,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  
+    <select id="findAllUser" resultMap="BaseResultMap" parameterType="Map">
+    select 
+    <include refid="Base_Column_List" />
+    from busi_user
+    where user_status = 1
+    <if test='phone != null and phone != ""'>
+    	and phone = #{phone}
+    </if>
+    <if test='userName != null and userName !=""'>
+  		and username like CONCAT('%', #{userName},'%')
+  	</if>
+  	<if test='authStatus != null and authStatus !=""'>
+  		and auth_status = #{authStatus}
+  	</if>
+    <if test='beginDate!=null and beginDate!=""'>
+    	<![CDATA[   and DATE_FORMAT(create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
+	</if>
+	<if test='openid != null and openid != ""'>
+    	and openid = #{openid}
+    </if>
+	<if test='endDate!=null and endDate!=""'>
+   		<![CDATA[  and DATE_FORMAT(create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
+	</if>
+	order by create_time desc
+  </select>
+  <update id="deleteOne" parameterType="java.util.List">
+  	update busi_user
+  	set user_status = '2'
+  	where user_id in 
+  	<foreach item="item" index="index" open="(" separator="," close=")" collection="list">
+  		#{item}
+  	</foreach>
+  </update>
+  <select id="findOne" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  
+   <select id="getUserByOpenId" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_user
+    where openid = #{openid,jdbcType=VARCHAR}
+ 	</select>
+ 	
+   <select id="listByOpenIdFindClassUserId" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_user
+	WHERE
+	classmate_user_id = (
+		SELECT
+			user_id
+		FROM
+			`busi_user`
+		WHERE
+			openid =  #{openid,jdbcType=VARCHAR}
+	)
+ 	</select>
+ 	
+  	<update id="updateUserIntegral">
+  		update busi_user
+    	set integral_num = integral_num + #{integral}
+	    where user_id = #{userId}
+  	</update>
+</mapper>

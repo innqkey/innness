@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huisou.mapper.SayPublisherPoMapper">
+  <resultMap id="BaseResultMap" type="com.huisou.po.SayPublisherPo">
+    <id column="publisher_id" jdbcType="INTEGER" property="publisherId" />
+    <result column="publisher_logo" jdbcType="VARCHAR" property="publisherLogo" />
+    <result column="publisher_name" jdbcType="VARCHAR" property="publisherName" />
+    <result column="publisher_status" jdbcType="VARCHAR" property="publisherStatus" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="INTEGER" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="standby1" jdbcType="VARCHAR" property="standby1" />
+    <result column="standby2" jdbcType="VARCHAR" property="standby2" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    publisher_id, publisher_logo, publisher_name, publisher_status, create_by, create_time, 
+    update_by, update_time, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from busi_say_publisher
+    where publisher_id = #{publisherId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from busi_say_publisher
+    where publisher_id = #{publisherId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.SayPublisherPo">
+    <selectKey keyProperty="publisherId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_say_publisher (publisher_logo, publisher_name, publisher_status, 
+      create_by, create_time, update_by, 
+      update_time, standby1, standby2
+      )
+    values (#{publisherLogo,jdbcType=VARCHAR}, #{publisherName,jdbcType=VARCHAR}, #{publisherStatus,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.SayPublisherPo">
+    <selectKey keyProperty="publisherId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_say_publisher
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="publisherLogo != null">
+        publisher_logo,
+      </if>
+      <if test="publisherName != null">
+        publisher_name,
+      </if>
+      <if test="publisherStatus != null">
+        publisher_status,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="standby1 != null">
+        standby1,
+      </if>
+      <if test="standby2 != null">
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="publisherLogo != null">
+        #{publisherLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="publisherName != null">
+        #{publisherName,jdbcType=VARCHAR},
+      </if>
+      <if test="publisherStatus != null">
+        #{publisherStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null">
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null">
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.SayPublisherPo">
+    update busi_say_publisher
+    <set>
+      <if test="publisherLogo != null">
+        publisher_logo = #{publisherLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="publisherName != null">
+        publisher_name = #{publisherName,jdbcType=VARCHAR},
+      </if>
+      <if test="publisherStatus != null">
+        publisher_status = #{publisherStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null">
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null">
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where publisher_id = #{publisherId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.SayPublisherPo">
+    update busi_say_publisher
+    set publisher_logo = #{publisherLogo,jdbcType=VARCHAR},
+      publisher_name = #{publisherName,jdbcType=VARCHAR},
+      publisher_status = #{publisherStatus,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where publisher_id = #{publisherId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="delete" parameterType="java.util.List">
+  	update busi_say_publisher
+  	set publisher_status = '2'
+  	where publisher_id in 
+  	<foreach item="item" index="index" open="(" separator="," close=")" collection="list">
+  		#{item}
+  	</foreach>
+  </update>
+    <select id="findAll"  parameterType="Map" resultType="com.huisou.vo.SayPublisherVo">
+  		select
+  		t1.publisher_id as publisherId,
+		t1.publisher_logo as publisherLogo,
+		t1.publisher_name as publisherName,
+		t1.publisher_status as publisherStatus,
+		t1.create_by as createBy,
+		t1.create_time as createTime,
+		t1.update_by as updateBy,
+		t1.update_time as updateTime,
+		COUNT(t2.create_by) as count
+  		from busi_say_publisher t1
+  		left join busi_say t2 on
+  		t2.create_by = t1.publisher_id
+  		where t1.publisher_status = "1"
+  		<if test="publisherName != null and publisherName !=''">
+  			and t1.publisher_name like CONCAT('%', #{publisherName},'%')
+  		</if>
+  		<if test="publisherId != null and publisherId != '' ">
+  			and t1.publisher_id = #{publisherId}
+  		</if>		  
+		<if test="beginDate!=null and beginDate!=''">
+    		<![CDATA[   and DATE_FORMAT(t1.create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
+		</if>
+		<if test="endDate!=null and endDate!=''">
+   			<![CDATA[  and DATE_FORMAT(t1.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
+		</if>
+		GROUP BY t1.publisher_id
+  	</select>
+</mapper>

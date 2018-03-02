@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.CoursePoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.CoursePo" >
+    <id column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="course_title" property="courseTitle" jdbcType="VARCHAR" />
+    <result column="course_price" property="coursePrice" jdbcType="DECIMAL" />
+    <result column="course_intro" property="courseIntro" jdbcType="VARCHAR" />
+    <result column="course_speaker" property="courseSpeaker" jdbcType="VARCHAR" />
+    <result column="course_duration" property="courseDuration" jdbcType="VARCHAR" />
+    <result column="introvideo_url" property="introvideoUrl" jdbcType="VARCHAR" />
+    <result column="course_picture" property="coursePicture" jdbcType="VARCHAR" />
+    <result column="course_logo" property="courseLogo" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="course_status" property="courseStatus" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.huisou.po.CoursePo" extends="BaseResultMap" >
+    <result column="course_detail" property="courseDetail" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    course_id, course_title, course_price, course_intro, course_speaker, course_duration, 
+    introvideo_url, course_picture, course_logo, create_by, create_time, update_by, update_time, 
+    course_status, standby1, standby2
+  </sql>
+  <sql id="Blob_Column_List" >
+    course_detail
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from busi_course
+    where course_id = #{courseId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_course
+    where course_id = #{courseId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.CoursePo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="courseId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_course (course_title, course_price, course_intro, 
+      course_speaker, course_duration, introvideo_url, 
+      course_picture, course_logo, create_by, 
+      create_time, update_by, update_time, 
+      course_status, standby1, standby2, 
+      course_detail)
+    values (#{courseTitle,jdbcType=VARCHAR}, #{coursePrice,jdbcType=DECIMAL}, #{courseIntro,jdbcType=VARCHAR}, 
+      #{courseSpeaker,jdbcType=VARCHAR}, #{courseDuration,jdbcType=VARCHAR}, #{introvideoUrl,jdbcType=VARCHAR}, 
+      #{coursePicture,jdbcType=VARCHAR}, #{courseLogo,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{courseStatus,jdbcType=VARCHAR}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}, 
+      #{courseDetail,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.CoursePo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="courseId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_course
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="courseTitle != null" >
+        course_title,
+      </if>
+      <if test="coursePrice != null" >
+        course_price,
+      </if>
+      <if test="courseIntro != null" >
+        course_intro,
+      </if>
+      <if test="courseSpeaker != null" >
+        course_speaker,
+      </if>
+      <if test="courseDuration != null" >
+        course_duration,
+      </if>
+      <if test="introvideoUrl != null" >
+        introvideo_url,
+      </if>
+      <if test="coursePicture != null" >
+        course_picture,
+      </if>
+      <if test="courseLogo != null" >
+        course_logo,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="courseStatus != null" >
+        course_status,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+      <if test="courseDetail != null" >
+        course_detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="courseTitle != null" >
+        #{courseTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="coursePrice != null" >
+        #{coursePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="courseIntro != null" >
+        #{courseIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="courseSpeaker != null" >
+        #{courseSpeaker,jdbcType=VARCHAR},
+      </if>
+      <if test="courseDuration != null" >
+        #{courseDuration,jdbcType=VARCHAR},
+      </if>
+      <if test="introvideoUrl != null" >
+        #{introvideoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="coursePicture != null" >
+        #{coursePicture,jdbcType=VARCHAR},
+      </if>
+      <if test="courseLogo != null" >
+        #{courseLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseStatus != null" >
+        #{courseStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+      <if test="courseDetail != null" >
+        #{courseDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.CoursePo" >
+    update busi_course
+    <set >
+      <if test="courseTitle != null" >
+        course_title = #{courseTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="coursePrice != null" >
+        course_price = #{coursePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="courseIntro != null" >
+        course_intro = #{courseIntro,jdbcType=VARCHAR},
+      </if>
+      <if test="courseSpeaker != null" >
+        course_speaker = #{courseSpeaker,jdbcType=VARCHAR},
+      </if>
+      <if test="courseDuration != null" >
+        course_duration = #{courseDuration,jdbcType=VARCHAR},
+      </if>
+      <if test="introvideoUrl != null" >
+        introvideo_url = #{introvideoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="coursePicture != null" >
+        course_picture = #{coursePicture,jdbcType=VARCHAR},
+      </if>
+      <if test="courseLogo != null" >
+        course_logo = #{courseLogo,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="courseStatus != null" >
+        course_status = #{courseStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+      <if test="courseDetail != null" >
+        course_detail = #{courseDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where course_id = #{courseId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.huisou.po.CoursePo" >
+    update busi_course
+    set course_title = #{courseTitle,jdbcType=VARCHAR},
+      course_price = #{coursePrice,jdbcType=DECIMAL},
+      course_intro = #{courseIntro,jdbcType=VARCHAR},
+      course_speaker = #{courseSpeaker,jdbcType=VARCHAR},
+      course_duration = #{courseDuration,jdbcType=VARCHAR},
+      introvideo_url = #{introvideoUrl,jdbcType=VARCHAR},
+      course_picture = #{coursePicture,jdbcType=VARCHAR},
+      course_logo = #{courseLogo,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      course_status = #{courseStatus,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR},
+      course_detail = #{courseDetail,jdbcType=LONGVARCHAR}
+    where course_id = #{courseId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.CoursePo" >
+    update busi_course
+    set course_title = #{courseTitle,jdbcType=VARCHAR},
+      course_price = #{coursePrice,jdbcType=DECIMAL},
+      course_intro = #{courseIntro,jdbcType=VARCHAR},
+      course_speaker = #{courseSpeaker,jdbcType=VARCHAR},
+      course_duration = #{courseDuration,jdbcType=VARCHAR},
+      introvideo_url = #{introvideoUrl,jdbcType=VARCHAR},
+      course_picture = #{coursePicture,jdbcType=VARCHAR},
+      course_logo = #{courseLogo,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      course_status = #{courseStatus,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where course_id = #{courseId,jdbcType=INTEGER}
+  </update>
+  <select id="search" resultMap="BaseResultMap">
+  	SELECT * FROM busi_course 
+  	<where>
+  		<if test="courseStatus!=null and courseStatus!=''">
+  		and course_status = #{courseStatus}
+  		</if>
+  		<if test="courseTitle!=null and courseTitle!=''">
+  		and course_title like CONCAT('%',#{courseTitle},'%')
+  		</if>
+  		<if test="startDate!=null">
+  		and create_time &gt;= #{startDate}
+  		</if>
+  		<if test="endDate!=null">
+  		and create_time &lt;= #{endDate}
+  		</if>
+  	</where>
+  	ORDER BY create_time DESC
+  </select>
+  <select id="findCourseByUserid" resultMap="BaseResultMap">
+  	SELECT
+		t2.*
+	FROM
+		(
+			SELECT
+				res_id
+			FROM
+				busi_order
+			WHERE
+				user_id = #{userid}
+			AND res_type = 'KC'
+			AND pay_status = 2
+		) t1
+	LEFT JOIN busi_course t2 ON t2.course_id = t1.res_id
+  </select>
+</mapper>

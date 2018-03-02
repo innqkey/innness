@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.AwardRecordPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.AwardRecordPo" >
+    <id column="award_record_id" property="awardRecordId" jdbcType="INTEGER" />
+    <result column="award_no" property="awardNo" jdbcType="VARCHAR" />
+    <result column="award_money" property="awardMoney" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="res_id" property="resId" jdbcType="INTEGER" />
+    <result column="res_type" property="resType" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="award_status" property="awardStatus" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    award_record_id, award_no, award_money, create_time, res_id, res_type, user_id, award_status, 
+    standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_award_record
+    where award_record_id = #{awardRecordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_award_record
+    where award_record_id = #{awardRecordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.AwardRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="awardRecordId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_award_record (award_no, award_money, create_time, 
+      res_id, res_type, user_id, 
+      award_status, standby1, standby2
+      )
+    values (#{awardNo,jdbcType=VARCHAR}, #{awardMoney,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{resId,jdbcType=INTEGER}, #{resType,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{awardStatus,jdbcType=VARCHAR}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.AwardRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="awardRecordId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_award_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="awardNo != null" >
+        award_no,
+      </if>
+      <if test="awardMoney != null" >
+        award_money,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="resId != null" >
+        res_id,
+      </if>
+      <if test="resType != null" >
+        res_type,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="awardStatus != null" >
+        award_status,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="awardNo != null" >
+        #{awardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="awardMoney != null" >
+        #{awardMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resId != null" >
+        #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resType != null" >
+        #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="awardStatus != null" >
+        #{awardStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.AwardRecordPo" >
+    update busi_award_record
+    <set >
+      <if test="awardNo != null" >
+        award_no = #{awardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="awardMoney != null" >
+        award_money = #{awardMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="resId != null" >
+        res_id = #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resType != null" >
+        res_type = #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="awardStatus != null" >
+        award_status = #{awardStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where award_record_id = #{awardRecordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.AwardRecordPo" >
+    update busi_award_record
+    set award_no = #{awardNo,jdbcType=VARCHAR},
+      award_money = #{awardMoney,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      res_id = #{resId,jdbcType=INTEGER},
+      res_type = #{resType,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      award_status = #{awardStatus,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where award_record_id = #{awardRecordId,jdbcType=INTEGER}
+  </update>
+  <select id="search" resultType="com.huisou.vo.AwardRecordVo">
+  	SELECT
+		t1.award_record_id awardRecordId,
+		t1.award_money awardMoney,
+		t1.create_time createTime,
+		t1.res_id resId,
+		t1.award_no awardNo,
+		t1.award_status awardStatus,
+		t1.res_type resType,
+		t1.user_id userId,
+		t2.nickname,
+		t2.headimgurl
+	FROM
+		busi_award_record t1
+	LEFT JOIN busi_user t2 ON t1.user_id = t2.user_id
+	WHERE
+		t1.res_id = #{resId}
+	AND t1.res_type =#{resType}
+	AND t1.award_status="2"
+	ORDER BY t1.create_time DESC
+  </select>
+  <select id="findAll" resultType="com.huisou.vo.AwardRecordVo">
+  	SELECT
+		t1.award_record_id awardRecordId,
+		t1.award_money awardMoney,
+		t1.create_time createTime,
+		t1.res_id resId,
+		t1.award_no awardNo,
+		t1.award_status awardStatus,
+		t1.res_type resType,
+		t1.user_id userId,
+		t2.nickname,
+		t3.video_audio_title videoAudioTitle,
+		t2.phone,
+		t2.headimgurl
+	FROM
+		busi_award_record t1
+	LEFT JOIN busi_user t2 ON t1.user_id = t2.user_id
+	LEFT JOIN busi_video_audio t3 ON t1.res_id = t3.video_audio_id
+	<where>
+		<if test="nickname!=null and nickname!=''">
+  		and t2.nickname like CONCAT('%',#{nickname},'%')
+  		</if>
+  		<if test="phone!=null and phone!=''">
+  		and t2.phone like CONCAT('%',#{phone},'%')
+  		</if>
+  		<if test="startDate!=null">
+  		and t1.create_time &gt;= #{startDate}
+  		</if>
+  		<if test="endDate!=null">
+  		and t1.create_time &lt;= #{endDate}
+  		</if>
+  		<if test="awardStatus!=null and awardStatus!=''">
+  		and t1.award_status = #{awardStatus}
+  		</if>
+	</where>
+	ORDER BY t1.create_time DESC
+  </select>
+ <select id="findOne" resultMap="BaseResultMap">
+ 	select * from busi_award_record where award_no=#{awardNo}
+ </select>
+</mapper>

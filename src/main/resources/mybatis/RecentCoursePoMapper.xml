@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.RecentCoursePoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.RecentCoursePo" >
+    <id column="recent_course_id" property="recentCourseId" jdbcType="INTEGER" />
+    <result column="recent_course_title" property="recentCourseTitle" jdbcType="VARCHAR" />
+    <result column="recent_course_address" property="recentCourseAddress" jdbcType="VARCHAR" />
+    <result column="recent_course_max_num" property="recentCourseMaxNum" jdbcType="VARCHAR" />
+    <result column="recent_course_apply_num" property="recentCourseApplyNum" jdbcType="VARCHAR" />
+    <result column="regionsIds" property="regionsids" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="recent_course_delete_status" property="recentCourseDeleteStatus" jdbcType="VARCHAR" />
+    <result column="recent_course_status" property="recentCourseStatus" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    recent_course_id, recent_course_title, recent_course_address, recent_course_max_num, 
+    recent_course_apply_num, regionsIds, province, city, area, course_id, begin_time, 
+    end_time, create_by, create_time, update_by, update_time, recent_course_delete_status, 
+    recent_course_status, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_recent_course
+    where recent_course_id = #{recentCourseId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_recent_course
+    where recent_course_id = #{recentCourseId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.RecentCoursePo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="recentCourseId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_recent_course (recent_course_title, recent_course_address, 
+      recent_course_max_num, recent_course_apply_num, 
+      regionsIds, province, city, 
+      area, course_id, begin_time, 
+      end_time, create_by, create_time, 
+      update_by, update_time, recent_course_delete_status, 
+      recent_course_status, standby1, standby2
+      )
+    values (#{recentCourseTitle,jdbcType=VARCHAR}, #{recentCourseAddress,jdbcType=VARCHAR}, 
+      #{recentCourseMaxNum,jdbcType=VARCHAR}, #{recentCourseApplyNum,jdbcType=VARCHAR}, 
+      #{regionsids,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{area,jdbcType=VARCHAR}, #{courseId,jdbcType=INTEGER}, #{beginTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{recentCourseDeleteStatus,jdbcType=VARCHAR}, 
+      #{recentCourseStatus,jdbcType=VARCHAR}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.RecentCoursePo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="recentCourseId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_recent_course
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recentCourseTitle != null" >
+        recent_course_title,
+      </if>
+      <if test="recentCourseAddress != null" >
+        recent_course_address,
+      </if>
+      <if test="recentCourseMaxNum != null" >
+        recent_course_max_num,
+      </if>
+      <if test="recentCourseApplyNum != null" >
+        recent_course_apply_num,
+      </if>
+      <if test="regionsids != null" >
+        regionsIds,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="courseId != null" >
+        course_id,
+      </if>
+      <if test="beginTime != null" >
+        begin_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="recentCourseDeleteStatus != null" >
+        recent_course_delete_status,
+      </if>
+      <if test="recentCourseStatus != null" >
+        recent_course_status,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recentCourseTitle != null" >
+        #{recentCourseTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="recentCourseAddress != null" >
+        #{recentCourseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="recentCourseMaxNum != null" >
+        #{recentCourseMaxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="recentCourseApplyNum != null" >
+        #{recentCourseApplyNum,jdbcType=VARCHAR},
+      </if>
+      <if test="regionsids != null" >
+        #{regionsids,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="courseId != null" >
+        #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="beginTime != null" >
+        #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recentCourseDeleteStatus != null" >
+        #{recentCourseDeleteStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="recentCourseStatus != null" >
+        #{recentCourseStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.RecentCoursePo" >
+    update busi_recent_course
+    <set >
+      <if test="recentCourseTitle != null" >
+        recent_course_title = #{recentCourseTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="recentCourseAddress != null" >
+        recent_course_address = #{recentCourseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="recentCourseMaxNum != null" >
+        recent_course_max_num = #{recentCourseMaxNum,jdbcType=VARCHAR},
+      </if>
+      <if test="recentCourseApplyNum != null" >
+        recent_course_apply_num = #{recentCourseApplyNum,jdbcType=VARCHAR},
+      </if>
+      <if test="regionsids != null" >
+        regionsIds = #{regionsids,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="courseId != null" >
+        course_id = #{courseId,jdbcType=INTEGER},
+      </if>
+      <if test="beginTime != null" >
+        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recentCourseDeleteStatus != null" >
+        recent_course_delete_status = #{recentCourseDeleteStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="recentCourseStatus != null" >
+        recent_course_status = #{recentCourseStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where recent_course_id = #{recentCourseId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.RecentCoursePo" >
+    update busi_recent_course
+    set recent_course_title = #{recentCourseTitle,jdbcType=VARCHAR},
+      recent_course_address = #{recentCourseAddress,jdbcType=VARCHAR},
+      recent_course_max_num = #{recentCourseMaxNum,jdbcType=VARCHAR},
+      recent_course_apply_num = #{recentCourseApplyNum,jdbcType=VARCHAR},
+      regionsIds = #{regionsids,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      course_id = #{courseId,jdbcType=INTEGER},
+      begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      recent_course_delete_status = #{recentCourseDeleteStatus,jdbcType=VARCHAR},
+      recent_course_status = #{recentCourseStatus,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where recent_course_id = #{recentCourseId,jdbcType=INTEGER}
+  </update>
+  
+ <select id="search" resultType="com.huisou.vo.RecentCourseVo">
+  	SELECT
+		t1.recent_course_id recentCourseId,
+		t1.recent_course_title recentCourseTitle,
+		t1.begin_time beginTime,
+		t1.course_id courseId,
+		t1.end_time endTime,
+		t1.create_time createTime,
+		t1.recent_course_address recentCourseAddress,
+		t1.recent_course_apply_num recentCourseApplyNum,
+		t1.recent_course_max_num recentCourseMaxNum,
+		t1.recent_course_status recentCourseStatus,
+		t2.course_title courseTitle,
+		t1.regionsIds regionsids
+	FROM
+		busi_recent_course t1
+	LEFT JOIN busi_course t2 ON t1.course_id = t2.course_id
+	<where>
+		<if test="courseTitle!=null and courseTitle!=''">
+  		and t2.courseTitle like CONCAT('%',#{courseTitle},'%')
+  		</if>
+  		<if test="recentCourseTitle!=null and recentCourseTitle!=''">
+  		and t1.recent_course_title like CONCAT('%',#{recentCourseTitle},'%')
+  		</if>
+  		<if test="recentCourseDeleteStatus!=null and recentCourseDeleteStatus!=''">
+  		and t1.recent_course_delete_status = #{recentCourseDeleteStatus}
+  		</if>
+  		<if test="startDate!=null">
+  		and t1.create_time &gt;= #{startDate}
+  		</if>
+  		<if test="endDate!=null">
+  		and t1.create_time &lt;= #{endDate}
+  		</if>
+	</where>
+	ORDER BY t1.create_time DESC
+  </select>
+  
+  <select id="findByAfterDate" resultMap="BaseResultMap">
+  	select * from busi_recent_course WHERE begin_time&gt;= #{now} AND recent_course_delete_status='1' order by course_id ,begin_time
+  </select>
+  <select id="findAll" resultMap="BaseResultMap">
+  	select * from busi_recent_course
+  </select>
+</mapper>

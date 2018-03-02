@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.MaterialLevelPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.MaterialLevelPo" >
+    <id column="material_level_id" property="materialLevelId" jdbcType="INTEGER" />
+    <result column="material_level_name" property="materialLevelName" jdbcType="VARCHAR" />
+    <result column="material_level_type" property="materialLevelType" jdbcType="VARCHAR" />
+    <result column="material_level_img" property="materialLevelImg" jdbcType="VARCHAR" />
+    <result column="material_level_num" property="materialLevelNum" jdbcType="INTEGER" />
+    <result column="material_level_status" property="materialLevelStatus" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    material_level_id, material_level_name, material_level_type, material_level_img, 
+    material_level_num, material_level_status,create_by, create_time, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_material_level
+    where material_level_id = #{materialLevelId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_material_level
+    where material_level_id = #{materialLevelId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.MaterialLevelPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="materialLevelId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_material_level (material_level_name, material_level_type, 
+      material_level_img, material_level_num, material_level_status,create_by, 
+      create_time, standby1, standby2
+      )
+    values (#{materialLevelName,jdbcType=VARCHAR}, #{materialLevelType,jdbcType=VARCHAR}, #{materialLevelImg,jdbcType=VARCHAR},
+      #{materialLevelStatus,jdbcType=VARCHAR}, #{materialLevelNum,jdbcType=INTEGER}, #{createBy,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.MaterialLevelPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="materialLevelId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_material_level
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="materialLevelName != null" >
+        material_level_name,
+      </if>
+      <if test="materialLevelType != null" >
+        material_level_type,
+      </if>
+      <if test="materialLevelImg != null" >
+        material_level_img,
+      </if>
+      <if test="materialLevelNum != null" >
+        material_level_num,
+      </if>
+      <if test="materialLevelStatus != null" >
+        material_level_status,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="materialLevelName != null" >
+        #{materialLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialLevelType != null" >
+        #{materialLevelType,jdbcType=VARCHAR},
+      </if>
+      <if test="materialLevelImg != null" >
+        #{materialLevelImg,jdbcType=VARCHAR},
+      </if>
+      <if test="materialLevelNum != null" >
+        #{materialLevelNum,jdbcType=INTEGER},
+      </if>
+      <if test="materialLevelStatus != null" >
+        #{materialLevelStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.MaterialLevelPo" >
+    update busi_material_level
+    <set >
+      <if test="materialLevelName != null" >
+        material_level_name = #{materialLevelName,jdbcType=VARCHAR},
+      </if>
+      <if test="materialLevelType != null" >
+        material_level_type = #{materialLevelType,jdbcType=VARCHAR},
+      </if>
+      <if test="materialLevelImg != null" >
+        material_level_img = #{materialLevelImg,jdbcType=VARCHAR},
+      </if>
+      <if test="materialLevelStatus != null" >
+        material_level_status = #{materialLevelStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="materialLevelNum != null" >
+        material_level_num = #{materialLevelNum,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where material_level_id = #{materialLevelId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.MaterialLevelPo" >
+    update busi_material_level
+    set material_level_name = #{materialLevelName,jdbcType=VARCHAR},
+      material_level_type = #{materialLevelType,jdbcType=VARCHAR},
+      material_level_img = #{materialLevelImg,jdbcType=VARCHAR},
+      material_level_status = #{materialLevelStatus,jdbcType=VARCHAR},
+      material_level_num = #{materialLevelNum,jdbcType=INTEGER},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where material_level_id = #{materialLevelId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="deleteOne" parameterType="java.util.List">
+  	update busi_material_level
+    set material_level_status = "2"
+  	where material_level_id in 
+  	<foreach item="item" index="index" open="(" separator="," close=")" collection="materialLevelId">
+  		#{item}
+  	</foreach>
+  </update>
+  <update id="updateLevelNum" parameterType="java.lang.Integer" >
+    update busi_material_level
+    set material_level_num = material_level_num + #{num}
+    where material_level_id = #{materialLevelId}
+    and material_level_status = "1"
+  </update>
+  <select id="findAll"  parameterType="Map" resultMap="BaseResultMap">
+  		select 
+  		<include refid="Base_Column_List" />
+  		from busi_material_level
+  		where material_level_status = "1"
+  		<if test="materialLevelType != NULL and materialLevelType != ''">
+  			and material_level_type = #{materialLevelType}
+  		</if>
+  		<if test="materialLevelName != null and materialLevelName !=''">
+  			and material_level_name like CONCAT('%', #{materialLevelName},'%')
+  		</if>
+  		<if test="minLevelNum != null and minLevelNum != '' ">
+  			<![CDATA[   and material_level_num >= #{minLevelNum}   ]]>
+  		</if>		  
+  		<if test="maxLevelNum != null and maxLevelNum != '' ">
+  			<![CDATA[   and material_level_num <= #{maxLevelNum}   ]]>
+  		</if>		  
+		<if test="beginDate!=null and beginDate!=''">
+    		<![CDATA[   and DATE_FORMAT(create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
+		</if>
+		<if test="endDate!=null and endDate!=''">
+   			<![CDATA[  and DATE_FORMAT(create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
+		</if>
+		ORDER BY create_time DESC
+  	</select>
+</mapper>

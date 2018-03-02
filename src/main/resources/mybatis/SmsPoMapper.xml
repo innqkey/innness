@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.SmsPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.SmsPo" >
+    <id column="sms_id" property="smsId" jdbcType="INTEGER" />
+    <result column="sms_code" property="smsCode" jdbcType="VARCHAR" />
+    <result column="sms_long" property="smsLong" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="sms_send_status" property="smsSendStatus" jdbcType="VARCHAR" />
+    <result column="sms_platform" property="smsPlatform" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sms_id, sms_code, sms_long, user_id, phone, sms_send_status, sms_platform, create_time, 
+    update_time, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_sms
+    where sms_id = #{smsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_sms
+    where sms_id = #{smsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.SmsPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="smsId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_sms (sms_code, sms_long, user_id, 
+      phone, sms_send_status, sms_platform, 
+      create_time, update_time, standby1, 
+      standby2)
+    values (#{smsCode,jdbcType=VARCHAR}, #{smsLong,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
+      #{phone,jdbcType=VARCHAR}, #{smsSendStatus,jdbcType=VARCHAR}, #{smsPlatform,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{standby1,jdbcType=VARCHAR}, 
+      #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.SmsPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="smsId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_sms
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="smsCode != null" >
+        sms_code,
+      </if>
+      <if test="smsLong != null" >
+        sms_long,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="smsSendStatus != null" >
+        sms_send_status,
+      </if>
+      <if test="smsPlatform != null" >
+        sms_platform,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="smsCode != null" >
+        #{smsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="smsLong != null" >
+        #{smsLong,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="smsSendStatus != null" >
+        #{smsSendStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="smsPlatform != null" >
+        #{smsPlatform,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.SmsPo" >
+    update busi_sms
+    <set >
+      <if test="smsCode != null" >
+        sms_code = #{smsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="smsLong != null" >
+        sms_long = #{smsLong,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="smsSendStatus != null" >
+        sms_send_status = #{smsSendStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="smsPlatform != null" >
+        sms_platform = #{smsPlatform,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sms_id = #{smsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.SmsPo" >
+    update busi_sms
+    set sms_code = #{smsCode,jdbcType=VARCHAR},
+      sms_long = #{smsLong,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR},
+      sms_send_status = #{smsSendStatus,jdbcType=VARCHAR},
+      sms_platform = #{smsPlatform,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where sms_id = #{smsId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="curDateNumByUserId" resultType="java.lang.Integer" >
+    select count(*) from busi_sms
+	where sms_send_status = '000000' 
+	<if test="userId != null" >
+	   and user_id = #{userId}
+    </if>
+	<if test="timeStr != null" >
+	   and create_time >= #{timeStr,jdbcType=VARCHAR}
+    </if>
+  </select>
+</mapper>

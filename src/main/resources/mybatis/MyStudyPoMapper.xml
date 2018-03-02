@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.MyStudyPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.MyStudyPo" >
+    <id column="my_study_id" property="myStudyId" jdbcType="INTEGER" />
+    <result column="res_id" property="resId" jdbcType="INTEGER" />
+    <result column="res_title" property="resTitle" jdbcType="VARCHAR" />
+    <result column="res_type" property="resType" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    my_study_id, res_id, res_title, res_type, user_id, create_time, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_my_study
+    where my_study_id = #{myStudyId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_my_study
+    where my_study_id = #{myStudyId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.MyStudyPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="myStudyId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_my_study (res_id, res_title, res_type, 
+      user_id, create_time, standby1, 
+      standby2)
+    values (#{resId,jdbcType=INTEGER}, #{resTitle,jdbcType=VARCHAR}, #{resType,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{standby1,jdbcType=VARCHAR}, 
+      #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.MyStudyPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="myStudyId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_my_study
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="resId != null" >
+        res_id,
+      </if>
+      <if test="resTitle != null" >
+        res_title,
+      </if>
+      <if test="resType != null" >
+        res_type,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="resId != null" >
+        #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resTitle != null" >
+        #{resTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="resType != null" >
+        #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.MyStudyPo" >
+    update busi_my_study
+    <set >
+      <if test="resId != null" >
+        res_id = #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resTitle != null" >
+        res_title = #{resTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="resType != null" >
+        res_type = #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where my_study_id = #{myStudyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.MyStudyPo" >
+    update busi_my_study
+    set res_id = #{resId,jdbcType=INTEGER},
+      res_title = #{resTitle,jdbcType=VARCHAR},
+      res_type = #{resType,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where my_study_id = #{myStudyId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findAll"  parameterType="Map" resultType="com.huisou.vo.MyStudyVo">
+  	SELECT
+		t1.my_study_id AS myStudyId,
+		t1.res_id AS resId,
+		t2.material_url AS resUrl,
+		t1.res_title AS resTitle,
+		t1.res_type AS resType,
+		t1.user_id AS userId,
+		t1.create_time AS createTime,
+		t2.material_down_num AS materialDownNum
+	FROM
+		busi_my_study t1
+	LEFT JOIN busi_material t2 
+	ON t1.res_id = t2.material_id
+	where 1=1
+		<if test='userId != null and userId != ""'>
+			and t1.user_id = #{userId}
+		</if>
+		<if test='resType != null and resType != ""'>
+			and t1.res_type = #{resType}
+		</if>
+	ORDER BY t1.create_time DESC		
+  </select>
+  <select id="findOne" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from busi_my_study
+    where 1=1
+    <if test="userId != null and userId != ''">
+    	and user_id = #{userId}
+    </if>
+    <if test="materialId != null and materialId != ''">
+    	and res_id = #{materialId}
+    </if>
+    <if test="resType != null and resType != ''">
+    	and res_type = #{resType}
+    </if>
+  </select>
+</mapper>

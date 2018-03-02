@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.ChatMessagePoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.ChatMessagePo" >
+    <id column="messageid" property="messageid" jdbcType="BIGINT" />
+    <result column="from_user" property="fromUser" jdbcType="INTEGER" />
+    <result column="to_user" property="toUser" jdbcType="INTEGER" />
+    <result column="from_username" property="fromUsername" jdbcType="VARCHAR" />
+    <result column="to_username" property="toUsername" jdbcType="VARCHAR" />
+    <result column="msgtype" property="msgtype" jdbcType="VARCHAR" />
+    <result column="headurl" property="headurl" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.huisou.po.ChatMessagePo" extends="BaseResultMap" >
+    <result column="message" property="message" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    messageid, from_user, to_user, from_username, to_username, msgtype, headurl, standby1, 
+    standby2, createtime
+  </sql>
+  <sql id="Blob_Column_List" >
+    message
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from busi_chat_message
+    where messageid = #{messageid,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from busi_chat_message
+    where messageid = #{messageid,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.ChatMessagePo" >
+    <selectKey resultType="java.lang.Long" keyProperty="messageid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_chat_message (from_user, to_user, from_username, 
+      to_username, msgtype, headurl, 
+      standby1, standby2, createtime, 
+      message)
+    values (#{fromUser,jdbcType=INTEGER}, #{toUser,jdbcType=INTEGER}, #{fromUsername,jdbcType=VARCHAR}, 
+      #{toUsername,jdbcType=VARCHAR}, #{msgtype,jdbcType=VARCHAR}, #{headurl,jdbcType=VARCHAR}, 
+      #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{message,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.ChatMessagePo" >
+    <selectKey resultType="java.lang.Long" keyProperty="messageid" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_chat_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fromUser != null" >
+        from_user,
+      </if>
+      <if test="toUser != null" >
+        to_user,
+      </if>
+      <if test="fromUsername != null" >
+        from_username,
+      </if>
+      <if test="toUsername != null" >
+        to_username,
+      </if>
+      <if test="msgtype != null" >
+        msgtype,
+      </if>
+      <if test="headurl != null" >
+        headurl,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="message != null" >
+        message,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fromUser != null" >
+        #{fromUser,jdbcType=INTEGER},
+      </if>
+      <if test="toUser != null" >
+        #{toUser,jdbcType=INTEGER},
+      </if>
+      <if test="fromUsername != null" >
+        #{fromUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="toUsername != null" >
+        #{toUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtype != null" >
+        #{msgtype,jdbcType=VARCHAR},
+      </if>
+      <if test="headurl != null" >
+        #{headurl,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="message != null" >
+        #{message,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.ChatMessagePo" >
+    update busi_chat_message
+    <set >
+      <if test="fromUser != null" >
+        from_user = #{fromUser,jdbcType=INTEGER},
+      </if>
+      <if test="toUser != null" >
+        to_user = #{toUser,jdbcType=INTEGER},
+      </if>
+      <if test="fromUsername != null" >
+        from_username = #{fromUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="toUsername != null" >
+        to_username = #{toUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtype != null" >
+        msgtype = #{msgtype,jdbcType=VARCHAR},
+      </if>
+      <if test="headurl != null" >
+        headurl = #{headurl,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="message != null" >
+        message = #{message,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where messageid = #{messageid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.huisou.po.ChatMessagePo" >
+    update busi_chat_message
+    set from_user = #{fromUser,jdbcType=INTEGER},
+      to_user = #{toUser,jdbcType=INTEGER},
+      from_username = #{fromUsername,jdbcType=VARCHAR},
+      to_username = #{toUsername,jdbcType=VARCHAR},
+      msgtype = #{msgtype,jdbcType=VARCHAR},
+      headurl = #{headurl,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      message = #{message,jdbcType=LONGVARCHAR}
+    where messageid = #{messageid,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.ChatMessagePo" >
+    update busi_chat_message
+    set from_user = #{fromUser,jdbcType=INTEGER},
+      to_user = #{toUser,jdbcType=INTEGER},
+      from_username = #{fromUsername,jdbcType=VARCHAR},
+      to_username = #{toUsername,jdbcType=VARCHAR},
+      msgtype = #{msgtype,jdbcType=VARCHAR},
+      headurl = #{headurl,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP}
+    where messageid = #{messageid,jdbcType=BIGINT}
+  </update>
+  
+  
+  <select id="listGetMessage"  resultMap="BaseResultMap">
+	  		select *
+	  		from busi_chat_message
+	  		where 1=1 and (
+	  		<if test="fromUser != null and fromUser !=''">
+	  			 from_user=#{fromUser}
+	  		</if>
+	  		<if test="toUser != null and toUser != '' ">
+	  			and to_user=#{toUser}
+	  		</if>
+	  		) OR (
+	  			<if test="fromUser != null and fromUser !=''">
+	  			 from_user=#{toUser}
+		  		</if>
+		  		<if test="toUser != null and toUser != '' ">
+		  			and to_user=#{fromUser}
+		  		</if>
+	  		)	  		
+	  		<if test="messageid != null and messageid != '' ">
+	  			<![CDATA[and messageid < #{messageid} ]]>		
+	  		</if>		  
+			order by messageid desc
+	  	</select>
+</mapper>

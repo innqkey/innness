@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.ImagePoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.ImagePo" >
+    <id column="image_id" property="imageId" jdbcType="INTEGER" />
+    <result column="user_openid" property="userOpenid" jdbcType="VARCHAR" />
+    <result column="backgroud_id" property="backgroudId" jdbcType="INTEGER" />
+    <result column="image_type" property="imageType" jdbcType="INTEGER" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    image_id, user_openid, backgroud_id, image_type, file_name, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_image
+    where image_id = #{imageId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_image
+    where image_id = #{imageId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.ImagePo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="imageId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_image (user_openid, backgroud_id, image_type, 
+      file_name, create_time)
+    values (#{userOpenid,jdbcType=VARCHAR}, #{backgroudId,jdbcType=INTEGER}, #{imageType,jdbcType=INTEGER}, 
+      #{fileName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.ImagePo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="imageId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_image
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userOpenid != null" >
+        user_openid,
+      </if>
+      <if test="backgroudId != null" >
+        backgroud_id,
+      </if>
+      <if test="imageType != null" >
+        image_type,
+      </if>
+      <if test="fileName != null" >
+        file_name,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userOpenid != null" >
+        #{userOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="backgroudId != null" >
+        #{backgroudId,jdbcType=INTEGER},
+      </if>
+      <if test="imageType != null" >
+        #{imageType,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.ImagePo" >
+    update busi_image
+    <set >
+      <if test="userOpenid != null" >
+        user_openid = #{userOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="backgroudId != null" >
+        backgroud_id = #{backgroudId,jdbcType=INTEGER},
+      </if>
+      <if test="imageType != null" >
+        image_type = #{imageType,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where image_id = #{imageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.ImagePo" >
+    update busi_image
+    set user_openid = #{userOpenid,jdbcType=VARCHAR},
+      backgroud_id = #{backgroudId,jdbcType=INTEGER},
+      image_type = #{imageType,jdbcType=INTEGER},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where image_id = #{imageId,jdbcType=INTEGER}
+  </update>
+  
+    <delete id="deleteByImageType">
+  	  delete from busi_image
+    where image_type = 2
+  </delete>
+  
+  <select id="getByOpenId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_image
+    where  user_openid= #{openId,jdbcType=VARCHAR} order by create_time desc
+  </select>
+  
+  <select id="getBackageImage" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_image
+    where  image_type= 2 order by create_time desc;
+  </select>
+  
+</mapper>

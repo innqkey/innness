@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.RotationImagePoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.RotationImagePo" >
+    <id column="rotation_image_id" property="rotationImageId" jdbcType="INTEGER" />
+    <result column="rotation_image_no" property="rotationImageNo" jdbcType="INTEGER" />
+    <result column="notice_certificate_id" property="noticeCertificateId" jdbcType="INTEGER" />
+    <result column="notice_certificate_content" property="noticeCertificateContent" jdbcType="VARCHAR" />
+    <result column="rotation_image_name" property="rotationImageName" jdbcType="VARCHAR" />
+    <result column="rotation_image_url" property="rotationImageUrl" jdbcType="VARCHAR" />
+    <result column="link_url_type" property="linkUrlType" jdbcType="VARCHAR" />
+    <result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="rotation_image_status" property="rotationImageStatus" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    rotation_image_id, rotation_image_no, notice_certificate_id, notice_certificate_content, 
+    rotation_image_name, rotation_image_url, link_url_type, link_url, create_by, create_time, 
+    update_by, update_time, rotation_image_status, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_rotation_image
+    where rotation_image_id = #{rotationImageId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_rotation_image
+    where rotation_image_id = #{rotationImageId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.RotationImagePo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="rotationImageId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_rotation_image (rotation_image_no, notice_certificate_id, 
+      notice_certificate_content, rotation_image_name, 
+      rotation_image_url, link_url_type, link_url, 
+      create_by, create_time, update_by, 
+      update_time, rotation_image_status, standby1, 
+      standby2)
+    values (#{rotationImageNo,jdbcType=INTEGER}, #{noticeCertificateId,jdbcType=INTEGER}, 
+      #{noticeCertificateContent,jdbcType=VARCHAR}, #{rotationImageName,jdbcType=VARCHAR}, 
+      #{rotationImageUrl,jdbcType=VARCHAR}, #{linkUrlType,jdbcType=VARCHAR}, #{linkUrl,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{rotationImageStatus,jdbcType=VARCHAR}, #{standby1,jdbcType=VARCHAR}, 
+      #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.RotationImagePo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="rotationImageId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_rotation_image
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rotationImageNo != null" >
+        rotation_image_no,
+      </if>
+      <if test="noticeCertificateId != null" >
+        notice_certificate_id,
+      </if>
+      <if test="noticeCertificateContent != null" >
+        notice_certificate_content,
+      </if>
+      <if test="rotationImageName != null" >
+        rotation_image_name,
+      </if>
+      <if test="rotationImageUrl != null" >
+        rotation_image_url,
+      </if>
+      <if test="linkUrlType != null" >
+        link_url_type,
+      </if>
+      <if test="linkUrl != null" >
+        link_url,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="rotationImageStatus != null" >
+        rotation_image_status,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rotationImageNo != null" >
+        #{rotationImageNo,jdbcType=INTEGER},
+      </if>
+      <if test="noticeCertificateId != null" >
+        #{noticeCertificateId,jdbcType=INTEGER},
+      </if>
+      <if test="noticeCertificateContent != null" >
+        #{noticeCertificateContent,jdbcType=VARCHAR},
+      </if>
+      <if test="rotationImageName != null" >
+        #{rotationImageName,jdbcType=VARCHAR},
+      </if>
+      <if test="rotationImageUrl != null" >
+        #{rotationImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrlType != null" >
+        #{linkUrlType,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null" >
+        #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rotationImageStatus != null" >
+        #{rotationImageStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.RotationImagePo" >
+    update busi_rotation_image
+    <set >
+      <if test="rotationImageNo != null" >
+        rotation_image_no = #{rotationImageNo,jdbcType=INTEGER},
+      </if>
+      <if test="noticeCertificateId != null" >
+        notice_certificate_id = #{noticeCertificateId,jdbcType=INTEGER},
+      </if>
+      <if test="noticeCertificateContent != null" >
+        notice_certificate_content = #{noticeCertificateContent,jdbcType=VARCHAR},
+      </if>
+      <if test="rotationImageName != null" >
+        rotation_image_name = #{rotationImageName,jdbcType=VARCHAR},
+      </if>
+      <if test="rotationImageUrl != null" >
+        rotation_image_url = #{rotationImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrlType != null" >
+        link_url_type = #{linkUrlType,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null" >
+        link_url = #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rotationImageStatus != null" >
+        rotation_image_status = #{rotationImageStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rotation_image_id = #{rotationImageId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.RotationImagePo" >
+    update busi_rotation_image
+    set rotation_image_no = #{rotationImageNo,jdbcType=INTEGER},
+      notice_certificate_id = #{noticeCertificateId,jdbcType=INTEGER},
+      notice_certificate_content = #{noticeCertificateContent,jdbcType=VARCHAR},
+      rotation_image_name = #{rotationImageName,jdbcType=VARCHAR},
+      rotation_image_url = #{rotationImageUrl,jdbcType=VARCHAR},
+      link_url_type = #{linkUrlType,jdbcType=VARCHAR},
+      link_url = #{linkUrl,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      rotation_image_status = #{rotationImageStatus,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where rotation_image_id = #{rotationImageId,jdbcType=INTEGER}
+  </update>
+  <select id="search" parameterType="Map" resultMap="BaseResultMap">
+  	select * from busi_rotation_image
+  	<where>
+  	  <if test="rotationImageId != null and rotationImageId !=''" >
+       and rotation_image_id = #{rotationImageId,jdbcType=INTEGER}
+      </if>
+  	  <if test="rotationImageNo != null and rotationImageNo !=''" >
+       and rotation_image_no = #{rotationImageNo,jdbcType=INTEGER}
+      </if>
+      <if test="noticeCertificateId != null and noticeCertificateId !=''" >
+       and notice_certificate_id = #{noticeCertificateId,jdbcType=INTEGER}
+      </if>
+      <if test="noticeCertificateContent != null and noticeCertificateContent !=''" >
+       and notice_certificate_content = #{noticeCertificateContent,jdbcType=VARCHAR}
+      </if>
+      <if test="rotationImageName != null and rotationImageName !=''" >
+       and rotation_image_name = #{rotationImageName,jdbcType=VARCHAR}
+      </if>
+      <if test="rotationImageUrl != null and rotationImageUrl !=''" >
+       and rotation_image_url = #{rotationImageUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="linkUrlType != null and linkUrlType !=''" >
+       and link_url_type = #{linkUrlType,jdbcType=VARCHAR}
+      </if>
+      <if test="linkUrl != null and linkUrl !=''" >
+       and link_url = #{linkUrl,jdbcType=VARCHAR}
+      </if>
+      <if test="createBy != null and createBy !=''" >
+       and create_by = #{createBy,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null and createTime !=''" >
+       and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null and updateBy !=''" >
+       and update_by = #{updateBy,jdbcType=INTEGER}
+      </if>
+      <if test="updateTime != null and updateTime !=''" >
+       and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="rotationImageStatus != null and rotationImageStatus !=''" >
+       and rotation_image_status = #{rotationImageStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="standby1 != null and standby1 !=''" >
+       and standby1 = #{standby1,jdbcType=VARCHAR}
+      </if>
+      <if test="standby2 != null and standby2 !=''" >
+       and standby2 = #{standby2,jdbcType=VARCHAR}
+      </if>
+  	</where>
+  	ORDER BY rotation_image_no DESC
+  </select>
+</mapper>

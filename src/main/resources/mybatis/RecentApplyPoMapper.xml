@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.RecentApplyPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.RecentApplyPo" >
+    <id column="recent_apply_id" property="recentApplyId" jdbcType="INTEGER" />
+    <result column="recent_course_id" property="recentCourseId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="regist_id" property="registId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="recent_course_status" property="recentCourseStatus" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    recent_apply_id, recent_course_id, user_id, order_id, regist_id, create_time, update_time, 
+    recent_course_status, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_recent_apply
+    where recent_apply_id = #{recentApplyId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_recent_apply
+    where recent_apply_id = #{recentApplyId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.RecentApplyPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="recentApplyId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_recent_apply (recent_course_id, user_id, order_id, 
+      regist_id, create_time, update_time, 
+      recent_course_status, standby1, standby2
+      )
+    values (#{recentCourseId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, 
+      #{registId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{recentCourseStatus,jdbcType=VARCHAR}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.RecentApplyPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="recentApplyId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_recent_apply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recentCourseId != null" >
+        recent_course_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="registId != null" >
+        regist_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="recentCourseStatus != null" >
+        recent_course_status,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recentCourseId != null" >
+        #{recentCourseId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="registId != null" >
+        #{registId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recentCourseStatus != null" >
+        #{recentCourseStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.RecentApplyPo" >
+    update busi_recent_apply
+    <set >
+      <if test="recentCourseId != null" >
+        recent_course_id = #{recentCourseId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="registId != null" >
+        regist_id = #{registId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recentCourseStatus != null" >
+        recent_course_status = #{recentCourseStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where recent_apply_id = #{recentApplyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.RecentApplyPo" >
+    update busi_recent_apply
+    set recent_course_id = #{recentCourseId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=INTEGER},
+      regist_id = #{registId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      recent_course_status = #{recentCourseStatus,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where recent_apply_id = #{recentApplyId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findRecentApplyByrecentCourseId" parameterType="java.lang.Integer" resultType="com.huisou.vo.RecentApplyVo">
+  	SELECT
+		t1.recent_apply_id recentApplyId,
+		t1.recent_course_id recentCourseId,
+		t1.user_id userId,
+		t1.order_id orderId,
+		t2.regist_id registId,
+		t2.card_type cardType,
+		t2.card_type_name cardTypeName,
+		t2.card_num cardNum,
+		t2.card_phone cardPhone,
+		t2.create_time createTime,
+		t3.headimgurl,
+		t3.nickname
+	FROM
+		busi_recent_apply t1
+	LEFT JOIN busi_regist t2 ON t1.regist_id = t2.regist_id
+	LEFT JOIN busi_user t3 ON t1.user_id = t3.user_id
+	WHERE
+ 		t1.recent_course_id =#{recentCourseId}
+ 		ORDER BY t2.create_time DESC
+  </select>
+  
+  <select id="findByUseridAndRecentCourseId" resultMap="BaseResultMap">
+  	SELECT * FROM busi_recent_apply where user_id=#{userId} and recent_course_id=#{recentCourseId}
+  </select>
+  
+  <select id="findOrderAndApplyVo" parameterType="Map" resultType="com.huisou.vo.OrderAndApplyVo">
+  	SELECT
+		t1.user_id userId,
+		t1.recent_course_id recentCourseId,
+		t1.create_time createTime,
+		t2.order_id orderId,
+		t2.order_no orderNo,
+		t3.recent_course_title recentCourseTitle,
+		t3.recent_course_address recentCourseAddress,
+		t3.recent_course_max_num recentCourseMaxNum,
+		t3.recent_course_apply_num recentCourseApplyNum,
+		t3.course_id courseId,
+		t3.begin_time beginTime,
+		t3.end_time endTime,
+		t3.recent_course_delete_status recentCourseDeleteStatus,
+		t3.recent_course_status recentCourseStatus
+	FROM
+		(
+			SELECT
+				order_id,
+				recent_course_id,
+				user_id,
+				create_time
+			FROM
+				busi_recent_apply
+			WHERE
+				user_id = #{userId}
+			GROUP BY
+				order_id
+		) t1
+	LEFT JOIN busi_order t2 ON t1.order_id = t2.order_id
+	LEFT JOIN busi_recent_course t3 ON t1.recent_course_id = t3.recent_course_id
+	WHERE t3.recent_course_status =#{recentCourseStatus}
+  </select>
+  <update id="updateRecentCourseStatus" parameterType="java.lang.Integer">
+  	UPDATE busi_recent_apply SET recent_course_status = '2' WHERE recent_course_id=#{recentCourseId}
+  </update>
+</mapper>
