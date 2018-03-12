@@ -138,7 +138,7 @@ public class SayController extends BaseController {
 	@RequestMapping(value = "/list")
 	public String list(HttpServletRequest request, PageTemp pageTemp){
 //		String type = request.getParameter("type");
-		String sayId = request.getParameter("sayId");
+		String sayTitle = request.getParameter("sayTitle");
 		String evalMin = request.getParameter("evalMin");
 		String evalMax = request.getParameter("evalMax");
 		String thumbsMin = request.getParameter("thumbsMin");
@@ -146,7 +146,7 @@ public class SayController extends BaseController {
 		String beginDate = request.getParameter("beginDate");
 		String endDate = request.getParameter("endDate");
 		Map<String, String> maps = new HashMap<String, String>();
-		maps.put("sayId", sayId);
+		maps.put("sayTitle", sayTitle);
 		maps.put("evalMin", evalMin);
 		maps.put("evalMax", evalMax);
 		maps.put("thumbsMin", thumbsMin);
@@ -260,7 +260,7 @@ public class SayController extends BaseController {
 	}
 	
 	/**
-	 * 语录点赞,每个用户只保存一条数据
+	 * 语录点赞,
 	 * @param request
 	 * @return
 	 */
@@ -273,8 +273,8 @@ public class SayController extends BaseController {
 			}
 			String resId = request.getParameter("resId");
 			Integer userId = super.getUserIdByToken(request.getParameter("userToken"));
-			ResourcesThumbsPo findOne = thumbsService.findOne(Integer.parseInt(resId),userId);
-			if (null == findOne){
+//			ResourcesThumbsPo findOne = thumbsService.findOne(Integer.parseInt(resId),userId);
+//			if (null == findOne){
 				ResourcesThumbsPo thumbsPo = new ResourcesThumbsPo();
 				thumbsPo.setResId(Integer.parseInt(resId));
 				thumbsPo.setResType("YL");
@@ -284,11 +284,11 @@ public class SayController extends BaseController {
 				if (null != res){
 					sayService.updateNum(Integer.parseInt(resId), 2, 1);
 				}
-			} else {
-				findOne.setThumbsStatus("1");
-				thumbsService.updateOne(findOne);
-				sayService.updateNum(Integer.parseInt(resId), 2, 1);
-			}
+//			} else {
+//				findOne.setThumbsStatus("1");
+//				thumbsService.updateOne(findOne);
+//				sayService.updateNum(Integer.parseInt(resId), 2, 1);
+//			}
 			return ResUtils.okRes();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -371,7 +371,7 @@ public class SayController extends BaseController {
 		}
 		int userId = super.getUserIdByToken(request.getParameter("userToken"));
 		ResourcesThumbsPo findOne = thumbsService.findOne(resId,userId);
-		if (null != findOne && findOne.getThumbsStatus().equals("1")){
+		if (null != findOne){
 			return ResUtils.okRes("1");
 		} else {
 			return ResUtils.okRes("0");
@@ -389,7 +389,9 @@ public class SayController extends BaseController {
 			if (null != type && type.equals("1")){
 				List<SayPo> poList = new ArrayList<>();
 				SayPo sayPo = sayService.selectOne();
-				poList.add(sayPo);
+				if (null != sayPo){
+					poList.add(sayPo);
+				}
 				return ResUtils.okRes(poList);
 			} else if (null != type && type.equals("2")) {
 				PageInfo<SayPo> allSays = sayService.findAll(null, pageTemp);

@@ -148,7 +148,7 @@ public class VideoAudioServiceImpl implements VideoAudioService{
 	public List<VideoAudioPo> findRelevant(Integer videoAudioId) {
 		// TODO Auto-generated method stub
 		VideoAudioPo videoAudioPo = videoAudioPoMapper.selectByPrimaryKey(videoAudioId);
-		List<VideoAudioPo> list = videoAudioPoMapper.findRelevant(videoAudioPo.getCreateTime(),videoAudioId);
+		List<VideoAudioPo> list = videoAudioPoMapper.findRelevant(videoAudioPo.getCreateTime(),videoAudioId,videoAudioPo.getVideoAudioType());
 		return list;
 	}
 
@@ -160,9 +160,15 @@ public class VideoAudioServiceImpl implements VideoAudioService{
 	}
 
 	@Override
-	public List<VideoAudioVo> findVideoAudioByUserId(Map map) {
+	public PageInfo<VideoAudioVo> findVideoAudioByUserId(Map map,PageTemp pageTemp) {
 		// TODO Auto-generated method stub
-		List<VideoAudioPo> list = videoAudioPoMapper.findVideoAudioByUserId(map);
+		PageHelper.startPage(pageTemp.getPageNum(), pageTemp.getPageSize());
+		List<VideoAudioPo> list = new ArrayList<>();
+		if("SP".equals(map.get("resType"))){
+			list = videoAudioPoMapper.findVideoAudioByUserIdBySP(map);
+		}else{
+			list = videoAudioPoMapper.findVideoAudioByUserId(map);
+		}
 		List<VideoAudioVo> voList = new ArrayList<>();
 		for (VideoAudioPo videoAudioPo : list) {
 			VideoAudioVo videoAudioVo = new VideoAudioVo();
@@ -175,6 +181,6 @@ public class VideoAudioServiceImpl implements VideoAudioService{
 			videoAudioVo.setAvgEvalLevel(avgEvalLevel);
 			voList.add(videoAudioVo);
 		}
-		return voList;
+		return new PageInfo(voList);
 	}
 }

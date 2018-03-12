@@ -15,7 +15,8 @@
     <id column="comment_id" jdbcType="INTEGER" property="commentId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="comment" jdbcType="VARCHAR" property="comment" />
-    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="userName" jdbcType="VARCHAR" property="userName" />
+    <result column="nickName" jdbcType="VARCHAR" property="nickName" />
     <result column="contact_way" jdbcType="VARCHAR" property="contactWay" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="comment_status" jdbcType="VARCHAR" property="commentStatus" />
@@ -152,7 +153,8 @@
   </update>
   <select id="selectByEmpParas"  parameterType="Map" resultMap="BaseResultVoMap">
   		select 
-  		t1.username,
+  		t1.username AS userName,
+  		t1.nickname AS nickName,
   		<include refid="Base_Column_Vo_List" />
   		from busi_comment s
   		left join busi_user t1

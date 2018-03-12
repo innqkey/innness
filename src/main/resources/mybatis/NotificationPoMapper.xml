@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.NotificationPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.NotificationPo" >
+    <id column="notification_id" property="notificationId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
+    <result column="template_id" property="templateId" jdbcType="INTEGER" />
+    <result column="notification_type" property="notificationType" jdbcType="VARCHAR" />
+    <result column="notification_context" property="notificationContext" jdbcType="VARCHAR" />
+    <result column="notification_read_unread" property="notificationReadUnread" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    notification_id, user_id, open_id, template_id, notification_type, notification_context, 
+    notification_read_unread, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_notification
+    where notification_id = #{notificationId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_notification
+    where notification_id = #{notificationId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.NotificationPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="notificationId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_notification (user_id, open_id, template_id, 
+      notification_type, notification_context, 
+      notification_read_unread, create_time)
+    values (#{userId,jdbcType=INTEGER}, #{openId,jdbcType=VARCHAR}, #{templateId,jdbcType=INTEGER}, 
+      #{notificationType,jdbcType=VARCHAR}, #{notificationContext,jdbcType=VARCHAR}, 
+      #{notificationReadUnread,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.NotificationPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="notificationId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_notification
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="openId != null" >
+        open_id,
+      </if>
+      <if test="templateId != null" >
+        template_id,
+      </if>
+      <if test="notificationType != null" >
+        notification_type,
+      </if>
+      <if test="notificationContext != null" >
+        notification_context,
+      </if>
+      <if test="notificationReadUnread != null" >
+        notification_read_unread,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="openId != null" >
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null" >
+        #{templateId,jdbcType=INTEGER},
+      </if>
+      <if test="notificationType != null" >
+        #{notificationType,jdbcType=VARCHAR},
+      </if>
+      <if test="notificationContext != null" >
+        #{notificationContext,jdbcType=VARCHAR},
+      </if>
+      <if test="notificationReadUnread != null" >
+        #{notificationReadUnread,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.NotificationPo" >
+    update busi_notification
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="openId != null" >
+        open_id = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null" >
+        template_id = #{templateId,jdbcType=INTEGER},
+      </if>
+      <if test="notificationType != null" >
+        notification_type = #{notificationType,jdbcType=VARCHAR},
+      </if>
+      <if test="notificationContext != null" >
+        notification_context = #{notificationContext,jdbcType=VARCHAR},
+      </if>
+      <if test="notificationReadUnread != null" >
+        notification_read_unread = #{notificationReadUnread,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where notification_id = #{notificationId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.NotificationPo" >
+    update busi_notification
+    set user_id = #{userId,jdbcType=INTEGER},
+      open_id = #{openId,jdbcType=VARCHAR},
+      template_id = #{templateId,jdbcType=INTEGER},
+      notification_type = #{notificationType,jdbcType=VARCHAR},
+      notification_context = #{notificationContext,jdbcType=VARCHAR},
+      notification_read_unread = #{notificationReadUnread,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where notification_id = #{notificationId,jdbcType=INTEGER}
+  </update>
+  <select id="findAll" resultMap="BaseResultMap">
+  	SELECT * FROM busi_notification WHERE user_id = #{userId} ORDER BY create_time DESC
+  </select>
+  
+</mapper>

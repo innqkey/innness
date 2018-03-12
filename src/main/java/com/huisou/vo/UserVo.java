@@ -2,8 +2,10 @@ package com.huisou.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import com.huisou.constant.DictConConstant;
+import com.huisou.po.CoursePo;
 
 public class UserVo implements Serializable{
 	/**
@@ -29,8 +31,120 @@ public class UserVo implements Serializable{
     private String phone;
 
     private Date createTime;
+    
+    private String sex;
 
-    public String getUsername() {
+    private String province;
+
+    private String city;
+
+    private String country;
+
+    private String userStatus;
+
+    private String cardNum;
+
+    private String standby1;
+    
+    private Integer classmateUserId;
+
+    private String standby2;
+    
+    private List<CoursePo> list;
+    
+    private String isApply;
+    
+    
+
+    public String getIsApply() {
+		return isApply;
+	}
+
+	public void setIsApply(String isApply) {
+		this.isApply = isApply;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getUserStatus() {
+		return userStatus;
+	}
+
+	public void setUserStatus(String userStatus) {
+		this.userStatus = userStatus;
+	}
+
+	public String getCardNum() {
+		return cardNum;
+	}
+
+	public void setCardNum(String cardNum) {
+		this.cardNum = cardNum;
+	}
+
+	public String getStandby1() {
+		return standby1;
+	}
+
+	public void setStandby1(String standby1) {
+		this.standby1 = standby1;
+	}
+
+	public Integer getClassmateUserId() {
+		return classmateUserId;
+	}
+
+	public void setClassmateUserId(Integer classmateUserId) {
+		this.classmateUserId = classmateUserId;
+	}
+
+	public String getStandby2() {
+		return standby2;
+	}
+
+	public void setStandby2(String standby2) {
+		this.standby2 = standby2;
+	}
+
+	public List<CoursePo> getList() {
+		return list;
+	}
+
+	public void setList(List<CoursePo> list) {
+		this.list = list;
+	}
+
+	public String getUsername() {
 		return username;
 	}
 

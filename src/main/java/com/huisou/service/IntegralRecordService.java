@@ -30,5 +30,12 @@ public interface IntegralRecordService {
 	 * @return
 	 */
 	PageInfo<IntegralRecordVo> selectAll(Map<String, String> maps, PageTemp pageTemp);
+
+	/**
+	 * 根据integralRecordId 更新 resId
+	 * @param integralRecordId
+	 * @param userId
+	 */
+	void updateIntegralRecord(Integer integralRecordId, Integer resId);
 	
 }

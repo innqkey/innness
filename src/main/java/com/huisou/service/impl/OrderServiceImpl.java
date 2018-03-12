@@ -13,6 +13,7 @@ import com.common.ResUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.huisou.constant.ContextConstant;
+import com.huisou.constant.DictConConstant;
 import com.huisou.mapper.CoursePoMapper;
 import com.huisou.mapper.OrderDetailPoMapper;
 import com.huisou.mapper.OrderPoMapper;
@@ -122,13 +123,14 @@ public class OrderServiceImpl implements OrderService {
 			registPo.setUserId(userId);
 			registPo.setCreateTime(date);
 			registPo.setRegistStatus(ContextConstant.EXIST_STATUS);
-			Integer registId = registPoMapper.insertSelective(registPo);
+			registPo.setCardTypeName(DictConConstant.getDicName("cardType", registPo.getCardType()));
+			registPoMapper.insertSelective(registPo);
 			OrderDetailPo orderDetailPo = new OrderDetailPo();
 			orderDetailPo.setCourseId(courseId);
 			orderDetailPo.setCreateTime(date);
 			orderDetailPo.setOrderId(orderPo.getOrderId());
 			orderDetailPo.setOrderDetailStatus(ContextConstant.EXIST_STATUS);
-			orderDetailPo.setRegistId(registId);
+			orderDetailPo.setRegistId(registPo.getRegistId());
 			orderDetailPo.setUserId(userId);
 			orderDetailPoMapper.insertSelective(orderDetailPo);
 		}
@@ -138,6 +140,15 @@ public class OrderServiceImpl implements OrderService {
 	public Integer add(OrderPo orderPo) {
 	    orderPoMapper.insertSelective(orderPo);
 		return orderPo.getOrderId();
+	}
+	
+	/**
+	 * 通过支付
+	 */
+	@Override
+	public OrderPo findByoutTradeNo(String tradeNo) {
+		return orderPoMapper.findByTradeNo(tradeNo);
+		
 	}
 
 }

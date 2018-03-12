@@ -6,6 +6,7 @@ import java.util.Map;
 import com.github.pagehelper.PageInfo;
 import com.huisou.po.UserPo;
 import com.huisou.vo.PageTemp;
+import com.huisou.vo.UserVo;
 
 /** 
 * @author qinkai 
@@ -71,7 +72,7 @@ public interface UserService {
 
 	UserPo getUserByOpenId(String openId);
 
-	List<UserPo> findAllClassmate(String openId);
+	PageInfo<UserVo> findAllClassmate(String openId,PageTemp pageTemp);
 
 	/**
 	 * 根据userId 更新用户积分
@@ -79,5 +80,7 @@ public interface UserService {
 	 * @param integral
 	 */
 	void updateUserIntegral(Integer userId, Long integral);
+	
+	List<String> findAllOpenid();
 
 }

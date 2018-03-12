@@ -51,5 +51,5 @@ public interface VideoAudioService {
 
 	List<VideoAudioPo> findByCourseId(Integer courseId);
 
-	List<VideoAudioVo> findVideoAudioByUserId(Map map);
+	PageInfo<VideoAudioVo> findVideoAudioByUserId(Map map,PageTemp pageTemp);
 }

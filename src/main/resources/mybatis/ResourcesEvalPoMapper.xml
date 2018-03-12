@@ -250,6 +250,7 @@
   </update>
   <select id="selectavgEvalLevel" resultType="java.lang.Integer">
   	SELECT AVG(eval_level) FROM busi_resources_eval WHERE res_id =#{videoAudioId} AND res_type=#{videoAudioType}
+  	AND eval_status = '1'
   </select>
   
    

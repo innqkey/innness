@@ -30,4 +30,6 @@ public interface OrderPoMapper {
     List<OrderPo> findByMap(Map map);
 
 	Integer getSuccessCount(Map<String, String> maps);
+
+	OrderPo findByTradeNo(String tradeNo);
 }

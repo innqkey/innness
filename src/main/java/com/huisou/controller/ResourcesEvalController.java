@@ -19,6 +19,7 @@ import com.huisou.constant.ContextConstant;
 import com.huisou.po.ResourcesEvalPo;
 import com.huisou.service.OrderService;
 import com.huisou.service.ResourcesEvalService;
+import com.huisou.vo.PageTemp;
 import com.huisou.vo.ResourcesEvalVo;
 
 /** 
@@ -99,7 +100,7 @@ public class ResourcesEvalController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value="/findByResIdAndResTypeWeb")
-	public String findByResIdAndResTypeWeb(HttpServletRequest request){
+	public String findByResIdAndResTypeWeb(HttpServletRequest request,PageTemp pageTemp){
 		try {
 			String resId = request.getParameter("resId");
 			String resType = request.getParameter("resType");
@@ -110,7 +111,7 @@ public class ResourcesEvalController extends BaseController{
 			map.put("resId", resId);
 			map.put("resType", resType);
 			map.put("evalStatus", ContextConstant.EXIST_STATUS);
-			PageInfo<ResourcesEvalVo> result = resourcesEvalService.findAllByMapAndStatus(map);
+			PageInfo<ResourcesEvalVo> result = resourcesEvalService.findAllByMapAndStatus(map,pageTemp);
 			return ResUtils.okRes(result);
 		} catch (Exception e) {
 			// TODO: handle exception

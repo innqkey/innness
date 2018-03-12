@@ -282,14 +282,15 @@ public class RecentCourseController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "/findAllByUserId")
-	public String findAllByUserId(HttpServletRequest request){
+	public String findAllByUserId(HttpServletRequest request,PageTemp pageTemp){
 		try {
 			String userToken = request.getParameter("userToken");
 			if(StringUtils.isBlank(userToken)){
 				return ResUtils.errRes("102", "请求参数错误");
 			}
 			Date now = new Date();
-			List<RecentCourseVo> list = recentCourseService.findAllByUserId(super.getUserIdByToken(userToken),now);
+			PageInfo<RecentCourseVo> result = recentCourseService.findAllByUserId(super.getUserIdByToken(userToken),now,pageTemp);
+			List<RecentCourseVo> list = result.getList();
 			for (RecentCourseVo recentCourseVo : list) {
 				String address = recentCourseVo.getRecentCourseAddress();
 				String regionsids = recentCourseVo.getRegionsids();
@@ -315,7 +316,8 @@ public class RecentCourseController extends BaseController{
 				}
 				recentCourseVo.setRecentCourseAddress(address);
 			}
-			return ResUtils.okRes(list);
+			result.setList(list);
+			return ResUtils.okRes(result);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

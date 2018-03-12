@@ -45,4 +45,9 @@ public class IntegralRecordServiceImpl implements IntegralRecordService{
 		List<IntegralRecordVo> list = integralRecordPoMapper.selecAll(maps);
 		return new PageInfo<IntegralRecordVo>(list);
 	}
+
+	@Override
+	public void updateIntegralRecord(Integer integralRecordId, Integer resId) {
+		integralRecordPoMapper.updateIntegralRecord(integralRecordId,resId);
+	}
 }

@@ -153,10 +153,10 @@ public class OrderController extends BaseController{
 			if(list==null || list.size()==0){
 				return ResUtils.errRes("102", "请求参数错误");
 			}
-			   String msg = registService.isRegist(list);
+			  /* String msg = registService.isRegist(list);
 			   if(StringUtils.isNotBlank(msg)){
 				   return ResUtils.errRes("108","身份证号 "+msg+"已报过名");
-			   }
+			   }*/
 			   OrderPo orderPo = orderService.registCourse(super.getUserIdByToken(userToken),Integer.parseInt(courseId),phone,list);
 			   OrderVo orderVo = new OrderVo();
 			   BeanUtils.copyProperties(orderVo, orderPo);
@@ -195,6 +195,7 @@ public class OrderController extends BaseController{
 			orderPo.setResType(resType);
 			orderPo.setUserId(super.getUserIdByToken(userToken));
 			orderPo.setCreateTime(date);
+			orderService.add(orderPo);
 			OrderVo orderVo = new OrderVo();
 			BeanUtils.copyProperties(orderVo, orderPo);
 			orderVo.setOpenid(super.getOpenIdByToken(userToken));

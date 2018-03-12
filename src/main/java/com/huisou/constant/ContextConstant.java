@@ -1,5 +1,7 @@
 package com.huisou.constant;
 
+import java.util.regex.Pattern;
+
 /**
  * 用来定影全局变量的
  *
@@ -24,6 +26,8 @@ public class ContextConstant {
     public static final String PARAM_NULL = "401";
     //token
     public static final String SESSION_TOKEN = "token";
+    //userToken
+    public static final String SESSION_USERTOKEN = "userToken";
     
     //软删除状态（可通用）
     public static final String EXIST_STATUS = "1";
@@ -41,6 +45,7 @@ public class ContextConstant {
      * 错误的订单号
      */
     public static final String PAY_FAIL_ERROR_ORDERID= "错误的订单号";
+    public static final String PAY_FAIL_ERROR_NULLODERID= "空的订单号";
     
     //数据库判断是否（可通用）
     public static final String YES = "Y";
@@ -76,4 +81,20 @@ public class ContextConstant {
 	public static final String HISTORY_EXIT= "1";
     public static final String HISTORY_DELETED="2";
     
+
+    //使用url的过滤：
+  	public static final Pattern EMOJI = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]" ,
+  	         Pattern.UNICODE_CASE|Pattern.CASE_INSENSITIVE);
+
+    
+ 
+	//新用户关注后发送的信息
+	public static final String ATTENTION = "恭喜您已经关注会搜商学院网络服务。在此，我们为您精心准备了大量的培训视频、音频和何耀东老师的经典语录，"
+			+ "以及海量的“移动互联网实战运营干货”和“行业资料”。应《中华人民共和国网络安全法》要求，同时为了倡导绿色、安全的网络学习环境，敬请您进行身份证实名认证，认证后您就可以随心所欲的享受我们为您提供的服务…… "
+			+ "您的身份一经认证，我们将会赠送您1000积分至您的会员账户中。邀请一名好友成功注册您还能再获得100积分。您可以使用您的积分下载和使用平台各类“学习资料”。"
+			+ "为了享受更优质的服务，建议您马上进入个人中心认证身份！";
+	
+	
+	
+
 }

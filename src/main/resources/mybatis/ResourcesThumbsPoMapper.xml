@@ -137,6 +137,7 @@
     <include refid="Base_Column_List" />
     from busi_resources_thumbs
     where res_type = "YL"
+    and thumbs_status = '1'
     <if test="resId != null and resId != ''">
     	and res_id = #{resId}
     </if>
@@ -198,7 +199,7 @@
 	WHERE t1.thumbs_status = '1'
 	AND t1.res_type = 'YL'
 	AND t1.res_id = #{sayId}
-	ORDER BY t1.create_time DESC
+	ORDER BY t1.create_time ASC
   </select>
   <update id="updateThumbs" parameterType="java.lang.Integer">
   	update busi_resources_thumbs 

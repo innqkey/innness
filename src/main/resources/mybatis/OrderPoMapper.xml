@@ -28,12 +28,14 @@
     <result column="pay_status" property="payStatus" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="INTEGER" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="course_logo" property="courseLogo" jdbcType="VARCHAR" />
     <result column="order_person_num" property="orderPersonNum" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="order_status" property="orderStatus" jdbcType="VARCHAR" />
     <result column="course_price" property="coursePrice" jdbcType="DECIMAL" />
     <result column="nickname" property="nickname" jdbcType="VARCHAR" />
     <result column="openid" property="openid" jdbcType="VARCHAR" />
+     <result column="username" property="userName" jdbcType="VARCHAR" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -226,7 +228,9 @@
   <select id="orderCourseList" resultMap="OrderVoResultMap" parameterType="Map" >
     select 
     	<include refid="Order_Column_List" />
-    	c.course_title resTitle
+    	c.course_title resTitle,
+    	c.course_logo courseLogo,
+    	u.username
     from busi_order o
 	LEFT JOIN busi_course c on o.res_id = c.course_id
 	LEFT JOIN busi_user u on o.user_id = u.user_id
@@ -252,13 +256,15 @@
 	<if test="endDate !=null and endDate!='' ">
 		<![CDATA[ and o.create_time <= #{endDate} ]]>
 	</if>
+	ORDER BY o.update_time DESC
   </select>
   
   <!-- 课程订单列表 -->
   <select id="orderVideoAudioList" resultMap="OrderVoResultMap" parameterType="Map" >
     select 
     	<include refid="Order_Column_List" />
-    	v.video_audio_title resTitle 
+    	v.video_audio_title resTitle,
+    	u.username 
     from busi_order o
 	LEFT JOIN busi_video_audio v on o.res_id = v.video_audio_id
 	LEFT JOIN busi_user u on o.user_id = u.user_id
@@ -281,9 +287,10 @@
 	<if test='endDate !=null and endDate!="" '>
 		<![CDATA[ and o.create_time <= #{endDate} ]]>
 	</if>
+	ORDER BY o.update_time DESC
   </select>
   <select id="findByUserIdAndResId" resultMap="BaseResultMap">
-  	SELECT * FROM busi_order WHERE res_id = #{resId} AND res_type=#{resType} AND user_id=#{userId} AND pay_status = #{payStatus}
+  	SELECT * FROM busi_order WHERE res_id = #{resId} AND res_type=#{resType} AND user_id=#{userId} AND pay_status = #{payStatus} AND order_status='1'
   </select>
   <select id="findByMap" resultMap="BaseResultMap">
   	select * from busi_order 
@@ -339,10 +346,20 @@
   		where t1.pay_status = '2'
   		and t1.order_status = '1'
   		<if test="beginDate!=null and beginDate!=''">
-	    	<![CDATA[   and DATE_FORMAT(t1.create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
+	    	<![CDATA[   and DATE_FORMAT(t1.update_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
 		</if>
 		<if test="endDate!=null and endDate!=''">
-	   		<![CDATA[  and DATE_FORMAT(t1.create_time, '%Y-%m-%d') < DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
+	   		<![CDATA[  and DATE_FORMAT(t1.update_time, '%Y-%m-%d') < DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
 		</if>
   </select>
+  
+  <select id="findByTradeNo"   resultMap="BaseResultMap">
+  		select
+  			*
+  		from busi_order where order_no = #{tradeNo}
+  </select>
+  
+  
+  
+  
 </mapper>

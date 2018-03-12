@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.common.FileUtil;
 import com.common.MD5Util;
 import com.common.ResUtils;
 import com.huisou.cache.RedisSmsCodeCache;
@@ -33,11 +34,10 @@ public class SmsServiceImpl implements SmsService {
 	
 	@Autowired
 	private RestTemplate restTemplate;
-	
-	public static String baseUrl = "https://app.cloopen.com:8883";
-	public static String appId = "8aaf07086150ec5001616a204b0c07ad";
-	public static String accountSid = "8a48b5514f4fc588014f67a8f5182ea2";
-	public static String authToken = "9e4008a1f862450fa9bb4b09a7693465";
+	public static String baseUrl = FileUtil.getApplicationPro("sms.baseUrl");
+	public static String appId = FileUtil.getApplicationPro("sms.appId");
+	public static String accountSid = FileUtil.getApplicationPro("sms.accountSid");
+	public static String authToken = FileUtil.getApplicationPro("sms.authToken");
 	public static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 	public static String timeStr = sdf.format(new Date());
 	public static String interUrl = "/2013-12-26/Accounts/"+accountSid+"/SMS/TemplateSMS?sig="+
@@ -62,9 +62,9 @@ public class SmsServiceImpl implements SmsService {
 		HashMap reqMap = new HashMap(); 
 		reqMap.put("to", phone);
 		reqMap.put("appId", appId);
-		reqMap.put("templateId", "1");
+		reqMap.put("templateId", FileUtil.getApplicationPro("sms.templateId"));
 		//短信有效时间3分钟
-		String smsMins = "3";
+		String smsMins = FileUtil.getApplicationPro("sms.longtime");
 		String[] params = {code,smsMins};
 		reqMap.put("datas", params);
 		String jsonMap = JSON.toJSONString(reqMap);
@@ -84,12 +84,12 @@ public class SmsServiceImpl implements SmsService {
 		}
 		 
 		HttpEntity<HashMap> request2 = new HttpEntity<>(reqMap,headers);
-//		ResponseEntity<String> result = restTemplate.postForEntity(codeUrl, request2, String.class);
-//		String resJson = result.getBody();
-//		logger.info("发送短信返回结果---------:"+resJson);
-//		String resCode = JSONObject.parseObject(resJson).getString("statusCode");
+		ResponseEntity<String> result = restTemplate.postForEntity(codeUrl, request2, String.class);
+		String resJson = result.getBody();
+		logger.info("发送短信返回结果---------:"+resJson);
+		String resCode = JSONObject.parseObject(resJson).getString("statusCode");
 		SmsPo po = new SmsPo();
-//		po.setSmsSendStatus(resCode);
+		po.setSmsSendStatus(resCode);
 		po.setPhone(phone);
 		po.setCreateTime(new Date());
 		po.setSmsCode(code);

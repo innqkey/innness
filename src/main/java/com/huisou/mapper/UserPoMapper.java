@@ -39,4 +39,6 @@ public interface UserPoMapper {
 
 		void updateUserIntegral(@Param("userId")Integer userId, @Param("integral")Long integral);
 
+		List<String> findAllOpenid();
+
 }

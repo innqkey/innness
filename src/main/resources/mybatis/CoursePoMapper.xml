@@ -292,4 +292,15 @@
 		) t1
 	LEFT JOIN busi_course t2 ON t2.course_id = t1.res_id
   </select>
+  
+  <select id="findAllPayCourseByUserid" resultMap="BaseResultMap">
+  	SELECT
+		t2.*
+	FROM
+		busi_order t1
+	LEFT JOIN busi_course t2 ON t1.res_id = t2.course_id
+	WHERE
+		t1.res_type = 'KC'
+		AND t1.user_id=#{userId} GROUP BY t2.course_id ORDER BY t2.create_time DESC
+  </select>
 </mapper>

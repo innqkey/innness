@@ -8,16 +8,17 @@ import java.io.InputStream;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 
+
 public class FtpFileUtil {
 
 	//ftp服务器ip地址
-    private static final String FTP_ADDRESS = "v0.ftp.upyun.com";
+    private static final String FTP_ADDRESS = FileUtil.getApplicationPro("ftp.address");
     //端口号
-    private static final int FTP_PORT = 21;
+    private static final int FTP_PORT = Integer.valueOf(null!=FileUtil.getApplicationPro("ftp.port")?FileUtil.getApplicationPro("ftp.port"):"21");
     //用户名
-    private static final String FTP_USERNAME = "caoxt/hsim-vedio";
+    private static final String FTP_USERNAME = FileUtil.getApplicationPro("ftp.username");;
     //密码
-    private static final String FTP_PASSWORD = "caoxiaotao";
+    private static final String FTP_PASSWORD = FileUtil.getApplicationPro("ftp.password");;
 
     //路径=/video
     public static boolean uploadFile(String originFileName,InputStream input,String ftpBasePath){

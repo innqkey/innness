@@ -26,4 +26,6 @@ public interface CoursePoMapper {
 
     List<CoursePo> findCourseByUserid(@Param(value = "userid")Integer userid);
 
+	List<CoursePo> findAllPayCourseByUserid(@Param(value = "userId")Integer userId);
+
 }

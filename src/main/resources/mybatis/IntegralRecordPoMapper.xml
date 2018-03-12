@@ -161,6 +161,7 @@
 		t1.create_time createTime,
 		t1.pay_status payStatus,
 		t2.nickname nickname,
+		t2.username userName,
 		t2.phone phone
 	FROM
 		busi_integral_record t1
@@ -217,4 +218,9 @@
 	</where>
 	order by t1.create_time desc
   </select>
+  <update id = "updateIntegralRecord" parameterType="java.lang.Integer">
+  	update busi_integral_record
+    set res_id = #{resId}
+    where integral_record_id = #{integralRecordId} 
+  </update>
 </mapper>

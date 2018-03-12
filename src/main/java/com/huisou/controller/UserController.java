@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,21 +33,25 @@ import org.springframework.web.multipart.MultipartFile;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.common.DateUtils;
+import com.common.MD5Util;
 import com.common.QrcodeUtils;
 import com.common.ResUtils;
 import com.common.UploadUtils;
 import com.github.pagehelper.PageInfo;
 import com.huisou.cache.RedisSmsCodeCache;
+import com.huisou.cache.RedisUserTokenCache;
 import com.huisou.constant.ContextConstant;
-import com.huisou.constant.DictConConstant;
 import com.huisou.po.ImagePo;
 import com.huisou.po.IntegralRecordPo;
+import com.huisou.po.NotificationPo;
 import com.huisou.po.UserPo;
 import com.huisou.service.ImageService;
 import com.huisou.service.IntegralRecordService;
+import com.huisou.service.NotificationService;
 import com.huisou.service.UserService;
 import com.huisou.vo.PageTemp;
 import com.huisou.vo.RegistVo;
+import com.huisou.vo.UserVo;
 
 
 /** 
@@ -66,6 +71,8 @@ public class UserController extends BaseController{
 	private RestTemplate restTemplate;
 	@Autowired
 	private RedisSmsCodeCache smsCache;
+	@Autowired
+	private NotificationService notificationService;
 	@Value("${wechat.pay.appId}")
 	public String appid;
 	
@@ -89,7 +96,8 @@ public class UserController extends BaseController{
 	@Autowired
 	private ImageService imageService;
 	
-
+	@Autowired
+	private RedisUserTokenCache userTokenCache;
 	
 	/**
 	 * 用户管理列表/查找
@@ -101,7 +109,7 @@ public class UserController extends BaseController{
 	public String list(HttpServletRequest request,PageTemp pageTemp){
 		try {
 			Map para = super.getPara();
-			PageInfo<UserPo>voList = userService.findAll(para,pageTemp);
+			PageInfo<UserPo> voList = userService.findAll(para,pageTemp);
 			return ResUtils.okRes(voList);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -198,11 +206,18 @@ public class UserController extends BaseController{
 			integralRecordPo.setResType("2");
 			integralRecordPo.setUserId(userId);
 			integralRecordService.insertIntegralRecord(integralRecordPo);
+			NotificationPo notificationPo = new NotificationPo();
+			notificationPo.setUserId(userId);
+			notificationPo.setOpenId(userPo.getOpenid());
+			notificationPo.setNotificationType("RZ");
+			notificationPo.setNotificationContext("用户绑定增加1000积分");
+			notificationPo.setCreateTime(new Date());
+			notificationService.addOne(notificationPo);
 			return ResUtils.okRes(userPo);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			return ResUtils.execRes();
 		}
-		return null;
 	}
 	
 	/**
@@ -211,10 +226,10 @@ public class UserController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/getclassmate")
-	public String getClassmate(HttpServletRequest request){
+	public String getClassmate(HttpServletRequest request,PageTemp pageTemp){
 		String  openId = super.getOpenIdByToken(request.getParameter("userToken"));
-		List<UserPo> list = userService.findAllClassmate(openId);
-		return ResUtils.okRes(list);
+		PageInfo<UserVo> result = userService.findAllClassmate(openId,pageTemp);
+		return ResUtils.okRes(result);
 	}
 	
 	/**
@@ -234,14 +249,85 @@ public class UserController extends BaseController{
 				imagePo.setFileName(imagename);
 				imagePo.setImageType(2);
 				imageService.saveImage(imagePo);
+				return ResUtils.okRes(imagename);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return ResUtils.execRes();
 		}
+		return ResUtils.execRes();
+	}
+	
+	/**
+	 * 返回上传背景图片的filename
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/getBackgroundImage")
+	public String getBackgroundImage(HttpServletRequest request){
+		ImagePo backageImagePo = imageService.getBackageImage();
+		if (backageImagePo != null){
+			return ResUtils.okRes(backageImagePo.getFileName());
+		} else {
+			return ResUtils.okRes(null);
+		}
+	}
+	
+	/**
+	 *  专门用于图片的上传内容的展示
+	 * @param request
+	 * @param dir
+	 * @param imageName
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/displayImage/{imageName}")
+	public String displayImage(HttpServletRequest request
+			,@PathVariable("imageName")String imageName,HttpServletResponse response) {
+		if (StringUtils.isBlank(imageName)) {
+			return ResUtils.exceCode;
+		}
+		
+		String requestURI = request.getRequestURI();
+		String suffix = requestURI.substring(requestURI.lastIndexOf(".")+1);
+		OutputStream outputStream = null;
+		FileInputStream fileInputStream = null;
+		try {
+			StringBuilder url = new StringBuilder();
+			url.append(saveUrl).append(imageName).append(".").append(suffix);
+			// 度图片
+			fileInputStream = new FileInputStream(url.toString());
+			response.setContentType("image/png");
+			outputStream = response.getOutputStream();
+			int available = fileInputStream.available();
+			byte[] data = new byte[available];
+			fileInputStream.read(data);
+			outputStream.write(data);
+			outputStream.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResUtils.exceCode;
+		} finally {
+			try {
+				if (fileInputStream != null){
+					fileInputStream.close();
+				}
+				if (outputStream != null){
+					outputStream.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				return ResUtils.exceCode;
+			}
+		}
 		return ResUtils.okRes();
 	}
+	
+	
+	
+	
+	
 	
 	/**
 	 * 用户传过来openid然后生成分享的二维码图片
@@ -454,4 +540,56 @@ public class UserController extends BaseController{
 		}
 	}
 	
+	/**
+	 * 修改通知状态
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/updateNotificationStatus")
+	public String updateNotificationStatus(HttpServletRequest request){
+		try {
+			String userToken = request.getParameter("userToken");
+			String notificationStatus = request.getParameter("notificationStatus");
+			if(StringUtils.isBlank(userToken) || StringUtils.isBlank(notificationStatus)){
+				return ResUtils.errRes("102", "请求参数错误");
+			}
+			UserPo userPo = new UserPo();
+			userPo.setUserId(super.getUserIdByToken(userToken));
+			userPo.setStandby1(notificationStatus);
+			userService.updateOne(userPo);
+			return ResUtils.okRes();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResUtils.execRes();
+		}
+	}
+	
+	/**
+	 * 升级代理
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/updateIsAgency")
+	public String updateIsAgency(HttpServletRequest request,@RequestParam(required = false, value = "userIds[]") List<String> userIds){
+		try {
+			String isAgency = request.getParameter("isAgency");
+			if(null == userIds || userIds.size() < 0 || StringUtils.isBlank(isAgency)){
+				return ResUtils.errRes("102", "请求参数错误");
+			}
+			for (String userId : userIds) {
+				if(StringUtils.isNumeric(userId)){
+					UserPo userPo = userService.find(Integer.parseInt(userId));
+					userPo.setIsAgency(isAgency);
+					userService.updateOne(userPo);
+					String openid = userPo.getOpenid();
+				    String userToken = MD5Util.md5Encode(MD5Util.md5Encode(openid));
+				    userTokenCache.addUserToken(userToken, userPo);
+				}
+			}
+		    return ResUtils.okRes();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResUtils.execRes();
+		}
+	}
 }

@@ -42,4 +42,6 @@ public interface OrderService {
 
 	Integer add(OrderPo orderPo);
 
+	OrderPo findByoutTradeNo(String outTradeNo);
+
 }

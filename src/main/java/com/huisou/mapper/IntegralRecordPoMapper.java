@@ -25,4 +25,6 @@ public interface IntegralRecordPoMapper {
 	List<IntegralRecordVo> search(@Param(value="nickname")String nickname, @Param(value="phone")String phone, @Param(value="startDate")Date startDate, @Param(value="endDate")Date endDate);
 
 	List<IntegralRecordVo> selecAll(Map<String, String> maps);
+
+	void updateIntegralRecord(@Param("integralRecordId")Integer integralRecordId, @Param("resId")Integer resId);
 }

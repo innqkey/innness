@@ -1,5 +1,6 @@
 package com.huisou.service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /*
@@ -20,7 +21,7 @@ public interface UserAuthService {
 	/*
 	 * 通过code换取网页授权access_token
 	 */
-	public void getAuthOpenId(String code, String state, HttpServletResponse response);
+	public void getAuthOpenId(String code, String state, HttpServletRequest request, HttpServletResponse response);
 	
 	public String getUserinfo(String accessToken, String openId);
 	

@@ -40,10 +40,10 @@
             <generatedKey column="messageid" sqlStatement="Mysql" identity="true"/>
         </table> -->
         
-         <table schema="huisou_business_school" tableName="busi_kefu_history" domainObjectName="ChatHistoryPo" enableCountByExample="false"  
+         <table schema="huisou_business_school" tableName="busi_template_send_history" domainObjectName="TemplateSendHistoryPo" enableCountByExample="false"  
         enableDeleteByExample="false" enableSelectByExample="false"  
         enableUpdateByExample="false">
-            <generatedKey column="chat_history_id" sqlStatement="Mysql" identity="true"/>
+            <generatedKey column="template_history_id" sqlStatement="Mysql" identity="true"/>
         </table>
         
     </context>

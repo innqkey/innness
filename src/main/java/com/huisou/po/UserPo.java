@@ -1,11 +1,15 @@
 package com.huisou.po;
 
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.huisou.constant.ContextConstant;
 @Table(name = "busi_user")
 public class UserPo {
 	@Id
@@ -48,8 +52,18 @@ public class UserPo {
     private Integer classmateUserId;
 
     private String standby2;
+    
+    private String isAgency;
 
-    public Integer getUserId() {
+    public String getIsAgency() {
+		return isAgency;
+	}
+
+	public void setIsAgency(String isAgency) {
+		this.isAgency = isAgency;
+	}
+
+	public Integer getUserId() {
         return userId;
     }
 
@@ -70,6 +84,10 @@ public class UserPo {
     }
 
     public void setNickname(String nickname) {
+    	
+    	Matcher matcher = ContextConstant.EMOJI.matcher(nickname);    
+    	
+        nickname = matcher.replaceAll("");  
         this.nickname = nickname == null ? null : nickname.trim();
     }
 

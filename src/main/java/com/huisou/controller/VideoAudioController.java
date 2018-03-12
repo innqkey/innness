@@ -126,7 +126,7 @@ public class VideoAudioController extends BaseController{
 			videoAudioPo.setVideoAudioType(videoAudioType);
 			videoAudioPo.setVideoAudioIstop(videoAudioIstop);
 			videoAudioPo.setVideoAudioStatus(ContextConstant.EXIST_STATUS);
-			if(StringUtils.isBlank(videoAudioPrice) || Integer.parseInt(videoAudioPrice)==0){
+			if(StringUtils.isBlank(videoAudioPrice) || BigDecimal.ZERO.equals(new BigDecimal(videoAudioPrice))){
 				videoAudioPo.setVideoAudioIspay(ContextConstant.NO);
 			}else{
 				videoAudioPo.setVideoAudioIspay(ContextConstant.YES);
@@ -279,6 +279,8 @@ public class VideoAudioController extends BaseController{
 			for (VideoAudioVo videoAudioVo : list) {
 				if(orderService.IsPay(super.getUserIdByToken(userToken), videoAudioVo.getVideoAudioId(), videoAudioVo.getVideoAudioType())){
 					videoAudioVo.setIsPlay(ContextConstant.YES);
+				}else if(ContextConstant.NO.equals(videoAudioVo.getVideoAudioIspay())){
+					videoAudioVo.setIsPlay(ContextConstant.YES);
 				}else{
 					videoAudioVo.setIsPlay(ContextConstant.NO);
 				}
@@ -310,6 +312,8 @@ public class VideoAudioController extends BaseController{
 			for (VideoAudioVo videoAudioVo : list) {
 				if(orderService.IsPay(super.getUserIdByToken(userToken), videoAudioVo.getVideoAudioId(), videoAudioVo.getVideoAudioType())){
 					videoAudioVo.setIsPlay(ContextConstant.YES);
+				}else if(ContextConstant.NO.equals(videoAudioVo.getVideoAudioIspay())){
+					videoAudioVo.setIsPlay(ContextConstant.YES);
 				}else{
 					videoAudioVo.setIsPlay(ContextConstant.NO);
 				}
@@ -331,12 +335,25 @@ public class VideoAudioController extends BaseController{
 	@RequestMapping(value = "/findRelevant")
 	public String findRelevant(HttpServletRequest request){
 		try {
-			String videoAudioId = request.getParameter("videoAudioId"); 
+			String videoAudioId = request.getParameter("videoAudioId");
+			String userToken = request.getParameter("userToken");
+			if(StringUtils.isBlank(userToken)){
+				return ResUtils.errRes("102", "请求参数错误");
+			}
 			if(StringUtils.isBlank(videoAudioId)){
 				return ResUtils.errRes("102", "请求参数错误");
 			}
 			List<VideoAudioPo> list = videoAudioService.findRelevant(Integer.parseInt(videoAudioId));
 			List<VideoAudioVo> result = videoAudioService.selectVoByPo(list);
+			for (VideoAudioVo videoAudioVo : result) {
+				if(orderService.IsPay(super.getUserIdByToken(userToken), videoAudioVo.getVideoAudioId(), videoAudioVo.getVideoAudioType())){
+					videoAudioVo.setIsPlay(ContextConstant.YES);
+				}else if(ContextConstant.NO.equals(videoAudioVo.getVideoAudioIspay())){
+					videoAudioVo.setIsPlay(ContextConstant.YES);
+				}else{
+					videoAudioVo.setIsPlay(ContextConstant.NO);
+				}
+			}
 			return ResUtils.okRes(result);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -360,7 +377,7 @@ public class VideoAudioController extends BaseController{
 			}
 			VideoAudioPo videoAudioPo = videoAudioService.findOne(Integer.parseInt(videoAudioId));
 			boolean isPay = orderService.IsPay(super.getUserIdByToken(userToken), videoAudioPo.getVideoAudioId(), videoAudioPo.getVideoAudioType());
-			if(!isPay){
+			if(!isPay && ContextConstant.YES.equals(videoAudioPo.getVideoAudioIspay())){
 				if("SP".equals(videoAudioPo.getVideoAudioType())){
 					videoAudioPo.setVideoAudioUrl(noPayResVideoUrl);
 				}else if("YP".equals(videoAudioPo.getVideoAudioType())){
@@ -388,7 +405,8 @@ public class VideoAudioController extends BaseController{
 				return ResUtils.errRes("102", "请求参数错误");
 			}
 			List<VideoAudioPo> list = videoAudioService.findByCourseId(Integer.parseInt(courseId));
-			return ResUtils.okRes(list);
+			List<VideoAudioVo> result = videoAudioService.selectVoByPo(list);
+			return ResUtils.okRes(result);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -432,7 +450,7 @@ public class VideoAudioController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "/findVideoAudioByUserId")
-	public String findVideoAudioByUserId(HttpServletRequest request){
+	public String findVideoAudioByUserId(HttpServletRequest request,PageTemp pageTemp){
 		try {
 			Map map = super.getPara();
 			String userToken = map.get("userToken").toString();
@@ -441,7 +459,7 @@ public class VideoAudioController extends BaseController{
 			}
 			Integer userId = super.getUserIdByToken(userToken);
 			map.put("userId", userId);
-			List<VideoAudioVo> list = videoAudioService.findVideoAudioByUserId(map);
+			PageInfo<VideoAudioVo> list = videoAudioService.findVideoAudioByUserId(map,pageTemp);
 			return ResUtils.okRes(list);
 		} catch (Exception e) {
 			// TODO: handle exception

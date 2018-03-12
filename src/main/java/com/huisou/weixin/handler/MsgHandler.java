@@ -1,20 +1,15 @@
 package com.huisou.weixin.handler;
 
 
-import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.common.JsonUtils;
-import com.huisou.weixin.builder.TextBuilder;
 
 import java.util.Map;
 
-import static me.chanjar.weixin.common.api.WxConsts.XmlMsgType;
 
 /**
  * 用户发送消息，对一个农户发哦是哪个的消息是否进行回复

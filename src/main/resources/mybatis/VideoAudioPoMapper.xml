@@ -380,7 +380,7 @@
 		FROM
 			busi_video_audio
 		WHERE
-			create_time  &gt;= (
+			create_time  &gt; (
 				SELECT
 					create_time
 				FROM
@@ -390,6 +390,7 @@
 				LIMIT 1
 			)
 			AND video_audio_status = '1'
+			AND video_audio_type = #{videoAudioType}
 		ORDER BY
 			create_time ASC
 		LIMIT 5
@@ -413,5 +414,35 @@
 		AND user_id = #{userId}
 		AND pay_status = #{payStatus}
 	) t2 ON t1.video_audio_id = t2.res_id
+   </select>
+    <select id="findVideoAudioByUserIdBySP" parameterType="Map" resultMap="BaseResultMap">
+  SELECT
+		t1.*
+	FROM
+		busi_video_audio t1
+	LEFT JOIN 
+		
+			busi_order o
+	ON t1.video_audio_id = o.res_id
+		WHERE
+			o.res_type = #{resType}  and t1.video_audio_type = #{resType}
+		AND o.user_id = #{userId}
+		AND o.pay_status = #{payStatus}
+	
+	
+	UNION
+	
+	SELECT
+		t1.*
+	FROM
+		busi_video_audio t1
+	LEFT JOIN 
+		
+			busi_order o
+	ON t1.course_id = o.res_id
+		WHERE
+			o.res_type = 'KC'
+		AND o.user_id = #{userId}
+		AND o.pay_status = #{payStatus}
    </select>
 </mapper>

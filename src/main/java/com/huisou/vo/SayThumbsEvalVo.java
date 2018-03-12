@@ -36,17 +36,25 @@ public class SayThumbsEvalVo {
 
     private String sayTitleName;
     private boolean show;
+    private boolean showUpDown;
     private List<ResourcesEvalVo> evalList;
     private List<ResourcesThumbsVo> thumbsList;
     
 	public boolean isShow() {
-		return show;
+		return false;
 	}
-
+	
 	public void setShow(boolean show) {
 		this.show = show;
 	}
 
+	public boolean isShowUpDown() {
+		return false;
+	}
+	
+	public void setShowUpDown(boolean showUpDown) {
+		this.showUpDown = showUpDown;
+	}
 	public List<ResourcesEvalVo> getEvalList() {
 		return evalList;
 	}

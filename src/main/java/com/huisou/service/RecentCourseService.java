@@ -26,6 +26,6 @@ public interface RecentCourseService {
 
 	RecentCoursePo findOneByrecentCourseId(Integer recentCourseId);
 
-	List<RecentCourseVo> findAllByUserId(Integer userId, Date now);
+	PageInfo<RecentCourseVo> findAllByUserId(Integer userId, Date now,PageTemp pageTemp);
 
 }

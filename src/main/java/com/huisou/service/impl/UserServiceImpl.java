@@ -1,15 +1,20 @@
 package com.huisou.service.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.huisou.constant.ContextConstant;
+import com.huisou.mapper.CoursePoMapper;
 import com.huisou.mapper.UserPoMapper;
+import com.huisou.po.CoursePo;
 import com.huisou.po.UserPo;
 import com.huisou.service.UserService;
 import com.huisou.vo.PageTemp;
@@ -25,6 +30,9 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	private UserPoMapper userPoMapper;
+	
+	@Autowired
+	private CoursePoMapper coursePoMapper;
 	
 	@Override
 	public PageInfo<UserPo> findAll(Map para, PageTemp pageTemp) {
@@ -48,15 +56,15 @@ public class UserServiceImpl implements UserService{
 	 */
 	@Override
 	public Integer addOne(UserPo userPo) {
-		UserPo user = userPoMapper.getUserByOpenId(userPo.getOpenid());
-		if (user != null && user.getUserId() != null) {
-			userPo.setUserId(user.getUserId());
-			//当user原本的classUserId不为空的时候，那么就替换原本的userid
-			if (user.getClassmateUserId() != null) {
-				userPo.setClassmateUserId(user.getClassmateUserId());
-			}
-			return userPoMapper.updateByPrimaryKey(userPo);
-		}
+//		UserPo user = userPoMapper.getUserByOpenId(userPo.getOpenid());
+//		if (user != null && user.getUserId() != null) {
+//			userPo.setUserId(user.getUserId());
+//			//当user原本的classUserId不为空的时候，那么就替换原本的userid
+//			if (user.getClassmateUserId() != null) {
+//				userPo.setClassmateUserId(user.getClassmateUserId());
+//			}
+//			return userPoMapper.updateByPrimaryKey(userPo);
+//		}
 		
 		return userPoMapper.insertSelective(userPo);
 	}
@@ -78,7 +86,7 @@ public class UserServiceImpl implements UserService{
 
 	public boolean getUserIntegral(Integer userId, Integer integral) {
 		UserPo userPo = userPoMapper.selectByPrimaryKey(userId);
-		if (null != userPo && userPo.getIntegralNum().intValue() >= integral){
+		if (null != userPo && null != userPo.getIntegralNum() && userPo.getIntegralNum().intValue() >= integral){
 			return true;
 		} else {
 			return false;
@@ -99,28 +107,38 @@ public class UserServiceImpl implements UserService{
 	 * 发现所有的同学
 	 */
 	@Override
-	public List<UserPo> findAllClassmate(String openId) {
-		List<UserPo> list = null;
-		list= userPoMapper.listByOpenIdFindClassUserId(openId);
-		UserPo userByOpenId = userPoMapper.getUserByOpenId(openId);
-		if (userByOpenId.getClassmateUserId() != null) {
-			UserPo userPo = userPoMapper.selectByPrimaryKey(userByOpenId.getUserId());
-			if (userPo != null) {
-				if (list != null && list.size() > 0) {
-					list.add(userPo);
-				}else {
-					list = new ArrayList<UserPo>();
-					list.add(userPo);
-				}
+	public PageInfo<UserVo> findAllClassmate(String openId,PageTemp pageTemp) {
+		List<UserVo> volist = new ArrayList<>();
+		PageHelper.startPage(pageTemp.getPageNum(), pageTemp.getPageSize());
+		List<UserPo> list = userPoMapper.listByOpenIdFindClassUserId(openId);
+		for (UserPo userPo : list) {
+			UserVo userVo = new UserVo();
+			try {
+				BeanUtils.copyProperties(userVo, userPo);
+			} catch (IllegalAccessException | InvocationTargetException e) {
+				e.printStackTrace();
 			}
+			List<CoursePo> coursePoList = coursePoMapper.findAllPayCourseByUserid(userVo.getUserId());
+			if(null==coursePoList || coursePoList.size()==0){
+				userVo.setIsApply(ContextConstant.NO);
+			}else{
+				userVo.setIsApply(ContextConstant.YES);
+			}
+			userVo.setList(coursePoList);
+			volist.add(userVo);
 		}
-		
-		return list;
+		return new PageInfo<>(volist);
 	}
 
 	@Override
 	public void updateUserIntegral(Integer userId, Long integral) {
 		userPoMapper.updateUserIntegral(userId,integral);
+	}
+
+	@Override
+	public List<String> findAllOpenid() {
+		List<String> list = userPoMapper.findAllOpenid();
+		return list;
 	}
 
 }

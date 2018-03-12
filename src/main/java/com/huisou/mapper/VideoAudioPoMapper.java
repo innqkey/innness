@@ -34,10 +34,12 @@ public interface VideoAudioPoMapper {
 
 	List<VideoAudioPo> findVideoAudioByPayNum(@Param(value = "videoAudioType")String videoAudioType);
 
-	List<VideoAudioPo> findRelevant(@Param(value = "createTime")Date createTime, @Param(value = "videoAudioId")Integer videoAudioId);
+	List<VideoAudioPo> findRelevant(@Param(value = "createTime")Date createTime, @Param(value = "videoAudioId")Integer videoAudioId,@Param(value = "videoAudioType")String videoAudioType);
 
 	List<VideoAudioPo> findByCourseId(@Param(value = "courseId")Integer courseId);
 
 	List<VideoAudioPo> findVideoAudioByUserId(Map map);
+
+	List<VideoAudioPo> findVideoAudioByUserIdBySP(Map map);
 
 }

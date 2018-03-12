@@ -21,11 +21,12 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="standby1" property="standby1" jdbcType="VARCHAR" />
     <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+    <result column="is_agency" property="isAgency" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     user_id, openid, nickname, sex, province, city, country, headimgurl, username, integral_num, 
     auth_status, user_status, card_type, classmate_user_id, card_num, phone, create_time, 
-    standby1, standby2
+    standby1, standby2, is_agency
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -231,6 +232,9 @@
       <if test="standby2 != null" >
         standby2 = #{standby2,jdbcType=VARCHAR},
       </if>
+       <if test="standby2 != null" >
+        is_agency = #{isAgency,jdbcType=VARCHAR},
+      </if>
     </set>
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
@@ -324,4 +328,8 @@
     	set integral_num = integral_num + #{integral}
 	    where user_id = #{userId}
   	</update>
+  	
+  	<select id="findAllOpenid" resultType="java.lang.String">
+  		select openid FROM busi_user where standby1='1' and standby2='2'
+  	</select>
 </mapper>

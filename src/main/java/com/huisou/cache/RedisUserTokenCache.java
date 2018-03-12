@@ -35,11 +35,9 @@ public class RedisUserTokenCache {
 	 * @param userInfo
 	 */
 	public void addUserToken(String userToken,UserPo userPo){
-		synchronized(RedisUserTokenCache.class){
-			logger.info("userToken===:"+userToken+";openId=="+userPo.getOpenid());
-			redis.set(userToken, JSON.toJSONString(userPo), ContextConstant.REDES_DATABASE1);
-//			redis.setTimeout(token, code, 60*2, ContextConstant.REDES_DATABASE1);
-		}
+		logger.info("userToken===:"+userToken+";openId=="+userPo.getOpenid());
+		redis.set(userToken, JSON.toJSONString(userPo), ContextConstant.REDES_DATABASE1);
+		logger.info("更新userToken缓存:"+userToken);
 	}
 	
 	/**

@@ -96,10 +96,8 @@
         <dependency>
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-data-redis</artifactId>
-		    <version>1.5.10.RELEASE</version>
 		</dependency>
-
-        
+		
         <!-- 使用微信工具开发 -->
         <dependency>
             <groupId>com.github.binarywang</groupId>
@@ -224,6 +222,30 @@
 	    		<version>2.6</version>  
 			</plugin>
 			
+<!-- 			
+			<plugin>
+			    <groupId>org.codehaus.cargo</groupId>
+			    <artifactId>cargo-maven2-plugin</artifactId>
+			    <version>1.4.15</version>
+			    <configuration>
+			        <container>
+			            <containerId>tomcat8x</containerId>
+			            <type>remote</type>
+			        </container>
+			        <configuration>
+			            <type>runtime</type>
+			            <properties>
+			                <cargo.tomcat.manager.url>http://192.168.0.131:8080/</cargo.tomcat.manager.url>
+			                <cargo.remote.username>admin</cargo.remote.username>
+			                <cargo.remote.password>123456</cargo.remote.password>
+			                <cargo.servlet.port>8080</cargo.servlet.port>
+			                <cargo.hostname>192.168.0.131</cargo.hostname>
+			                <cargo.tomcat.ajp.port>8080</cargo.tomcat.ajp.port>
+			            </properties>
+			        </configuration>
+			    </configuration>
+			</plugin>
+			 -->
             
             <plugin>
                 <groupId>org.mybatis.generator</groupId>

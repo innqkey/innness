@@ -74,7 +74,8 @@ public class RecentCourseServiceImpl implements RecentCourseService{
 	}
 
 	@Override
-	public List<RecentCourseVo> findAllByUserId(Integer userId, Date now) {
+	public PageInfo<RecentCourseVo> findAllByUserId(Integer userId, Date now,PageTemp pageTemp) {
+		PageHelper.startPage(pageTemp.getPageNum(), pageTemp.getPageSize());
 		List<RecentCoursePo> list = recentCoursePoMapper.findByAfterDate(now);
 		List<RecentCourseVo> voList = new ArrayList<>();
 		for (RecentCoursePo recentCoursePo : list) {
@@ -93,7 +94,7 @@ public class RecentCourseServiceImpl implements RecentCourseService{
 			}
 			voList.add(recentCourseVo);
 		}
-		return voList;
+		return new PageInfo(voList);
 	}
 
 	

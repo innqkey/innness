@@ -351,6 +351,7 @@ public class MaterialController extends BaseController{
 					integralService.insertIntegralRecord(integralRecordPo);
 					studyPo.setCreateTime(new Date());
 					studyPo.setResType("KJ");
+					studyPo.setUserId(userId);
 					studyService.insertStudyRecord(studyPo);
 					userService.updateUserIntegral(userId,-Long.parseLong(integral));
 					return ResUtils.okRes();

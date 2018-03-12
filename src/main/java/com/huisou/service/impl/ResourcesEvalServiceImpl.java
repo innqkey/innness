@@ -61,7 +61,8 @@ public class ResourcesEvalServiceImpl implements ResourcesEvalService{
 	}
 	
 	@Override
-	public PageInfo<ResourcesEvalVo> findAllByMapAndStatus(Map<String, String> map) {
+	public PageInfo<ResourcesEvalVo> findAllByMapAndStatus(Map<String, String> map,PageTemp pageTemp) {
+		PageHelper.startPage(pageTemp.getPageNum(), pageTemp.getPageSize());
 		List<ResourcesEvalVo> elalVo = evalPoMapper.findAllByMapAndStatus(map);
 		return new PageInfo<ResourcesEvalVo>(elalVo);
 	}

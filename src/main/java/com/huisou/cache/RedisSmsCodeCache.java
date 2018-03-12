@@ -29,11 +29,8 @@ public class RedisSmsCodeCache {
 	 * @param userInfo
 	 */
 	public void addSmsCode(String token,String code){
-		synchronized(RedisSmsCodeCache.class){
-			logger.info("token;验证码===:"+token+";"+code);
-			redis.put("sms",token, code, ContextConstant.REDES_DATABASE1);
-//			redis.setTimeout(token, code, 60*2, ContextConstant.REDES_DATABASE1);
-		}
+		logger.info("token;验证码===:"+token+";"+code);
+		redis.put("sms",token, code, ContextConstant.REDES_DATABASE1);
 	}
 	
 	/**
@@ -45,4 +42,5 @@ public class RedisSmsCodeCache {
 		String code = String.valueOf(redis.getMap("sms",token, ContextConstant.REDES_DATABASE1));
 		return code;
 	}
+	
 }

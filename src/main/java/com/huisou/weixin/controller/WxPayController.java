@@ -1,37 +1,43 @@
 package com.huisou.weixin.controller;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.Date;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.common.ResUtils;
+import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
-import com.github.binarywang.wxpay.bean.request.*;
+import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.constant.WxPayConstants.SignType;
 import com.github.binarywang.wxpay.constant.WxPayConstants.TradeType;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.huisou.constant.ContextConstant;
+import com.huisou.mapper.WeixinCallbackRecordPoMapper;
 import com.huisou.po.AwardRecordPo;
 import com.huisou.po.OrderPo;
 import com.huisou.po.PayRecordPo;
+import com.huisou.po.WeixinCallbackRecordPo;
 import com.huisou.service.AwardRecordService;
 import com.huisou.service.OrderService;
 import com.huisou.service.PayRecordService;
-import com.huisou.vo.OrderVo;
 import com.huisou.weixin.config.WxPayProperties;
 
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 
 /**
@@ -56,11 +62,16 @@ public class WxPayController   {
   private OrderService orderService;
   @Autowired
   private PayRecordService payRecordService;
+  
+  
   @Value("${wechat.pay.reward.notifyUrl}")
   private String rewardNotifyUrl;
   
   @Autowired
   private AwardRecordService awardRecordService;
+  @Autowired
+  private WeixinCallbackRecordPoMapper weixinCallbackRecordPoMapper;
+  
   
   
   /**
@@ -69,71 +80,84 @@ public class WxPayController   {
    * 支付的总金额，等于现金金额  + 优惠券（微信支付）金额等。
    */
   @PostMapping("/getFeedBackInfo")
-  public WxPayOrderNotifyResult parseOrderNotifyResult(@RequestBody String xmlData) throws WxPayException {
+  public String parseOrderNotifyResult(@RequestBody String xmlData) throws WxPayException {
 	  try {
-	      logger.debug("微信支付异步通知请求参数：{}", xmlData);
+	      logger.info("微信支付异步通知请求参数：{}", xmlData);
 	      WxPayOrderNotifyResult result = this.wxService.parseOrderNotifyResult(xmlData);
-	      //用来检查是否成功，
-	      if (result.getReturnCode().equals("SUCCESS")) {
+	      if (result.getReturnCode() != null && !result.getReturnCode().equals("SUCCESS")) {
+	    	  return WxPayNotifyResponse.fail(result.getReturnMsg());
+	      }
+	      
+	      WeixinCallbackRecordPo callbackRecordPo = new WeixinCallbackRecordPo();
+	      org.springframework.beans.BeanUtils.copyProperties(result, callbackRecordPo);
+	      weixinCallbackRecordPoMapper.insert(callbackRecordPo);
+	      
+	      //用来支付是否成功
+	      if (result.getResultCode().equals("SUCCESS")) {
 	    	  PayRecordPo payRecordPo = new PayRecordPo();
 	    	  payRecordPo.setWeixinRecord(result.getTransactionId());
 	    	  payRecordPo.setCreateTime(new Date());
+	    	  
 	    	  //首先判断商务号是否正确
 	    	  if ( wxPayProperties.getMchId().equals(result.getMchId())) {
 	    		  //看看数据库中是否有该订单号
 	    		  if (result.getOutTradeNo() != null) {
-	    			HashMap<String, String> map = new HashMap<String,String>();
-	    			map.put("order_no", result.getOutTradeNo());
-					List<OrderVo> orderList = orderService.findOrderByParamers(map);
+	    			  
+	    			String outTradeNo = result.getOutTradeNo();
+					OrderPo order= orderService.findByoutTradeNo(outTradeNo);
 					//说明存在该订单号
-					if (orderList != null && orderList.size() > 0) {
+					if (order != null ) {
+						
 						//判断金额是否正确
 						Integer totalFee = result.getTotalFee();
 						if (totalFee != null) {
+							
 							int payedValue = totalFee.intValue();
-							OrderVo orderVo = orderList.get(0);
-							int payOrder = orderVo.getOrderPay().intValue() * 100;
-							if (payedValue == payOrder) {
-								logger.info("支付成功" + result);
+							int payOrderValue = (int) (order.getOrderPay().floatValue()) * 100;
+							if (payedValue == payOrderValue) {
+								
+								logger.info("支付成功");
 								//说明成功，更改数据库的状态，并且保存支付信息
 								OrderPo orderPo = new OrderPo();
-								orderPo.setOrderId(orderVo.getOrderId());
+								orderPo.setOrderId(order.getOrderId());
 								orderPo.setPayStatus(ContextConstant.PAY_STATUS_SUCCESS);
 								orderService.update(orderPo);
-								
 								//保存对应的支付信息
-								payRecordPo.setOrderId(orderVo.getOrderId());
-								payRecordPo.setPayMoney(new BigDecimal(payedValue/100));
-								payRecordPo.setResId(orderVo.getResId());
-								payRecordPo.setResPrice(orderVo.getOrderPay());
-								payRecordPo.setResTitle(orderVo.getResTitle());
-								payRecordPo.setResType(orderVo.getResType());
+								payRecordPo.setUserId(order.getUserId());
+								payRecordPo.setOrderId(order.getOrderId());
+								payRecordPo.setPayMoney(order.getOrderPay());
+								payRecordPo.setResId(order.getResId());
+								payRecordPo.setResPrice(order.getOrderPay());
+								payRecordPo.setResType(order.getResType());
 								payRecordPo.setPayStatus(ContextConstant.PAY_STATUS_SUCCESS);
-								
 							}else {
-								logger.error("错误的金额" + result);
+								logger.error("错误的金额,应付金额是" + payOrderValue + "已经支付金额是" + payedValue);
 								payRecordPo.setPayFailCause(ContextConstant.PAY_FAIL_ERROR_NUM);
-								payRecordPo.setOrderId(orderVo.getOrderId());
-								payRecordPo.setPayMoney(new BigDecimal(result.getTotalFee()/100) );
-								payRecordPo.setResId(orderVo.getResId());
-								payRecordPo.setResPrice(orderVo.getOrderPay());
-								payRecordPo.setResTitle(orderVo.getResTitle());
-								payRecordPo.setResType(orderVo.getResType());
+								payRecordPo.setUserId(order.getUserId());
+								payRecordPo.setOrderId(order.getOrderId());
+								payRecordPo.setPayMoney(order.getOrderPay());
+								payRecordPo.setResId(order.getResId());
+								payRecordPo.setResPrice(order.getOrderPay());
+								payRecordPo.setResType(order.getResType());
 								payRecordPo.setPayStatus(ContextConstant.PAY_STATUS_FAIL);
 							}
+							
 						}
 						
 					}else {
-						 logger.error("错误的订单号" + result);
+						 logger.error("错误的订单号::" + result.getOutTradeNo());
 						 payRecordPo.setPayFailCause(ContextConstant.PAY_FAIL_ERROR_ORDERID);
 						 payRecordPo.setPayStatus(ContextConstant.PAY_STATUS_FAIL);
 					}
 					
+				}else {
+					 logger.error("订单号为空 :-----" );
+					 payRecordPo.setPayFailCause(ContextConstant.PAY_FAIL_ERROR_NULLODERID);
+					 payRecordPo.setPayStatus(ContextConstant.PAY_STATUS_FAIL);
 				}
-	    		  
 	    	  }else {
 	    		  //如果商务号不对的话，那么记录用户的对应的信息
-	    		  logger.error("错误的商务号用户" + result);
+	    		  logger.error("错误的商务号用户" + result.getMchId());
 	    		  payRecordPo.setPayFailCause(ContextConstant.PAY_FAIL_ERROR_ACCOUNT);
 	    		  payRecordPo.setPayStatus(ContextConstant.PAY_STATUS_FAIL);
 	    	  }
@@ -141,7 +165,7 @@ public class WxPayController   {
 	    	  payRecordService.add(payRecordPo);
 	      }
 	      
-	      return result;
+	      return WxPayNotifyResponse.success("OK");
 	    } catch (WxPayException e) {
 	    	logger.error(e.getMessage(), e);
 	      throw e;
@@ -156,13 +180,20 @@ public class WxPayController   {
    * 支付的总金额，等于现金金额  + 优惠券（微信支付）金额等。
    */
   @PostMapping("/getRewardFeedBackInfo")
-  public WxPayOrderNotifyResult getRewardFeedBackInfo(@RequestBody String xmlData) throws WxPayException {
+  public String getRewardFeedBackInfo(@RequestBody String xmlData) throws WxPayException {
 	  try {
-		  logger.debug("微信支付异步通知请求参数：{}", xmlData);
+		  logger.info("微信支付异步通知请求参数：{}", xmlData);
 		  WxPayOrderNotifyResult result = this.wxService.parseOrderNotifyResult(xmlData);
+		  if (result.getReturnCode() != null && !result.getReturnCode().equals("SUCCESS")) {
+	    	  return WxPayNotifyResponse.fail(result.getReturnMsg());
+	      }
+		  
+		  WeixinCallbackRecordPo callbackRecordPo = new WeixinCallbackRecordPo();
+		  BeanUtils.copyProperties(result, callbackRecordPo);
+	      weixinCallbackRecordPoMapper.insert(callbackRecordPo);
+	      
 		  //用来检查是否成功，
-		  if (result.getReturnCode().equals("SUCCESS")) {
-		
+		  if (result.getResultCode().equals("SUCCESS")) {
 			  //首先判断商务号是否正确
 			  if ( wxPayProperties.getMchId().equals(result.getMchId())) {
 				  //看看数据库中是否有该订单号
@@ -175,31 +206,30 @@ public class WxPayController   {
 						  Integer totalFee = result.getTotalFee();
 						  if (totalFee != null) {
 							  int payedValue = totalFee.intValue();
-							  int payOrder = awardRecordPo.getAwardMoney().intValue() * 100;
+							  int payOrder = (int) (awardRecordPo.getAwardMoney().floatValue()) * 100;
 							  if (payedValue == payOrder) {
-								  logger.info("支付成功" + result);
+								  logger.info("打赏成功" + result);
 								  //说明成功，更改数据库的状态，并且保存支付信息
-								  OrderPo orderPo = new OrderPo();
-								  orderPo.setOrderId(awardRecordPo.getAwardRecordId());
-								  orderPo.setPayStatus(ContextConstant.PAY_STATUS_SUCCESS);
-								  orderService.update(orderPo);
+								  awardRecordPo.setAwardStatus(ContextConstant.PAY_STATUS_SUCCESS);
+								  awardRecordService.update(awardRecordPo);
 							  }
 						  }
 						  
 					  }else {
-						  logger.error("错误的订单号" + result);
+						  logger.error("错误的订单号" );
 					  }
-					  
+				  }else {
+					  logger.error("订单为空");
 				  }
 				  
 			  }else {
 				  //如果商务号不对的话，那么记录用户的对应的信息
-				  logger.error("错误的商务号用户" + result);
+				  logger.error("错误的商务号用户" );
 			  }
 			  
 		  }
 		  
-		  return result;
+		  return WxPayNotifyResponse.success("ok");
 	  } catch (WxPayException e) {
 		  logger.error(e.getMessage(), e);
 		  throw e;
@@ -228,9 +258,7 @@ public class WxPayController   {
 		
 		
 		Integer totalFee = request.getTotalFee();
-		if (totalFee != null) {
-			//request.setTotalFee(totalFee * 100);
-		}
+		request.setTotalFee(totalFee * 100);
 		request.setTradeType(TradeType.JSAPI);
 		//生成随机字符串
 		request.setNonceStr(String.valueOf(System.currentTimeMillis() / 1000));
@@ -271,9 +299,7 @@ public class WxPayController   {
 		//修改打赏的回掉地址
 		request.setNotifyURL(rewardNotifyUrl);
 		Integer totalFee = request.getTotalFee();
-		if (totalFee != null) {
-			//request.setTotalFee(totalFee * 100);
-		}
+		request.setTotalFee(totalFee * 100);
 		request.setTradeType(TradeType.JSAPI);
 		//生成随机字符串
 		request.setNonceStr(String.valueOf(System.currentTimeMillis() / 1000));
@@ -292,6 +318,6 @@ public class WxPayController   {
 	return ResUtils.execRes();
   }
   
-  
+
 }
 

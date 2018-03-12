@@ -48,7 +48,7 @@ public interface ResourcesEvalService {
 
 	PageInfo<ResourcesEvalVo> findAllByMap(Map<String, String> map);
 
-	PageInfo<ResourcesEvalVo> findAllByMapAndStatus(Map<String, String> map);
+	PageInfo<ResourcesEvalVo> findAllByMapAndStatus(Map<String, String> map,PageTemp pageTemp);
 
 	/**
 	 * 查找一条评论

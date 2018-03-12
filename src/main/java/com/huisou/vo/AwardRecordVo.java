@@ -41,7 +41,18 @@ public class AwardRecordVo {
 	    
 	    private String openid;
 	    
-	    public String getOpenid() {
+	    private String userName;
+	    
+	    
+	    public String getUserName() {
+			return userName;
+		}
+
+		public void setUserName(String userName) {
+			this.userName = userName;
+		}
+
+		public String getOpenid() {
 			return openid;
 		}
 

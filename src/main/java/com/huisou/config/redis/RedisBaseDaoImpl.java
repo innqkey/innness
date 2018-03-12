@@ -28,7 +28,7 @@ public class RedisBaseDaoImpl<T> implements IRedisBaseDao<T> {
 	
 	@Override
 	public void set(String key, String value, int database) {
-		redisTemplate.getConnectionFactory().getConnection().select(database);
+//		redisTemplate.getConnectionFactory().getConnection().select(database);
 		redisTemplate.opsForValue().set(key, value);
 //		redisTemplate.execute(new RedisCallback<Boolean>() {  
 //            @Override  
@@ -43,7 +43,7 @@ public class RedisBaseDaoImpl<T> implements IRedisBaseDao<T> {
 
 	@Override
 	public void setTimeout(String key, String value, long timeout, int database) {
-		redisTemplate.getConnectionFactory().getConnection().select(database);
+//		redisTemplate.getConnectionFactory().getConnection().select(database);
 		redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
 	}
 	

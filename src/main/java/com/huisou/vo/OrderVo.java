@@ -62,8 +62,27 @@ public class OrderVo {
 
     private List<RegistPo> list;
     
+    private String courseLogo;
+    
+    private String userName;
     
     
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getCourseLogo() {
+		return courseLogo;
+	}
+
+	public void setCourseLogo(String courseLogo) {
+		this.courseLogo = courseLogo;
+	}
+
 	public List<RegistPo> getList() {
 		return list;
 	}

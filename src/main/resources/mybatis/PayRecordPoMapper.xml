@@ -212,6 +212,7 @@
 		t1.pay_status payStatus,
 		t2.user_id userId,
 		t2.nickname,
+		t2.username,
 		t2.phone
 	FROM
 		busi_pay_record t1

@@ -161,7 +161,8 @@
 		t1.res_type resType,
 		t1.user_id userId,
 		t2.nickname,
-		t2.headimgurl
+		t2.headimgurl,
+		t2.username userName
 	FROM
 		busi_award_record t1
 	LEFT JOIN busi_user t2 ON t1.user_id = t2.user_id
