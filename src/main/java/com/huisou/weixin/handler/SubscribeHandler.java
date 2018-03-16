@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +99,12 @@ public class SubscribeHandler extends AbstractHandler {
 		       			NotificationPo notificationPo = new NotificationPo();
 		       			notificationPo.setCreateTime(new Date());
 		       			notificationPo.setUserId(user.getUserId());
-		       			notificationPo.setNotificationContext("邀请用户" + userWxInfo.getNickname() + "增加100积分");
+		       			
+		       			String infoNickname = userWxInfo.getNickname();
+		       			Matcher matcher = ContextConstant.EMOJI.matcher(infoNickname);    
+		       	        infoNickname = matcher.replaceAll("");  
+		       	        
+		       			notificationPo.setNotificationContext("邀请用户" + infoNickname + "增加100积分");
 		       			notificationPo.setOpenId(user.getOpenid());
 		       			notificationPo.setNotificationType("FX");
 		       			notificationService.addOne(notificationPo);
@@ -136,7 +142,10 @@ public class SubscribeHandler extends AbstractHandler {
 	       	NotificationPo newPo = new NotificationPo();
 	       	newPo.setCreateTime(new Date());
 	       	newPo.setUserId(newUserPo.getUserId());
-	       	newPo.setNotificationContext("亲爱的" + userWxInfo.getNickname() + "，" + ContextConstant.ATTENTION);
+	       	String infoNickname = userWxInfo.getNickname();
+   			Matcher matcher = ContextConstant.EMOJI.matcher(infoNickname);    
+   	        infoNickname = matcher.replaceAll("");
+	       	newPo.setNotificationContext("亲爱的" + infoNickname + "，" + ContextConstant.ATTENTION);
 	       	newPo.setOpenId(newUserPo.getOpenid());
 	       	newPo.setNotificationType("GZ");
 	       	notificationService.addOne(newPo);
@@ -155,13 +164,13 @@ public class SubscribeHandler extends AbstractHandler {
 //      return responseResult;
 //    }
 
-    try {
-    	
-      return new TextBuilder().build("感谢您的关注", wxMessage, weixinService);
-      
-    } catch (Exception e) {
-      this.logger.error(e.getMessage(), e);
-    }
+//    try {
+//    	
+//      return new TextBuilder().build("", wxMessage, weixinService);
+//      
+//    } catch (Exception e) {
+//      this.logger.error(e.getMessage(), e);
+//    }
 
     return null;
   }

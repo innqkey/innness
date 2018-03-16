@@ -34,7 +34,7 @@ public class WxMenuController implements WxMpMenuService {
    * 如果要创建个性化菜单，请设置matchrule属性
    * 详情请见：https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1455782296&token=&lang=zh_CN
    * </pre>
-   *
+   *   微信支付使用json的进行数据发送的时候，子菜单的key的值使用subButtons，不能使用sub_button，这个项目的bug
    * @param menu
    * @return 如果是个性化菜单，则返回menuid，否则返回null
    */

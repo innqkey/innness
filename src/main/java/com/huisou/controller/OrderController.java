@@ -132,21 +132,21 @@ public class OrderController extends BaseController{
 	public String registCourse(HttpServletRequest request){
 		try {
 			String userToken = request.getParameter("userToken");
-			String code = request.getParameter("code");
+//			String code = request.getParameter("code");
 			if( StringUtils.isBlank(userToken)){
 				return ResUtils.errRes("102", "请求参数错误");
 			}
-			if( StringUtils.isBlank(code)){
-				return ResUtils.errRes("104", "验证码错误");
-			}
-			String redisCode = smsCache.getSmsCode(userToken);
-			if(!code.equals(redisCode)){
-				return ResUtils.errRes("104", "验证码错误");
-			}
+//			if( StringUtils.isBlank(code)){
+//				return ResUtils.errRes("104", "验证码错误");
+//			}
+//			String redisCode = smsCache.getSmsCode(userToken);
+//			if(!code.equals(redisCode)){
+//				return ResUtils.errRes("104", "验证码错误");
+//			}
 			String registPos = request.getParameter("registPos");
 			String courseId = request.getParameter("courseId");
-			String phone = request.getParameter("phone");
-			if(StringUtils.isBlank(registPos) || StringUtils.isBlank(courseId) || StringUtils.isBlank(phone)){
+//			String phone = request.getParameter("phone");
+			if(StringUtils.isBlank(registPos) || StringUtils.isBlank(courseId)){
 				return ResUtils.errRes("102", "请求参数错误");
 			}
 			List<RegistPo> list = JacksonUtil.toListObject(registPos, RegistPo.class);
@@ -157,7 +157,7 @@ public class OrderController extends BaseController{
 			   if(StringUtils.isNotBlank(msg)){
 				   return ResUtils.errRes("108","身份证号 "+msg+"已报过名");
 			   }*/
-			   OrderPo orderPo = orderService.registCourse(super.getUserIdByToken(userToken),Integer.parseInt(courseId),phone,list);
+			   OrderPo orderPo = orderService.registCourse(super.getUserIdByToken(userToken),Integer.parseInt(courseId),"",list);
 			   OrderVo orderVo = new OrderVo();
 			   BeanUtils.copyProperties(orderVo, orderPo);
 			   orderVo.setOpenid(super.getOpenIdByToken(userToken));

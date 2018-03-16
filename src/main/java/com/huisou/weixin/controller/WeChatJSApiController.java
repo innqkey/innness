@@ -37,4 +37,5 @@ public class WeChatJSApiController {
 		}
 		return ResUtils.okRes(signature);
 	}
+	
 }

@@ -11,28 +11,31 @@ wechat.mp.secret=e11b06f2ddc1d4b6a22eefd7d99d7f3f
 wechat.mp.token=huisou
 wechat.mp.aesKey=PoafUWHQlb02ibkGTLOqqilptPLkLyIYl8AxMXwgiF2
 
+#线上的
+#wechat.mp.appId=wxaac9e9ec86e7f30e
+#wechat.mp.secret=cec34198d2035fc3df94658c42289f2f
+#wechat.mp.token=huisou
+#wechat.mp.aesKey=x5ISMCKjKzyRUzPZ67zGn8BTrJLn2BASQ2yIbKa3qsx
+
 #设置微信公众号的appid(必填)
 wechat.pay.appId=wxc004032102b0d269
 #微信支付商户号
 wechat.pay.mchId=1481500362
-#配置接受支付回调的地址，不能带参数(必填)
-wechat.pay.notifyUrl=http://sxy.huisou.cn/list/pay/getFeedBackInfo
-
-#打赏的回掉地址
-wechat.pay.reward.notifyUrl=http://sxy.huisou.cn/list/pay/getRewardFeedBackInfo
+#配置接受支付回调的地址，这个是自动封装的
+wechat.pay.notifyUrl=http://sxy.huisou.cn/pay/getFeedBackInfo
+#打赏的回掉地址，这个是在WxpayController中的createRewardOrder中手动封装的
+wechat.pay.reward.notifyUrl=http://sxy.huisou.cn/pay/getRewardFeedBackInfo
 
 #微信支付商户密钥，
 wechat.pay.mchKey=US9koqlebKDB5aqyD4wFA6ojuz7SKk4N
 #密钥文件所在地址，
 wechat.pay.keyPath=
 
-#融云的appkey和对应的appSecret
-rongyu.appkey=
-rongyu.appSecret=
 
 #socketio配置
 uk.im.server.host=127.0.0.1
 uk.im.server.port=8082
+
 
 spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
 spring.datasource.driver-class-name=com.mysql.jdbc.Driver
@@ -57,7 +60,7 @@ spring.redis.port=6379
 # Redis服务器连接密码（默认为空）
 spring.redis.password=huisou
 # 连接池最大连接数（使用负值表示没有限制）
-spring.redis.pool.max-active=-1
+spring.redis.pool.max-active=100
 # 连接池最大阻塞等待时间（使用负值表示没有限制）
 spring.redis.pool.max-wait=-1
 # 连接池中的最大空闲连接
@@ -84,17 +87,13 @@ server.tomcat.uri-encoding=UTF-8
 spring.http.multipart.maxFileSize=500Mb
 spring.http.multipart.maxRequestSize=1000Mb
 
-#pic 这个是二维码的本地的保存地址
-image.url=d:/
-
-nopay.res.video.url=[{"name":"视频提示.mp4","url":"http://hssxy.huisou.cn/video/5133006770223687.mp4"}]
-nopay.res.audio.url=[{"name":"语音提示.mp3","url":"http://hssxy.huisou.cn/audio/5133215925480488.mp3"}]
+nopay.res.video.url=111
+nopay.res.audio.url=222
 #文档下载的路径
 doc.prefix=/list/customer/docDonwload/
 
 #token标价，1-开启；2-关闭
 http.token = 1
-
 
 #记录项目编码值，每次重启项目是修改
 item.num=1
@@ -102,18 +101,24 @@ item.num=1
 system.application.time=2017-05-01
 
 #本地存储视频、音频、资料地址，需传到本地再上传ftp
-local.baseUrl=/home/tomcat/webapps/upload
+local.baseUrl=D:/data
 ftp.baseUrl=http://hssxy.huisou.cn
 vedio.dir=/video
 audio.dir=/audio
 resource.dir=/resource
 img.dir=/img
 
-#ftp有拍云配置
+#ftp测试有拍云配置
 ftp.address=v0.ftp.upyun.com
 ftp.port=21
 ftp.username=caoxt/hsim-vedio
 ftp.password=caoxiaotao
+
+#ftp线上有拍云配置
+#ftp.address=v0.ftp.upyun.com
+#ftp.port=21
+#ftp.username=caoxt/sxy-video
+#ftp.password=caoxiaotao
 
 #短信配置
 sms.baseUrl=https://app.cloopen.com:8883
@@ -122,9 +127,9 @@ sms.accountSid=8a48b5514f4fc588014f67a8f5182ea2
 sms.authToken=9e4008a1f862450fa9bb4b09a7693465
 sms.templateId=237720
 sms.longtime=3
-
+	
 #pic 这个是二维码的本地的保存地址,必须加斜杠
-image.url=/home/tomcat/webapps/upload/image/
+image.url=h:/image/
 #二维码在图片的位置
 qrcode.startX=433
 qrcode.startY=308
@@ -132,16 +137,8 @@ qrcode.startY=308
 qrcode.codeWidth=253
 qrcode.codeHight=253
 
-#微信发送开课提醒的templateid
-templateId.send=raapEpZn-susZHu30yMBmh0V2HoaOcSV7oz1PobSuc4
-#推荐成功同学的模板
-templateId.classmate=x-8TPqZn4mSVSRd0F5mV4PrSZMiiy1xmdTgAdWaidlU
-    
-#发送推荐成功的模板连接url
-success.url=http://sxy.huisou.cn/sxyback/html/my_class.html?state=1
-
 #微信state传值，标记跳转页面
-state.url=http://sxy.huisou.cn/sxyback/html/tranfer.html?userToken=
+state.url=http://sxy.huisou.cn/sxybacky/html/tranfer.html?userToken=
 
 #是否开启jsonp跨域，开发时开启，用于前端本地调试接口;1-返回json格式,2-返回jsonp格式，上线改为1
 is.json.or.jsonp = 2
@@ -152,8 +149,8 @@ wx.redirectUri=http://sxy.huisou.cn/list/userAuth/getAuthOpenId
 #ueditor配置
 ueditor.config=config.json
 ueditor.unified=true
-ueditor.upload-path=/home/tomcat/webapps/upload
-ueditor.url-prefix=http://sxy.huisou.cn/upload/
+ueditor.upload-path=E:/upload/
+ueditor.url-prefix=http://localhost:8080/upload/
 
 #打印sql日志
 debug=true
@@ -161,3 +158,15 @@ logging.level.com.huisou.mapper=DEBUG
 logging.level.root=INFO
 logging.level.org.springframework.web=DEBUG
 logging.level.org.hibernate=ERROR
+
+
+
+#微信发送开课提醒的templateid
+templateId.send=raapEpZn-susZHu30yMBmh0V2HoaOcSV7oz1PobSuc4
+#推荐成功同学的模板
+templateId.classmate=x-8TPqZn4mSVSRd0F5mV4PrSZMiiy1xmdTgAdWaidlU
+    
+#发送推荐成功的模板连接url
+success.url=http://sxy.huisou.cn/sxyback/html/my_class.html?state=1
+	
+

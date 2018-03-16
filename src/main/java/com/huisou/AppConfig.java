@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 @EnableJpaRepositories("com.huisou.repository")
 @EnableTransactionManagement//开启事务
 @SpringBootApplication(scanBasePackages = {"com.example", "com.baidu", "com.huisou"})
-//public class AppConfig{
 public class AppConfig extends SpringBootServletInitializer{
 	private static Logger logger = LoggerFactory.getLogger(AppConfig.class);
     public static void main(String[] args) {

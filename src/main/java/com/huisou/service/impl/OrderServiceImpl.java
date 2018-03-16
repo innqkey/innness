@@ -114,7 +114,7 @@ public class OrderServiceImpl implements OrderService {
 		orderPo.setOrderPay(coursePo.getCoursePrice().multiply(new BigDecimal(list.size())));
 		orderPo.setPayStatus(ContextConstant.PAY_STATUS_NO);
 		orderPo.setUserId(userId);
-		orderPo.setPhone(phone);
+//		orderPo.setPhone(phone);
 		orderPo.setOrderPersonNum(list.size());
 		orderPo.setCreateTime(date);
 		orderPo.setOrderStatus(ContextConstant.EXIST_STATUS);
