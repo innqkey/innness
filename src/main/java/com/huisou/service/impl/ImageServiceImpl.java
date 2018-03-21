@@ -38,7 +38,7 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	public void deleteImage(ImagePo image) {
-		imagePoMapper.deleteByPrimaryKey(image.getImageId());
+		imagePoMapper.changeStatus(image.getImageId());
 		
 	}
 	/**
@@ -62,6 +62,15 @@ public class ImageServiceImpl implements ImageService {
 				}
 			}
 			return list.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public List<ImagePo> getImageByOpenIdAndDelete(String openId) {
+		 List<ImagePo> list =imagePoMapper.getImageByOpenIdAndDelete(openId);
+		 if (list != null && list.size() > 0) {
+			return list;
 		}
 		return null;
 	}

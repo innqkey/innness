@@ -59,6 +59,19 @@ public class SmsServiceImpl implements SmsService {
 		logger.info("短信验证码--"+token+";"+code);
 		smsCache.addSmsCode(token, code);
 		
+		return rlySendMsg(phone, userId, code);
+	}
+	
+	@Override
+	public String sendSms(String phone) {
+		String code = String.valueOf((int)(Math.random() * 9000 + 1000));
+		logger.info("phone短信验证码--"+phone+";"+code);
+		smsCache.addSmsCode(phone, code);
+		
+		return rlySendMsg(phone, 0, code);
+	}
+	
+	private String rlySendMsg(String phone, Integer userId, String code) {
 		HashMap reqMap = new HashMap(); 
 		reqMap.put("to", phone);
 		reqMap.put("appId", appId);

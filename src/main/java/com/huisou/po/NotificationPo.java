@@ -1,11 +1,14 @@
 package com.huisou.po;
 
 import java.util.Date;
+import java.util.regex.Matcher;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.huisou.constant.ContextConstant;
 @Table(name = "busi_notification")
 public class NotificationPo {
 	@Id
@@ -71,6 +74,12 @@ public class NotificationPo {
     }
 
     public void setNotificationContext(String notificationContext) {
+    	Matcher matcher = ContextConstant.EMOJI.matcher(notificationContext);    
+    	
+    	notificationContext = matcher.replaceAll("");  
+        //2018-03-13过滤特殊字
+    	notificationContext = notificationContext.replaceAll("[^(a-zA-Z0-9\\u4e00-\\u9fa5)]", "");
+        
         this.notificationContext = notificationContext == null ? null : notificationContext.trim();
     }
 

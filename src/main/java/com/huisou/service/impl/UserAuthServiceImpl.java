@@ -55,6 +55,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 	
 	@Override
 	public void authCode(String state,HttpServletResponse response){
+		logger.info("authCode获取地址打印stateUrl=="+stateUrl+";wxRedirectUri=="+wxRedirectUri);
 		HashMap<String, String> codeReqMap = new HashMap<String,String>();
 		codeReqMap.put("appId", appId);
 		codeReqMap.put("redirectUri",URLDecoder.decode(wxRedirectUri));
@@ -81,7 +82,14 @@ public class UserAuthServiceImpl implements UserAuthService {
 	@Override
 	public void getAuthOpenId(String code, String state, HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
-		logger.info("微信授权认证回调===code="+code+";state="+state);
+		logger.info("获取用户openid，微信授权认证回调===code="+code+";state="+state);
+		String shareOpenId = "";
+		if(state.contains(";")){
+			logger.info("state为跳转页面和openid拼接");
+			String[] strs = state.split(";");
+			state = strs[0];
+			shareOpenId = strs[1];
+		}
 		HashMap<String, String> codeReqMap = new HashMap<String,String>();
 		codeReqMap.put("appId", appId);
 		codeReqMap.put("secret",secret);
@@ -91,8 +99,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 		
 		userToken = String.valueOf(null!=request.getSession().getAttribute("userToken")?request.getSession().getAttribute("userToken"):"");
 		
-		logger.info("----userToken is null----"+userToken+";"+StringUtils.isBlank(userToken));
-		logger.info("----userToken is null----"+userToken+";"+"null".equals(userToken));
+		logger.info("----userToken is null----"+userToken+";"+(StringUtils.isEmpty(userToken)||"null".equals(userToken)));
 		
 		if(StringUtils.isEmpty(userToken)||"null".equals(userToken)){
 			String codeUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={appId}&secret={secret}&code={code}&grant_type=authorization_code";
@@ -115,7 +122,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 					}
 					visitSer.insertOne(visitRecordVo);
 					//获取微信用户信息
-					userToken = getUserinfo(accessToken,openId);
+					userToken = getUserinfo(accessToken,openId,shareOpenId);
 					
 					request.getSession().setAttribute("userToken", userToken);
 					
@@ -138,7 +145,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 	}
 
 	@Override
-	public String getUserinfo(String accessToken, String openId) {
+	public String getUserinfo(String accessToken, String openId, String shareOpenId) {
 		// TODO Auto-generated method stub
 		if(StringUtils.isBlank(accessToken)&&StringUtils.isBlank(openId)){
 			return null;
@@ -176,6 +183,12 @@ public class UserAuthServiceImpl implements UserAuthService {
 			    	userPo.setOpenid(jsonObject.getString("openid"));
 			    	userPo.setCountry(jsonObject.getString("country"));
 			    	userPo.setSex(jsonObject.getString("sex"));
+			    	
+			    	if(StringUtils.isNotBlank(shareOpenId)){
+			    		logger.info("设置我的分享人=====");
+			    		UserPo shareUser = userService.getUserByOpenId(shareOpenId);
+				    	userPo.setClassmateUserId(shareUser.getUserId());
+			    	}
 			    	userService.addOne(userPo);
 			    	//放入redis缓存
 					userTokenCache.addUserToken(userToken, userPo);

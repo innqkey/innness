@@ -30,7 +30,9 @@ public class UserAuthController extends BaseController{
 	
 	@RequestMapping(value = "/getAuthOpenId")
 	public void getAuthOpenId(HttpServletRequest request,HttpServletResponse response){
+		logger.info("getAuthOpenId获取地址打印stateUrl=="+stateUrl);
 		Map<String,String> para = this.getPara();
+		//获取页面跳转参数+openid,用;分隔
 		String state = request.getParameter("state");
 		
 		if(StringUtils.isBlank(state)){
@@ -43,6 +45,11 @@ public class UserAuthController extends BaseController{
 			//跳转项目连接，链接传userToken参数
 			try {
 				logger.info("session存在userToken----跳转首页连接----");
+				if(state.contains(";")){
+					logger.info("state为跳转页面和openid拼接");
+					String[] strs = state.split(";");
+					state = strs[0];
+				}
 				response.sendRedirect(stateUrl+userToken+"&state="+state);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

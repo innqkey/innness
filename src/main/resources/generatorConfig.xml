@@ -40,11 +40,10 @@
             <generatedKey column="messageid" sqlStatement="Mysql" identity="true"/>
         </table> -->
         
-         <table schema="huisou_business_school" tableName="busi_template_send_history" domainObjectName="TemplateSendHistoryPo" enableCountByExample="false"  
+         <table schema="huisou_business_school" tableName="common_user_set" domainObjectName="CommonUserSetPo" enableCountByExample="false"  
         enableDeleteByExample="false" enableSelectByExample="false"  
         enableUpdateByExample="false">
-            <generatedKey column="template_history_id" sqlStatement="Mysql" identity="true"/>
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
         </table>
-        
     </context>
 </generatorConfiguration>

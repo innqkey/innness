@@ -1,5 +1,6 @@
 package com.huisou.weixin.controller;
 
+
 import java.util.Date;
 
 import javax.annotation.Resource;
@@ -11,30 +12,44 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.common.ResUtils;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
+import com.github.binarywang.wxpay.bean.notify.WxPayRefundNotifyResult;
+import com.github.binarywang.wxpay.bean.notify.WxPayRefundNotifyResult.ReqInfo;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
+import com.github.binarywang.wxpay.bean.result.WxPayRefundQueryResult;
+import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import com.github.binarywang.wxpay.constant.WxPayConstants.SignType;
 import com.github.binarywang.wxpay.constant.WxPayConstants.TradeType;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.huisou.constant.ContextConstant;
 import com.huisou.mapper.WeixinCallbackRecordPoMapper;
+import com.huisou.mapper.WeixinRefundApplyRecordPoMapper;
+import com.huisou.mapper.WeixinRefundNotifyRecordPoMapper;
 import com.huisou.po.AwardRecordPo;
 import com.huisou.po.OrderPo;
 import com.huisou.po.PayRecordPo;
+import com.huisou.po.RefundPo;
 import com.huisou.po.WeixinCallbackRecordPo;
+import com.huisou.po.WeixinRefundApplyRecordPo;
+import com.huisou.po.WeixinRefundNotifyRecordPo;
 import com.huisou.service.AwardRecordService;
 import com.huisou.service.OrderService;
 import com.huisou.service.PayRecordService;
+import com.huisou.service.RefundService;
 import com.huisou.weixin.config.WxPayProperties;
+import com.huisou.weixin.config.WxPayRefundRequestTemp;
+
 
 
 
@@ -65,12 +80,148 @@ public class WxPayController   {
   @Value("${wechat.pay.reward.notifyUrl}")
   private String rewardNotifyUrl;
   
+  @Value("${wechat.refund.notifyUrl}")
+  public String refundNotifyUrl;
+  
   @Autowired
   private AwardRecordService awardRecordService;
   @Autowired
   private WeixinCallbackRecordPoMapper weixinCallbackRecordPoMapper;
+  @Autowired
+  private WeixinRefundApplyRecordPoMapper weixinRefundApplyRecordPoMapper;
+  
+  @Autowired
+  private RefundService refundService;
+  
+  @Autowired
+  private WeixinRefundNotifyRecordPoMapper weixinRefundNotifyRecordPoMapper;
   
   
+  
+  /**
+   * <pre>
+   * 微信支付-申请退款
+   *  生成退款的表的记录交给了对应的验证的时候去做。
+   * 详见 https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_4
+   * 接口链接：https://api.mch.weixin.qq.com/secapi/pay/refund
+   * </pre>
+   *
+   * @param request 请求对象
+   * @return 退款操作结果
+   */
+  @PostMapping("/weixinRefundCreate")
+  public String refund(@RequestBody WxPayRefundRequestTemp request,Integer refundId) throws WxPayException {
+	  //退款前需要验证+
+	  RefundPo refundPo = refundService.findById(refundId);
+	  if (refundPo != null && request.getOutRefundNo() != null ) {
+		  //判断金额，判断退款单号，判断订单号
+		  boolean validateRefundNo = request.getOutRefundNo().equals(refundPo.getRefundNo());
+		  boolean validateReFundFee = request.getRefundFee().equals(refundPo.getReturnAmount());
+		  if (validateRefundNo && validateReFundFee) {
+			  request.setRefundFee(request.getRefundFee() != null ? request.getRefundFee() * 100: 0);
+			  request.setTotalFee(request.getTotalFee() != null ? request.getTotalFee() * 100: 0);
+			  request.setNotifyUrl(refundNotifyUrl);
+			  
+			  //对申请退款进行判断
+			  WxPayRefundResult refundResult = this.wxService.refund(request);
+			  if ("SUCCESS".equalsIgnoreCase(refundResult.getReturnCode())) {
+				  //成功保内容
+				  WeixinRefundApplyRecordPo weixinRefundApplyRecordPo = new WeixinRefundApplyRecordPo();
+				  BeanUtils.copyProperties(refundResult, weixinRefundApplyRecordPo);
+				  //保存申请的返回记录
+				  weixinRefundApplyRecordPoMapper.insertSelective(weixinRefundApplyRecordPo);
+				  
+				  if ("SUCCESS".equalsIgnoreCase(refundResult.getResultCode())){
+					  //改变订单的状态
+					  	refundPo.setApplyId(weixinRefundApplyRecordPo.getApplyId());
+						refundPo.setRefundStatus(ContextConstant.REFUND_APPLY_SUCCESS);
+						refundService.updateStatus(refundPo);
+						return ResUtils.okRes();
+				  }else {
+					  	refundPo.setApplyId(weixinRefundApplyRecordPo.getApplyId());
+						refundPo.setRefundStatus(ContextConstant.REFUND_APPLY_FAIL);
+						refundService.updateStatus(refundPo);
+						return ResUtils.execRes(refundResult.getErrCodeDes());
+				  }
+				  
+			  }else {
+				  logger.error("微信申请状态fail：{}",refundResult.getReturnMsg());
+				  return ResUtils.execRes(refundResult.getReturnMsg());
+			  }
+		  }
+		  
+		  return ResUtils.execRes("退款单号或金额出现异常");
+	  }
+	  
+	  return ResUtils.execRes("数据错误");
+  }
+
+  
+  
+  
+  /**
+   * 解析退款申请成功后，微信发来的消息，至于退款是否成功需要通过退款查询接口查询
+   * @param xmlData
+   * @return
+   * @throws WxPayException
+   */
+  
+  @PostMapping("/parseRefundNotify")
+  public String parseRefundNotifyResult(@RequestBody String xmlData) throws WxPayException {
+    WxPayRefundNotifyResult refundNotifyResult = this.wxService.parseRefundNotifyResult(xmlData);
+    String return_Code = refundNotifyResult.getResultCode();
+    logger.info("接受退款同时信息：{}",refundNotifyResult);
+    WeixinRefundNotifyRecordPo weixinRefundNotifyRecordPo = new WeixinRefundNotifyRecordPo();
+    BeanUtils.copyProperties(refundNotifyResult, weixinRefundNotifyRecordPo);
+    ReqInfo reqInfo = refundNotifyResult.getReqInfo();
+    BeanUtils.copyProperties(reqInfo, weixinRefundNotifyRecordPo);
+    weixinRefundNotifyRecordPoMapper.insertSelective(weixinRefundNotifyRecordPo);
+    
+    //如果成功的话，那么就进行下一步
+    if ("SUCCESS".equals(return_Code)) {
+    	RefundPo refundPo = refundService.findByRefundNo(reqInfo.getOutRefundNo());
+    	if ("SUCCESS".equals(weixinRefundNotifyRecordPo.getRefundStatus())) {
+    		refundPo.setRefundStatus(ContextConstant.REFUND_SUCCESS);
+    	}else if ("CHANGE".equals(weixinRefundNotifyRecordPo.getRefundStatus())) {
+    		refundPo.setRefundStatus(ContextConstant.REFUND_FAIL);
+    	}else {
+    		refundPo.setRefundStatus(ContextConstant.REFUND_CLOSE);
+    	}
+    	
+    	refundPo.setRefundNotifyId(weixinRefundNotifyRecordPo.getRefundNotifyId());
+    	refundService.updateStatus(refundPo);
+    	return  WxPayNotifyResponse.success("ok");
+    	
+    }
+    return WxPayNotifyResponse.fail("fail");
+  }
+  
+  /**
+   * <pre>
+   * 微信支付-查询退款
+   * 应用场景：
+   *  提交退款申请后，通过调用该接口查询退款状态。退款有一定延时，用零钱支付的退款20分钟内到账，
+   *  银行卡支付的退款3个工作日后重新查询退款状态。
+   * 详见 https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_5
+   * 接口链接：https://api.mch.weixin.qq.com/pay/refundquery
+   * </pre>
+   * 以下四个参数四选一
+   *
+   * @param transactionId 微信订单号
+   * @param outTradeNo    商户订单号
+   * @param outRefundNo   商户退款单号
+   * @param refundId      微信退款单号
+   * @return 退款信息
+   */
+  @GetMapping("/refundQuery")
+  public WxPayRefundQueryResult refundQuery(@RequestParam(required = false) String transactionId,
+                                            @RequestParam(required = false) String outTradeNo,
+                                            @RequestParam(required = false) String outRefundNo,
+                                            @RequestParam(required = false) String refundId)
+      throws WxPayException {
+	  
+    return this.wxService.refundQuery(transactionId, outTradeNo, outRefundNo, refundId);
+  }
   
   /**
    * 异步获取课程支付的账户返回的系统的信息和结果
@@ -173,6 +324,10 @@ public class WxPayController   {
 	    }
   }
   
+  
+  
+
+  
   /**
    * 这个是打赏的会调用的地址
    * 支付的总金额，等于现金金额  + 优惠券（微信支付）金额等。
@@ -266,7 +421,6 @@ public class WxPayController   {
 		request.setSignType(SignType.MD5);
 		logger.info("音频课程等处理后发送微信服务器: {}", request);
 		Object createOrder = this.wxService.createOrder(request);
-		
 		return ResUtils.okRes(createOrder);
 	} catch (Exception e) {
 		
@@ -316,6 +470,7 @@ public class WxPayController   {
 	return ResUtils.execRes();
   }
   
+
 
 }
 

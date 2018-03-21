@@ -3,8 +3,6 @@ package com.huisou.vo;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.common.DateUtils;
-
 /** 
 * @author 作者 :yuhao 
 * @version 创建时间：2018年1月30日 下午3:40:03 
@@ -46,37 +44,9 @@ public class RecentCourseVo implements Serializable{
 	    
 	    private String regionsids;
 	    
-	    private String beginTimes;
-	    
-	    private String endTimes;
-	    
-	    private String city;
 	    
 	    
-		public String getCity() {
-			return city;
-		}
-
-		public void setCity(String city) {
-			this.city = city;
-		}
-
-		public String getBeginTimes() {
-			return DateUtils.format(this.beginTime, DateUtils.Y_M_D);
-		}
-
-		public void setBeginTimes(String beginTimes) {
-			this.beginTimes = beginTimes;
-		}
-
-		public String getEndTimes() {
-			return DateUtils.format(this.endTime, DateUtils.Y_M_D);
-		}
-
-		public void setEndTimes(String endTimes) {
-			this.endTimes = endTimes;
-		}
-
+	    
 		public String getRegionsids() {
 			return regionsids;
 		}

@@ -45,10 +45,12 @@ import com.huisou.po.ImagePo;
 import com.huisou.po.IntegralRecordPo;
 import com.huisou.po.NotificationPo;
 import com.huisou.po.UserPo;
+import com.huisou.service.AgentService;
 import com.huisou.service.ImageService;
 import com.huisou.service.IntegralRecordService;
 import com.huisou.service.NotificationService;
 import com.huisou.service.UserService;
+import com.huisou.vo.CustomerVo;
 import com.huisou.vo.PageTemp;
 import com.huisou.vo.RegistVo;
 import com.huisou.vo.UserVo;
@@ -98,6 +100,9 @@ public class UserController extends BaseController{
 	
 	@Autowired
 	private RedisUserTokenCache userTokenCache;
+	
+	@Autowired
+	private AgentService agentService;
 	
 	/**
 	 * 用户管理列表/查找
@@ -325,10 +330,6 @@ public class UserController extends BaseController{
 	}
 	
 	
-	
-	
-	
-	
 	/**
 	 * 用户传过来openid然后生成分享的二维码图片
 	 * @param openId
@@ -344,8 +345,17 @@ public class UserController extends BaseController{
 			if (StringUtils.isBlank(openId)) {
 				return ResUtils.execRes();
 			}
-			
+			UserPo userPo = userService.getUserByOpenId(openId);
 			ImagePo image = imageService.getImageByOpenId(openId);
+//			
+//			//为了防止错误，添加如果永久的删除的能找到，但是图片没有找到，重新生成一次，研究发现同样的字符串，生成相同的url
+//			List<ImagePo> deList =  imageService.getImageByOpenIdAndDelete(openId);
+//			if (image == null  && deList!= null && deList.size() > 0) {
+//				getImageQrcode(openId, response, deList.get(0).getQcodeUrl());
+//				System.out.println(System.currentTimeMillis() -currentTimeMillis);
+//				return ResUtils.okRes();
+//			}
+			
 			if (image!= null && StringUtils.isNotBlank(image.getFileName())) {
 				//如果二维码保存时间大于30天的话，那么就删除
 				Date addDate = DateUtils.addDate(image.getCreateTime(), 30);
@@ -353,18 +363,34 @@ public class UserController extends BaseController{
 				boolean back = false;
 				if (backageImage != null) {
 					 back = !backageImage.getImageId().equals(image.getBackgroudId());
+				}else {
+					back = true;
 				}
 				
-				Boolean date = new Date().getTime() > addDate.getTime() + 500;
+				boolean temp = "1".equals(userPo.getIsAgency());
+				Boolean date = false;
+				//如果是代理，并且不是永久的数据类型，所以重新发送
+				if (!temp && image.getImageType() == 1) {
+					date = true;
+				}else if (temp && image.getImageType() == 1) {
+					date= new Date().getTime() > addDate.getTime() + 500;
+				}
+				
 				//如果超过时间那么就重新发送
 				if ( date || back ) {
 					//删除该图片，并重新生成
 					imageService.deleteImage(image);
+					//判断删除的图片是不是永久图片
 					File file = new File(saveUrl + image.getFileName());
 					if (file.exists()) {
 						file.delete();
 					}
-					getImageQrcode(openId, response);
+					//删除之前先将之前的永久url传入
+					if (image.getImageType()!= null && image.getImageType() == 3 && image.getQcodeUrl() != null) {
+						getImageQrcode(openId, response, image.getQcodeUrl());
+					}else {
+						getImageQrcode(openId, response,null);
+					}
 				}
 				
 				fis = new FileInputStream(saveUrl + image.getFileName());
@@ -376,7 +402,7 @@ public class UserController extends BaseController{
 	                os.flush();  
 	            }  
 			}else {
-				getImageQrcode(openId, response);
+				getImageQrcode(openId, response,null);
 			}
 			return ResUtils.okRes();
 		} catch (Exception e) {
@@ -402,19 +428,36 @@ public class UserController extends BaseController{
 	 * @param response
 	 * @throws Exception 
 	 */
-	private void getImageQrcode(String openId, HttpServletResponse response) throws Exception {
+	private void getImageQrcode(String openId, HttpServletResponse response,String codeUrl) throws Exception {
+		//如果qrcodeurl不为空的，说明是永久的url
 		String access_token = getAccessToken();
 		if (StringUtils.isNotBlank(access_token)) {
+			UserPo userPo = userService.getUserByOpenId(openId);
+			String isAgency = userPo.getIsAgency();
+			//判断是否是代理商还是普通员工
 			Map<String,Object> map = new LinkedHashMap<String,Object>();
-			//保存30天
-			map.put("action_name", "QR_STR_SCENE");
-			map.put("expire_seconds", 2592000);
+			boolean temp = "1".equals(isAgency);
+			//如果不为空的话说明是永久的
+			if (StringUtils.isNotBlank(codeUrl)) {
+				UrlToQrcode(openId, response, temp, codeUrl);
+				return;
+			}
+			
+			if (temp) {
+				//保存30天
+				map.put("action_name", "QR_STR_SCENE");
+				map.put("expire_seconds", 2592000);
+			}else {
+				//是代理商就是永久
+				map.put("action_name", "QR_LIMIT_STR_SCENE");
+			}
+			
 			HashMap<String, Object> hashMap = new HashMap<String,Object>();
 			HashMap<String, String> teMap = new HashMap<String,String>();
 			teMap.put("scene_str", openId);
 			hashMap.put("scene",teMap);
 			map.put("action_info", hashMap);
-			//创建永久的二维码
+			
 			HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(map);
 			String result  = restTemplate.postForObject(ContextConstant.WEIXIN_QRCODE_CREATE + "?access_token="+ access_token,httpEntity,String.class);
 			if (result != null) {
@@ -422,34 +465,55 @@ public class UserController extends BaseController{
 				if (resultJson != null) {
 					String qrcodeUrl = resultJson.getString("url");
 					if (qrcodeUrl != null ) {
-						//根据url生成二维码
-						ImagePo backimage = imageService.getBackageImage();
-						BufferedImage compositeImage;
-						if (backimage == null || StringUtils.isBlank(backimage.getFileName())) {
-							compositeImage = QrcodeUtils.createImage(qrcodeUrl, this.codeWidth, this.codeHight);
-						}else {
-							compositeImage= QrcodeUtils.compositeImage(qrcodeUrl,this.saveUrl + backimage.getFileName(), this.qrcodestartX, this.qrcodestartY, this.codeWidth, this.codeHight);
-						}
-						
-						String imageName = System.nanoTime() + ".jpg";
-						ImageIO.write(compositeImage, "JPG", new File(saveUrl + imageName));
-						//将保存的本地的数据放入数据库
-						ImagePo imagePo = new ImagePo();
-						imagePo.setFileName(imageName);
-						imagePo.setUserOpenid(openId);
-						imagePo.setCreateTime(new Date());
-						imagePo.setImageType(1);
-						if (backimage != null) {
-							imagePo.setBackgroudId(backimage.getImageId());
-						}
-						
-						imageService.saveImage(imagePo);
-						ImageIO.write(compositeImage , "JPEG", response.getOutputStream());
+						UrlToQrcode(openId, response, temp, qrcodeUrl);
 					}
 					
 				}
 			}
 		}
+	}
+
+	/**
+	 * 根据url，保存图片，生成二维码
+	 * @param openId
+	 * @param response
+	 * @param temp
+	 * @param qrcodeUrl
+	 * @throws Exception
+	 * @throws IOException
+	 */
+	private void UrlToQrcode(String openId, HttpServletResponse response, boolean temp, String qrcodeUrl)
+			throws Exception, IOException {
+		//根据url生成二维码
+		ImagePo backimage = imageService.getBackageImage();
+		BufferedImage compositeImage;
+		if (backimage == null || StringUtils.isBlank(backimage.getFileName())) {
+			compositeImage = QrcodeUtils.createImage(qrcodeUrl, this.codeWidth, this.codeHight);
+		}else {
+			compositeImage= QrcodeUtils.compositeImage(qrcodeUrl,this.saveUrl + backimage.getFileName(), this.qrcodestartX, this.qrcodestartY, this.codeWidth, this.codeHight);
+		}
+		
+		String imageName = System.nanoTime() + ".jpg";
+		ImageIO.write(compositeImage, "JPG", new File(saveUrl + imageName));
+		//将保存的本地的数据放入数据库
+		ImagePo imagePo = new ImagePo();
+		imagePo.setFileName(imageName);
+		if (temp) {
+			imagePo.setImageType(1);
+		}else {
+			//保存qrcodeUrl
+			imagePo.setQcodeUrl(qrcodeUrl);
+			imagePo.setImageType(3);
+		}
+		
+		imagePo.setUserOpenid(openId);
+		imagePo.setCreateTime(new Date());
+		if (backimage != null) {
+			imagePo.setBackgroudId(backimage.getImageId());
+		}
+		
+		imageService.saveImage(imagePo);
+		ImageIO.write(compositeImage , "JPEG", response.getOutputStream());
 	}
 	/**
 	 * 用来获取access_token
@@ -578,6 +642,9 @@ public class UserController extends BaseController{
 			}
 			for (String userId : userIds) {
 				if(StringUtils.isNumeric(userId)){
+					List<Integer> list = new ArrayList<>();
+					agentService.updateAgentUserId(list,Integer.parseInt(userId));
+					
 					UserPo userPo = userService.find(Integer.parseInt(userId));
 					userPo.setIsAgency(isAgency);
 					userService.updateOne(userPo);
@@ -587,6 +654,27 @@ public class UserController extends BaseController{
 				}
 			}
 		    return ResUtils.okRes();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResUtils.execRes();
+		}
+	}
+	
+	/**
+	 * 前台查看我的同学
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/findCustomer")
+	public String findCustomer(HttpServletRequest request,PageTemp pageTemp){
+		try {
+			String userToken = request.getParameter("userToken");
+			if(StringUtils.isBlank(userToken)){
+				return ResUtils.errRes("102", "请求参数错误");
+			}
+			Integer userId = super.getUserIdByToken(userToken);
+			PageInfo<CustomerVo> result = userService.findCustomer(userId,pageTemp);
+			return ResUtils.okRes(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResUtils.execRes();

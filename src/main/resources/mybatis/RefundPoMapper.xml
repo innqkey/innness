@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.RefundPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.RefundPo" >
+    <id column="refund_id" property="refundId" jdbcType="INTEGER" />
+    <result column="return_amount" property="returnAmount" jdbcType="DECIMAL" />
+    <result column="refund_notify_id" property="refundNotifyId" jdbcType="INTEGER" />
+    <result column="validate_phone" property="validatePhone" jdbcType="VARCHAR" />
+    <result column="apply_id" property="applyId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="refund_no" property="refundNo" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="refund_status" property="refundStatus" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    refund_id, return_amount, refund_notify_id, validate_phone, apply_id, user_id, refund_no, 
+    order_id, refund_status, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_refund
+    where refund_id = #{refundId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_refund
+    where refund_id = #{refundId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.RefundPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="refundId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_refund (return_amount, refund_notify_id, validate_phone, 
+      apply_id, user_id, refund_no, 
+      order_id, refund_status, create_time, 
+      update_time)
+    values (#{returnAmount,jdbcType=DECIMAL}, #{refundNotifyId,jdbcType=INTEGER}, #{validatePhone,jdbcType=VARCHAR}, 
+      #{applyId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{refundNo,jdbcType=VARCHAR}, 
+      #{orderId,jdbcType=INTEGER}, #{refundStatus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.RefundPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="refundId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_refund
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="returnAmount != null" >
+        return_amount,
+      </if>
+      <if test="refundNotifyId != null" >
+        refund_notify_id,
+      </if>
+      <if test="validatePhone != null" >
+        validate_phone,
+      </if>
+      <if test="applyId != null" >
+        apply_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="refundNo != null" >
+        refund_no,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="refundStatus != null" >
+        refund_status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="returnAmount != null" >
+        #{returnAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="refundNotifyId != null" >
+        #{refundNotifyId,jdbcType=INTEGER},
+      </if>
+      <if test="validatePhone != null" >
+        #{validatePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="applyId != null" >
+        #{applyId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="refundNo != null" >
+        #{refundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="refundStatus != null" >
+        #{refundStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.RefundPo" >
+    update busi_refund
+    <set >
+      <if test="returnAmount != null" >
+        return_amount = #{returnAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="refundNotifyId != null" >
+        refund_notify_id = #{refundNotifyId,jdbcType=INTEGER},
+      </if>
+      <if test="validatePhone != null" >
+        validate_phone = #{validatePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="applyId != null" >
+        apply_id = #{applyId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="refundNo != null" >
+        refund_no = #{refundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="refundStatus != null" >
+        refund_status = #{refundStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where refund_id = #{refundId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.RefundPo" >
+    update busi_refund
+    set return_amount = #{returnAmount,jdbcType=DECIMAL},
+      refund_notify_id = #{refundNotifyId,jdbcType=INTEGER},
+      validate_phone = #{validatePhone,jdbcType=VARCHAR},
+      apply_id = #{applyId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      refund_no = #{refundNo,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=INTEGER},
+      refund_status = #{refundStatus,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where refund_id = #{refundId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findByRefundNo" parameterType="java.lang.String">
+		select 
+		 <include refid="Base_Column_List" />
+		 from busi_refund  where refund_no = #{outRefundNo}
+  </select>
+  
+  
+</mapper>

@@ -1,4 +1,5 @@
 package com.huisou.po;
+
 import java.util.Date;
 
 import javax.persistence.GeneratedValue;
@@ -15,11 +16,19 @@ public class ImagePo {
 
     private Integer backgroudId;
 
+    private Integer status;
+
     private Integer imageType;
+
+    private String qcodeUrl;
 
     private String fileName;
 
     private Date createTime;
+
+    private String standby1;
+
+    private String standby2;
 
     public Integer getImageId() {
         return imageId;
@@ -45,12 +54,28 @@ public class ImagePo {
         this.backgroudId = backgroudId;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public Integer getImageType() {
         return imageType;
     }
 
     public void setImageType(Integer imageType) {
         this.imageType = imageType;
+    }
+
+    public String getQcodeUrl() {
+        return qcodeUrl;
+    }
+
+    public void setQcodeUrl(String qcodeUrl) {
+        this.qcodeUrl = qcodeUrl == null ? null : qcodeUrl.trim();
     }
 
     public String getFileName() {
@@ -67,5 +92,21 @@ public class ImagePo {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getStandby1() {
+        return standby1;
+    }
+
+    public void setStandby1(String standby1) {
+        this.standby1 = standby1 == null ? null : standby1.trim();
+    }
+
+    public String getStandby2() {
+        return standby2;
+    }
+
+    public void setStandby2(String standby2) {
+        this.standby2 = standby2 == null ? null : standby2.trim();
     }
 }

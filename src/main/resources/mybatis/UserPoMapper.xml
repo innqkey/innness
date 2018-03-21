@@ -23,6 +23,28 @@
     <result column="standby2" property="standby2" jdbcType="VARCHAR" />
     <result column="is_agency" property="isAgency" jdbcType="VARCHAR" />
   </resultMap>
+  
+  <resultMap id="CustomerVoResultMap" type="com.huisou.vo.CustomerVo" >
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_pay" property="orderPay" jdbcType="DECIMAL" />
+    <result column="pay_status" property="payStatus" jdbcType="VARCHAR" />
+    <result column="order_person_num" property="orderPersonNum" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="course_title" property="courseTitle" jdbcType="VARCHAR" />
+    <result column="course_price" property="coursePrice" jdbcType="DECIMAL" />
+    <result column="course_intro" property="courseIntro" jdbcType="VARCHAR" />
+    <result column="course_speaker" property="courseSpeaker" jdbcType="VARCHAR" />
+    <result column="course_duration" property="courseDuration" jdbcType="VARCHAR" />
+    <result column="introvideo_url" property="introvideoUrl" jdbcType="VARCHAR" />
+    <result column="course_picture" property="coursePicture" jdbcType="VARCHAR" />
+    <result column="course_logo" property="courseLogo" jdbcType="VARCHAR" />
+    <result column="course_detail" property="courseDetail" jdbcType="LONGVARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+  </resultMap>
+  
   <sql id="Base_Column_List" >
     user_id, openid, nickname, sex, province, city, country, headimgurl, username, integral_num, 
     auth_status, user_status, card_type, classmate_user_id, card_num, phone, create_time, 
@@ -266,11 +288,12 @@
     <include refid="Base_Column_List" />
     from busi_user
     where user_status = 1
-    <if test='phone != null and phone != ""'>
-    	and phone = #{phone}
-    </if>
     <if test='userName != null and userName !=""'>
-  		and username like CONCAT('%', #{userName},'%')
+    and(
+    	username like CONCAT('%', #{userName},'%')
+  		or nickname like CONCAT('%', #{userName},'%')
+  		or phone like CONCAT('%', #{userName},'%')
+  		)
   	</if>
   	<if test='authStatus != null and authStatus !=""'>
   		and auth_status = #{authStatus}
@@ -332,4 +355,37 @@
   	<select id="findAllOpenid" resultType="java.lang.String">
   		select openid FROM busi_user where standby1='1' and standby2='2'
   	</select>
+  	
+  	<select id="findCustomer" resultMap="CustomerVoResultMap">
+  		SELECT
+			t1.order_id orderId,
+			t1.pay_status payStatus,
+			t1.order_pay orderPay,
+			t1.order_person_num orderPersonNum,
+			t1.create_time createTime,
+			t2.course_id courseId,
+			t2.course_status courseTitle,
+			t2.course_price coursePrice,
+			t2.course_intro courseIntro,
+			t2.course_speaker courseSpeaker,
+			t2.course_duration courseDuration,
+			t2.introvideo_url introvideoUrl,
+			t2.course_picture coursePicture,
+			t2.course_logo courseLogo,
+			t2.course_detail courseDetail,
+			t3.user_id userId,
+			t3.nickname,
+			t3.username
+		FROM
+			busi_order t1
+		LEFT JOIN busi_course t2 ON t1.res_id = t2.course_id
+		LEFT JOIN busi_user t3 ON t1.user_id = t3.user_id
+		LEFT JOIN busi_agent t4 ON t1.user_id = t4.user_id
+		WHERE
+			t1.res_type = 'KC'
+		AND t1.pay_status = '2'
+		AND t1.order_status = '1'
+		AND t4.agent_user_id = #{userId}
+  	</select>
+  	
 </mapper>

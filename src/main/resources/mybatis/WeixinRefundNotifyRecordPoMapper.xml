@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.WeixinRefundNotifyRecordPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.WeixinRefundNotifyRecordPo" >
+    <id column="refund_notify_id" property="refundNotifyId" jdbcType="INTEGER" />
+    <result column="return_code" property="returnCode" jdbcType="VARCHAR" />
+    <result column="return_msg" property="returnMsg" jdbcType="VARCHAR" />
+    <result column="appid" property="appid" jdbcType="VARCHAR" />
+    <result column="mch_id" property="mchId" jdbcType="VARCHAR" />
+    <result column="nonce_str" property="nonceStr" jdbcType="VARCHAR" />
+    <result column="transaction_id" property="transactionId" jdbcType="VARCHAR" />
+    <result column="out_trade_no" property="outTradeNo" jdbcType="VARCHAR" />
+    <result column="refund_id" property="refundId" jdbcType="VARCHAR" />
+    <result column="out_refund_no" property="outRefundNo" jdbcType="VARCHAR" />
+    <result column="total_fee" property="totalFee" jdbcType="INTEGER" />
+    <result column="settlement_total_fee" property="settlementTotalFee" jdbcType="VARCHAR" />
+    <result column="refund_fee" property="refundFee" jdbcType="INTEGER" />
+    <result column="settlement_refund_fee" property="settlementRefundFee" jdbcType="INTEGER" />
+    <result column="refund_status" property="refundStatus" jdbcType="VARCHAR" />
+    <result column="success_time" property="successTime" jdbcType="VARCHAR" />
+    <result column="refund_recv_accout" property="refundRecvAccout" jdbcType="VARCHAR" />
+    <result column="refund_account" property="refundAccount" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    refund_notify_id, return_code, return_msg, appid, mch_id, nonce_str, transaction_id, 
+    out_trade_no, refund_id, out_refund_no, total_fee, settlement_total_fee, refund_fee, 
+    settlement_refund_fee, refund_status, success_time, refund_recv_accout, refund_account, 
+    create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_weixin_refund_notify_record
+    where refund_notify_id = #{refundNotifyId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_weixin_refund_notify_record
+    where refund_notify_id = #{refundNotifyId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.WeixinRefundNotifyRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="refundNotifyId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_weixin_refund_notify_record (return_code, return_msg, appid, 
+      mch_id, nonce_str, transaction_id, 
+      out_trade_no, refund_id, out_refund_no, 
+      total_fee, settlement_total_fee, refund_fee, 
+      settlement_refund_fee, refund_status, success_time, 
+      refund_recv_accout, refund_account, create_time
+      )
+    values (#{returnCode,jdbcType=VARCHAR}, #{returnMsg,jdbcType=VARCHAR}, #{appid,jdbcType=VARCHAR}, 
+      #{mchId,jdbcType=VARCHAR}, #{nonceStr,jdbcType=VARCHAR}, #{transactionId,jdbcType=VARCHAR}, 
+      #{outTradeNo,jdbcType=VARCHAR}, #{refundId,jdbcType=VARCHAR}, #{outRefundNo,jdbcType=VARCHAR}, 
+      #{totalFee,jdbcType=INTEGER}, #{settlementTotalFee,jdbcType=VARCHAR}, #{refundFee,jdbcType=INTEGER}, 
+      #{settlementRefundFee,jdbcType=INTEGER}, #{refundStatus,jdbcType=VARCHAR}, #{successTime,jdbcType=VARCHAR}, 
+      #{refundRecvAccout,jdbcType=VARCHAR}, #{refundAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.WeixinRefundNotifyRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="refundNotifyId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_weixin_refund_notify_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="returnCode != null" >
+        return_code,
+      </if>
+      <if test="returnMsg != null" >
+        return_msg,
+      </if>
+      <if test="appid != null" >
+        appid,
+      </if>
+      <if test="mchId != null" >
+        mch_id,
+      </if>
+      <if test="nonceStr != null" >
+        nonce_str,
+      </if>
+      <if test="transactionId != null" >
+        transaction_id,
+      </if>
+      <if test="outTradeNo != null" >
+        out_trade_no,
+      </if>
+      <if test="refundId != null" >
+        refund_id,
+      </if>
+      <if test="outRefundNo != null" >
+        out_refund_no,
+      </if>
+      <if test="totalFee != null" >
+        total_fee,
+      </if>
+      <if test="settlementTotalFee != null" >
+        settlement_total_fee,
+      </if>
+      <if test="refundFee != null" >
+        refund_fee,
+      </if>
+      <if test="settlementRefundFee != null" >
+        settlement_refund_fee,
+      </if>
+      <if test="refundStatus != null" >
+        refund_status,
+      </if>
+      <if test="successTime != null" >
+        success_time,
+      </if>
+      <if test="refundRecvAccout != null" >
+        refund_recv_accout,
+      </if>
+      <if test="refundAccount != null" >
+        refund_account,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="returnCode != null" >
+        #{returnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="returnMsg != null" >
+        #{returnMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="appid != null" >
+        #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="mchId != null" >
+        #{mchId,jdbcType=VARCHAR},
+      </if>
+      <if test="nonceStr != null" >
+        #{nonceStr,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionId != null" >
+        #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="outTradeNo != null" >
+        #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="refundId != null" >
+        #{refundId,jdbcType=VARCHAR},
+      </if>
+      <if test="outRefundNo != null" >
+        #{outRefundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="totalFee != null" >
+        #{totalFee,jdbcType=INTEGER},
+      </if>
+      <if test="settlementTotalFee != null" >
+        #{settlementTotalFee,jdbcType=VARCHAR},
+      </if>
+      <if test="refundFee != null" >
+        #{refundFee,jdbcType=INTEGER},
+      </if>
+      <if test="settlementRefundFee != null" >
+        #{settlementRefundFee,jdbcType=INTEGER},
+      </if>
+      <if test="refundStatus != null" >
+        #{refundStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="successTime != null" >
+        #{successTime,jdbcType=VARCHAR},
+      </if>
+      <if test="refundRecvAccout != null" >
+        #{refundRecvAccout,jdbcType=VARCHAR},
+      </if>
+      <if test="refundAccount != null" >
+        #{refundAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.WeixinRefundNotifyRecordPo" >
+    update busi_weixin_refund_notify_record
+    <set >
+      <if test="returnCode != null" >
+        return_code = #{returnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="returnMsg != null" >
+        return_msg = #{returnMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="appid != null" >
+        appid = #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="mchId != null" >
+        mch_id = #{mchId,jdbcType=VARCHAR},
+      </if>
+      <if test="nonceStr != null" >
+        nonce_str = #{nonceStr,jdbcType=VARCHAR},
+      </if>
+      <if test="transactionId != null" >
+        transaction_id = #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="outTradeNo != null" >
+        out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="refundId != null" >
+        refund_id = #{refundId,jdbcType=VARCHAR},
+      </if>
+      <if test="outRefundNo != null" >
+        out_refund_no = #{outRefundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="totalFee != null" >
+        total_fee = #{totalFee,jdbcType=INTEGER},
+      </if>
+      <if test="settlementTotalFee != null" >
+        settlement_total_fee = #{settlementTotalFee,jdbcType=VARCHAR},
+      </if>
+      <if test="refundFee != null" >
+        refund_fee = #{refundFee,jdbcType=INTEGER},
+      </if>
+      <if test="settlementRefundFee != null" >
+        settlement_refund_fee = #{settlementRefundFee,jdbcType=INTEGER},
+      </if>
+      <if test="refundStatus != null" >
+        refund_status = #{refundStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="successTime != null" >
+        success_time = #{successTime,jdbcType=VARCHAR},
+      </if>
+      <if test="refundRecvAccout != null" >
+        refund_recv_accout = #{refundRecvAccout,jdbcType=VARCHAR},
+      </if>
+      <if test="refundAccount != null" >
+        refund_account = #{refundAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where refund_notify_id = #{refundNotifyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.WeixinRefundNotifyRecordPo" >
+    update busi_weixin_refund_notify_record
+    set return_code = #{returnCode,jdbcType=VARCHAR},
+      return_msg = #{returnMsg,jdbcType=VARCHAR},
+      appid = #{appid,jdbcType=VARCHAR},
+      mch_id = #{mchId,jdbcType=VARCHAR},
+      nonce_str = #{nonceStr,jdbcType=VARCHAR},
+      transaction_id = #{transactionId,jdbcType=VARCHAR},
+      out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      refund_id = #{refundId,jdbcType=VARCHAR},
+      out_refund_no = #{outRefundNo,jdbcType=VARCHAR},
+      total_fee = #{totalFee,jdbcType=INTEGER},
+      settlement_total_fee = #{settlementTotalFee,jdbcType=VARCHAR},
+      refund_fee = #{refundFee,jdbcType=INTEGER},
+      settlement_refund_fee = #{settlementRefundFee,jdbcType=INTEGER},
+      refund_status = #{refundStatus,jdbcType=VARCHAR},
+      success_time = #{successTime,jdbcType=VARCHAR},
+      refund_recv_accout = #{refundRecvAccout,jdbcType=VARCHAR},
+      refund_account = #{refundAccount,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where refund_notify_id = #{refundNotifyId,jdbcType=INTEGER}
+  </update>
+</mapper>

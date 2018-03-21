@@ -51,4 +51,19 @@ public class RotationImageServiceImpl implements RotationImageService{
 		return rotationImagePoMapper.selectByPrimaryKey(rotationImageId);
 	}
 
+	@Override
+	public RotationImagePo findOne(String linkUrlType) {
+		List<RotationImagePo> imagePos = rotationImagePoMapper.findOne(linkUrlType);
+		if (null != imagePos && imagePos.size() > 0){
+			return imagePos.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public void deleteImageByType(String linkUrlType) {
+		rotationImagePoMapper.deleteImageByType(linkUrlType);
+	}
+
 }

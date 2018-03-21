@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.huisou.constant.ContextConstant;
@@ -17,6 +20,7 @@ import com.huisou.mapper.UserPoMapper;
 import com.huisou.po.CoursePo;
 import com.huisou.po.UserPo;
 import com.huisou.service.UserService;
+import com.huisou.vo.CustomerVo;
 import com.huisou.vo.PageTemp;
 import com.huisou.vo.UserVo;
 
@@ -33,6 +37,8 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private CoursePoMapper coursePoMapper;
+	
+	private  static  final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	
 	@Override
 	public PageInfo<UserPo> findAll(Map para, PageTemp pageTemp) {
@@ -66,7 +72,20 @@ public class UserServiceImpl implements UserService{
 //			return userPoMapper.updateByPrimaryKey(userPo);
 //		}
 		
-		return userPoMapper.insertSelective(userPo);
+		int i = 0;
+		synchronized(userPo.getOpenid().intern()){
+			logger.info("-----------------------"+userPo.getOpenid());
+			try{
+				UserPo user = userPoMapper.getUserByOpenId(userPo.getOpenid());
+				if(null==user){
+					i = userPoMapper.insertSelective(userPo);
+				}
+			}catch(Exception e){
+				logger.info("授权插入数据重复======"+JSON.toJSONString(userPo));
+			}
+		}
+		logger.info("执行完成======");
+		return i;
 	}
 
 	@Override
@@ -139,6 +158,13 @@ public class UserServiceImpl implements UserService{
 	public List<String> findAllOpenid() {
 		List<String> list = userPoMapper.findAllOpenid();
 		return list;
+	}
+
+	@Override
+	public PageInfo<CustomerVo> findCustomer(Integer userId, PageTemp pageTemp) {
+		PageHelper.startPage(pageTemp.getPageNum(), pageTemp.getPageSize());
+		List<CustomerVo> list = userPoMapper.findCustomer(userId);
+		return new PageInfo<>(list);
 	}
 
 }

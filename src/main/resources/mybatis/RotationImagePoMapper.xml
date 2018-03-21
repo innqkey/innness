@@ -212,7 +212,9 @@
   </update>
   <select id="search" parameterType="Map" resultMap="BaseResultMap">
   	select * from busi_rotation_image
-  	<where>
+  	where 1 = 1 
+  	and rotation_image_status = '1'
+  	and link_url_type != 3
   	  <if test="rotationImageId != null and rotationImageId !=''" >
        and rotation_image_id = #{rotationImageId,jdbcType=INTEGER}
       </if>
@@ -258,7 +260,23 @@
       <if test="standby2 != null and standby2 !=''" >
        and standby2 = #{standby2,jdbcType=VARCHAR}
       </if>
-  	</where>
   	ORDER BY rotation_image_no DESC
   </select>
+  
+  <select id="findOne" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_rotation_image
+    where 1 = 1
+    and rotation_image_status = '1'
+    <if test="linkUrlType != null and linkUrlType !=''" >
+       and link_url_type = #{linkUrlType,jdbcType=VARCHAR}
+    </if>
+    ORDER BY create_time DESC
+  </select>
+  <update id="deleteImageByType" parameterType="java.lang.String" >
+    update busi_rotation_image
+    set rotation_image_status = '2'
+    where link_url_type = #{linkUrlType}
+  </update>
 </mapper>

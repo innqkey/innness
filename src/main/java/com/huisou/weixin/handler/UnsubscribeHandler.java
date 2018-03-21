@@ -18,6 +18,7 @@ import java.util.Map;
  */
 @Component
 public class UnsubscribeHandler extends AbstractHandler {
+	
 	@Autowired
     private UserService userService; 
 	@Override

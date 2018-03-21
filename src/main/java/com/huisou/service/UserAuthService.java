@@ -23,6 +23,6 @@ public interface UserAuthService {
 	 */
 	public void getAuthOpenId(String code, String state, HttpServletRequest request, HttpServletResponse response);
 	
-	public String getUserinfo(String accessToken, String openId);
+	public String getUserinfo(String accessToken, String openId, String shareOpenId);
 	
 }

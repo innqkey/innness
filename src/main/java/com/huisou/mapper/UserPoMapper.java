@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import com.huisou.po.UserPo;
+import com.huisou.vo.CustomerVo;
 import com.huisou.vo.UserVo;
 
 public interface UserPoMapper {
@@ -40,5 +41,7 @@ public interface UserPoMapper {
 		void updateUserIntegral(@Param("userId")Integer userId, @Param("integral")Long integral);
 
 		List<String> findAllOpenid();
+
+		List<CustomerVo> findCustomer(@Param("userId")Integer userId);
 
 }

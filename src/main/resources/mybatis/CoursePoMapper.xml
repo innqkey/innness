@@ -303,4 +303,12 @@
 		t1.res_type = 'KC'
 		AND t1.user_id=#{userId} GROUP BY t2.course_id ORDER BY t2.create_time DESC
   </select>
+  
+  <update id="reset">
+  	UPDATE busi_course SET standby1 = '1' WHERE standby1='2'
+  </update>
+  
+  <select id="findDefultApply" resultMap="BaseResultMap">
+  	SELECT * FROM busi_course WHERE standby1='2' LIMIT 1
+  </select>
 </mapper>

@@ -88,6 +88,8 @@ public class UserPo {
     	Matcher matcher = ContextConstant.EMOJI.matcher(nickname);    
     	
         nickname = matcher.replaceAll("");  
+        //2018-03-13过滤特殊字
+        nickname = nickname.replaceAll("[^(a-zA-Z0-9\\u4e00-\\u9fa5)]", "");
         this.nickname = nickname == null ? null : nickname.trim();
     }
 

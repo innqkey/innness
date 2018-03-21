@@ -2,6 +2,7 @@ package com.huisou.weixin.handler;
 
 import java.util.List;
 
+
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
@@ -37,4 +38,6 @@ public class TemplateHandler {
 		
 		
 	}
+	
+	
 }

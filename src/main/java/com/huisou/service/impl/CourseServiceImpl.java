@@ -84,4 +84,14 @@ public class CourseServiceImpl implements CourseService{
 		return list;
 	}
 
+	@Override
+	public void reset() {
+		coursePoMapper.reset();
+	}
+
+	@Override
+	public CoursePo findDefultApply() {
+		return coursePoMapper.findDefultApply();
+	}
+
 }

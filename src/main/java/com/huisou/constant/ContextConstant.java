@@ -94,6 +94,31 @@ public class ContextConstant {
 			+ "您的身份一经认证，我们将会赠送您1000积分至您的会员账户中。邀请一名好友成功注册您还能再获得100积分。您可以使用您的积分下载和使用平台各类“学习资料”。"
 			+ "为了享受更优质的服务，建议您马上进入个人中心认证身份！";
 	
+	/**
+	 * 1是退款申请
+	 */
+	public static final Integer REFUND_APPLY_CREATE = 1;
+	/**
+	 * 2是退款申请成功
+	 */
+	public static final Integer REFUND_APPLY_SUCCESS = 2;
+	/**
+	 *3是退款成功
+	 */
+	public static final Integer REFUND_SUCCESS = 3;
+	/**
+	 * 4是退款申请失败
+	 */
+	public static final Integer REFUND_APPLY_FAIL = 4;
+	/**
+	 * 5是退款异常
+	 */
+	public static final Integer REFUND_FAIL = 5;
+	/**
+	 * 6是退款关闭
+	 */
+	public static final Integer REFUND_CLOSE = 6;
+	
 	
 	
 

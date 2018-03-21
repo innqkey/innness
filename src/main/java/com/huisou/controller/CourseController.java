@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.common.DateUtils;
 import com.common.ResUtils;
 import com.github.pagehelper.PageInfo;
+import com.google.zxing.oned.rss.RSSUtils;
 import com.huisou.constant.ContextConstant;
 import com.huisou.po.CoursePo;
 import com.huisou.service.CourseService;
@@ -213,6 +214,46 @@ public class CourseController extends BaseController{
 			return ResUtils.okRes(courseVo);
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
+			return ResUtils.execRes();
+		}
+	}
+	
+	/**
+	 * 设置手机端报名默认跳转的课程
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/setDefultApply")
+	public String setDefultApply(HttpServletRequest request){
+		try {
+			String courseId = request.getParameter("courseId"); 
+			if(StringUtils.isBlank(courseId) || (!StringUtils.isNumeric(courseId))){
+				return ResUtils.errRes("102", "请求参数错误");
+			}
+			CoursePo coursePo = new CoursePo();
+			coursePo.setCourseId(Integer.parseInt(courseId));
+			coursePo.setStandby1("2");
+			courseService.reset();
+			courseService.updateCourse(coursePo);
+			return ResUtils.okRes();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResUtils.execRes();
+		}
+	}
+	
+	/**
+	 * 查找默认的课程
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/findDefultApply")
+	public String findDefultApply(HttpServletRequest request){
+		try {
+			CoursePo coursePo = courseService.findDefultApply();
+			return ResUtils.okRes(coursePo);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return ResUtils.execRes();
 		}

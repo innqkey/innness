@@ -1,5 +1,7 @@
 package com.huisou.service;
 
+import java.util.List;
+
 import com.huisou.po.ImagePo;
 
 /**
@@ -19,4 +21,8 @@ public interface ImageService {
 
 	void deleteBackageImage();
 	public ImagePo getBackageImage();
+
+	List<ImagePo> getImageByOpenIdAndDelete(String openId);
+	
+	
 }

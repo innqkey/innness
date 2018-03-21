@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.common.ResUtils;
 import com.github.pagehelper.PageInfo;
@@ -55,9 +56,7 @@ public class WeChatTemplateController {
 	
 	@Value("${templateId.send}")
 	private String sendTemplateId;
-	
 
-	
 	/**
 	 * 模板历史删除
 	 * @param pageTemp
@@ -89,11 +88,6 @@ public class WeChatTemplateController {
 		
 		return ResUtils.okRes();
 	}
-	
-	
-	
-	
-	
 
 	/**
 	 * 添加模板

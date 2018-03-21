@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
 import com.huisou.po.UserPo;
+import com.huisou.vo.CustomerVo;
 import com.huisou.vo.PageTemp;
 import com.huisou.vo.UserVo;
 
@@ -82,5 +83,7 @@ public interface UserService {
 	void updateUserIntegral(Integer userId, Long integral);
 	
 	List<String> findAllOpenid();
+
+	PageInfo<CustomerVo> findCustomer(Integer userId, PageTemp pageTemp);
 
 }

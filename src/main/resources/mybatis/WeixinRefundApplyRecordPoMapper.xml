@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.WeixinRefundApplyRecordPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.WeixinRefundApplyRecordPo" >
+    <id column="apply_id" property="applyId" jdbcType="INTEGER" />
+    <result column="out_refund_no" property="outRefundNo" jdbcType="VARCHAR" />
+    <result column="refund_id" property="refundId" jdbcType="VARCHAR" />
+    <result column="refund_fee" property="refundFee" jdbcType="INTEGER" />
+    <result column="transaction_id" property="transactionId" jdbcType="VARCHAR" />
+    <result column="return_code" property="returnCode" jdbcType="VARCHAR" />
+    <result column="return_msg" property="returnMsg" jdbcType="VARCHAR" />
+    <result column="appid" property="appid" jdbcType="VARCHAR" />
+    <result column="mch_id" property="mchId" jdbcType="VARCHAR" />
+    <result column="result_code" property="resultCode" jdbcType="VARCHAR" />
+    <result column="err_code" property="errCode" jdbcType="VARCHAR" />
+    <result column="out_trade_no" property="outTradeNo" jdbcType="VARCHAR" />
+    <result column="err_code_des" property="errCodeDes" jdbcType="VARCHAR" />
+    <result column="total_fee" property="totalFee" jdbcType="INTEGER" />
+    <result column="settlement_total_fee" property="settlementTotalFee" jdbcType="INTEGER" />
+    <result column="settlement_refund_fee" property="settlementRefundFee" jdbcType="INTEGER" />
+    <result column="fee_type" property="feeType" jdbcType="VARCHAR" />
+    <result column="cash_fee" property="cashFee" jdbcType="INTEGER" />
+    <result column="cash_fee_type" property="cashFeeType" jdbcType="VARCHAR" />
+    <result column="cash_refund_fee" property="cashRefundFee" jdbcType="INTEGER" />
+    <result column="coupon_type_$n" property="couponTypeN" jdbcType="VARCHAR" />
+    <result column="coupon_refund_fee" property="couponRefundFee" jdbcType="INTEGER" />
+    <result column="coupon_refund_fee_$n" property="couponRefundFeeN" jdbcType="INTEGER" />
+    <result column="coupon_refund_count" property="couponRefundCount" jdbcType="INTEGER" />
+    <result column="coupon_refund_id_$n" property="couponRefundIdN" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    apply_id, out_refund_no, refund_id, refund_fee, transaction_id, return_code, return_msg, 
+    appid, mch_id, result_code, err_code, out_trade_no, err_code_des, total_fee, settlement_total_fee, 
+    settlement_refund_fee, fee_type, cash_fee, cash_fee_type, cash_refund_fee, coupon_type_$n, 
+    coupon_refund_fee, coupon_refund_fee_$n, coupon_refund_count, coupon_refund_id_$n
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_weixin_refund_apply_record
+    where apply_id = #{applyId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_weixin_refund_apply_record
+    where apply_id = #{applyId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.WeixinRefundApplyRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="applyId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_weixin_refund_apply_record (out_refund_no, refund_id, refund_fee, 
+      transaction_id, return_code, return_msg, 
+      appid, mch_id, result_code, 
+      err_code, out_trade_no, err_code_des, 
+      total_fee, settlement_total_fee, settlement_refund_fee, 
+      fee_type, cash_fee, cash_fee_type, 
+      cash_refund_fee, coupon_type_$n, coupon_refund_fee, 
+      coupon_refund_fee_$n, coupon_refund_count, coupon_refund_id_$n
+      )
+    values (#{outRefundNo,jdbcType=VARCHAR}, #{refundId,jdbcType=VARCHAR}, #{refundFee,jdbcType=INTEGER}, 
+      #{transactionId,jdbcType=VARCHAR}, #{returnCode,jdbcType=VARCHAR}, #{returnMsg,jdbcType=VARCHAR}, 
+      #{appid,jdbcType=VARCHAR}, #{mchId,jdbcType=VARCHAR}, #{resultCode,jdbcType=VARCHAR}, 
+      #{errCode,jdbcType=VARCHAR}, #{outTradeNo,jdbcType=VARCHAR}, #{errCodeDes,jdbcType=VARCHAR}, 
+      #{totalFee,jdbcType=INTEGER}, #{settlementTotalFee,jdbcType=INTEGER}, #{settlementRefundFee,jdbcType=INTEGER}, 
+      #{feeType,jdbcType=VARCHAR}, #{cashFee,jdbcType=INTEGER}, #{cashFeeType,jdbcType=VARCHAR}, 
+      #{cashRefundFee,jdbcType=INTEGER}, #{couponTypeN,jdbcType=VARCHAR}, #{couponRefundFee,jdbcType=INTEGER}, 
+      #{couponRefundFeeN,jdbcType=INTEGER}, #{couponRefundCount,jdbcType=INTEGER}, #{couponRefundIdN,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.WeixinRefundApplyRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="applyId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_weixin_refund_apply_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="outRefundNo != null" >
+        out_refund_no,
+      </if>
+      <if test="refundId != null" >
+        refund_id,
+      </if>
+      <if test="refundFee != null" >
+        refund_fee,
+      </if>
+      <if test="transactionId != null" >
+        transaction_id,
+      </if>
+      <if test="returnCode != null" >
+        return_code,
+      </if>
+      <if test="returnMsg != null" >
+        return_msg,
+      </if>
+      <if test="appid != null" >
+        appid,
+      </if>
+      <if test="mchId != null" >
+        mch_id,
+      </if>
+      <if test="resultCode != null" >
+        result_code,
+      </if>
+      <if test="errCode != null" >
+        err_code,
+      </if>
+      <if test="outTradeNo != null" >
+        out_trade_no,
+      </if>
+      <if test="errCodeDes != null" >
+        err_code_des,
+      </if>
+      <if test="totalFee != null" >
+        total_fee,
+      </if>
+      <if test="settlementTotalFee != null" >
+        settlement_total_fee,
+      </if>
+      <if test="settlementRefundFee != null" >
+        settlement_refund_fee,
+      </if>
+      <if test="feeType != null" >
+        fee_type,
+      </if>
+      <if test="cashFee != null" >
+        cash_fee,
+      </if>
+      <if test="cashFeeType != null" >
+        cash_fee_type,
+      </if>
+      <if test="cashRefundFee != null" >
+        cash_refund_fee,
+      </if>
+      <if test="couponTypeN != null" >
+        coupon_type_$n,
+      </if>
+      <if test="couponRefundFee != null" >
+        coupon_refund_fee,
+      </if>
+      <if test="couponRefundFeeN != null" >
+        coupon_refund_fee_$n,
+      </if>
+      <if test="couponRefundCount != null" >
+        coupon_refund_count,
+      </if>
+      <if test="couponRefundIdN != null" >
+        coupon_refund_id_$n,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="outRefundNo != null" >
+        #{outRefundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="refundId != null" >
+        #{refundId,jdbcType=VARCHAR},
+      </if>
+      <if test="refundFee != null" >
+        #{refundFee,jdbcType=INTEGER},
+      </if>
+      <if test="transactionId != null" >
+        #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="returnCode != null" >
+        #{returnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="returnMsg != null" >
+        #{returnMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="appid != null" >
+        #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="mchId != null" >
+        #{mchId,jdbcType=VARCHAR},
+      </if>
+      <if test="resultCode != null" >
+        #{resultCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errCode != null" >
+        #{errCode,jdbcType=VARCHAR},
+      </if>
+      <if test="outTradeNo != null" >
+        #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="errCodeDes != null" >
+        #{errCodeDes,jdbcType=VARCHAR},
+      </if>
+      <if test="totalFee != null" >
+        #{totalFee,jdbcType=INTEGER},
+      </if>
+      <if test="settlementTotalFee != null" >
+        #{settlementTotalFee,jdbcType=INTEGER},
+      </if>
+      <if test="settlementRefundFee != null" >
+        #{settlementRefundFee,jdbcType=INTEGER},
+      </if>
+      <if test="feeType != null" >
+        #{feeType,jdbcType=VARCHAR},
+      </if>
+      <if test="cashFee != null" >
+        #{cashFee,jdbcType=INTEGER},
+      </if>
+      <if test="cashFeeType != null" >
+        #{cashFeeType,jdbcType=VARCHAR},
+      </if>
+      <if test="cashRefundFee != null" >
+        #{cashRefundFee,jdbcType=INTEGER},
+      </if>
+      <if test="couponTypeN != null" >
+        #{couponTypeN,jdbcType=VARCHAR},
+      </if>
+      <if test="couponRefundFee != null" >
+        #{couponRefundFee,jdbcType=INTEGER},
+      </if>
+      <if test="couponRefundFeeN != null" >
+        #{couponRefundFeeN,jdbcType=INTEGER},
+      </if>
+      <if test="couponRefundCount != null" >
+        #{couponRefundCount,jdbcType=INTEGER},
+      </if>
+      <if test="couponRefundIdN != null" >
+        #{couponRefundIdN,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.WeixinRefundApplyRecordPo" >
+    update busi_weixin_refund_apply_record
+    <set >
+      <if test="outRefundNo != null" >
+        out_refund_no = #{outRefundNo,jdbcType=VARCHAR},
+      </if>
+      <if test="refundId != null" >
+        refund_id = #{refundId,jdbcType=VARCHAR},
+      </if>
+      <if test="refundFee != null" >
+        refund_fee = #{refundFee,jdbcType=INTEGER},
+      </if>
+      <if test="transactionId != null" >
+        transaction_id = #{transactionId,jdbcType=VARCHAR},
+      </if>
+      <if test="returnCode != null" >
+        return_code = #{returnCode,jdbcType=VARCHAR},
+      </if>
+      <if test="returnMsg != null" >
+        return_msg = #{returnMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="appid != null" >
+        appid = #{appid,jdbcType=VARCHAR},
+      </if>
+      <if test="mchId != null" >
+        mch_id = #{mchId,jdbcType=VARCHAR},
+      </if>
+      <if test="resultCode != null" >
+        result_code = #{resultCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errCode != null" >
+        err_code = #{errCode,jdbcType=VARCHAR},
+      </if>
+      <if test="outTradeNo != null" >
+        out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="errCodeDes != null" >
+        err_code_des = #{errCodeDes,jdbcType=VARCHAR},
+      </if>
+      <if test="totalFee != null" >
+        total_fee = #{totalFee,jdbcType=INTEGER},
+      </if>
+      <if test="settlementTotalFee != null" >
+        settlement_total_fee = #{settlementTotalFee,jdbcType=INTEGER},
+      </if>
+      <if test="settlementRefundFee != null" >
+        settlement_refund_fee = #{settlementRefundFee,jdbcType=INTEGER},
+      </if>
+      <if test="feeType != null" >
+        fee_type = #{feeType,jdbcType=VARCHAR},
+      </if>
+      <if test="cashFee != null" >
+        cash_fee = #{cashFee,jdbcType=INTEGER},
+      </if>
+      <if test="cashFeeType != null" >
+        cash_fee_type = #{cashFeeType,jdbcType=VARCHAR},
+      </if>
+      <if test="cashRefundFee != null" >
+        cash_refund_fee = #{cashRefundFee,jdbcType=INTEGER},
+      </if>
+      <if test="couponTypeN != null" >
+        coupon_type_$n = #{couponTypeN,jdbcType=VARCHAR},
+      </if>
+      <if test="couponRefundFee != null" >
+        coupon_refund_fee = #{couponRefundFee,jdbcType=INTEGER},
+      </if>
+      <if test="couponRefundFeeN != null" >
+        coupon_refund_fee_$n = #{couponRefundFeeN,jdbcType=INTEGER},
+      </if>
+      <if test="couponRefundCount != null" >
+        coupon_refund_count = #{couponRefundCount,jdbcType=INTEGER},
+      </if>
+      <if test="couponRefundIdN != null" >
+        coupon_refund_id_$n = #{couponRefundIdN,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where apply_id = #{applyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.WeixinRefundApplyRecordPo" >
+    update busi_weixin_refund_apply_record
+    set out_refund_no = #{outRefundNo,jdbcType=VARCHAR},
+      refund_id = #{refundId,jdbcType=VARCHAR},
+      refund_fee = #{refundFee,jdbcType=INTEGER},
+      transaction_id = #{transactionId,jdbcType=VARCHAR},
+      return_code = #{returnCode,jdbcType=VARCHAR},
+      return_msg = #{returnMsg,jdbcType=VARCHAR},
+      appid = #{appid,jdbcType=VARCHAR},
+      mch_id = #{mchId,jdbcType=VARCHAR},
+      result_code = #{resultCode,jdbcType=VARCHAR},
+      err_code = #{errCode,jdbcType=VARCHAR},
+      out_trade_no = #{outTradeNo,jdbcType=VARCHAR},
+      err_code_des = #{errCodeDes,jdbcType=VARCHAR},
+      total_fee = #{totalFee,jdbcType=INTEGER},
+      settlement_total_fee = #{settlementTotalFee,jdbcType=INTEGER},
+      settlement_refund_fee = #{settlementRefundFee,jdbcType=INTEGER},
+      fee_type = #{feeType,jdbcType=VARCHAR},
+      cash_fee = #{cashFee,jdbcType=INTEGER},
+      cash_fee_type = #{cashFeeType,jdbcType=VARCHAR},
+      cash_refund_fee = #{cashRefundFee,jdbcType=INTEGER},
+      coupon_type_$n = #{couponTypeN,jdbcType=VARCHAR},
+      coupon_refund_fee = #{couponRefundFee,jdbcType=INTEGER},
+      coupon_refund_fee_$n = #{couponRefundFeeN,jdbcType=INTEGER},
+      coupon_refund_count = #{couponRefundCount,jdbcType=INTEGER},
+      coupon_refund_id_$n = #{couponRefundIdN,jdbcType=VARCHAR}
+    where apply_id = #{applyId,jdbcType=INTEGER}
+  </update>
+</mapper>

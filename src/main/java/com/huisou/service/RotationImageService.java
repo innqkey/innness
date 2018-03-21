@@ -23,5 +23,17 @@ public interface RotationImageService {
 	List<RotationImagePo> findByparames(Map map);
 
 	RotationImagePo selectOne(Integer rotationImageId);
+	/**
+	 * 查找微信分享的图片
+	 * @param linkUrlType
+	 * @return
+	 */
+	RotationImagePo findOne(String linkUrlType);
+
+	/**
+	 * 删除微信分享的图片
+	 * @param string
+	 */
+	void deleteImageByType(String linkUrlType);
 
 }

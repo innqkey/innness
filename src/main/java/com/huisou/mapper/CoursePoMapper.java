@@ -28,4 +28,8 @@ public interface CoursePoMapper {
 
 	List<CoursePo> findAllPayCourseByUserid(@Param(value = "userId")Integer userId);
 
+	void reset();
+
+	CoursePo findDefultApply();
+
 }

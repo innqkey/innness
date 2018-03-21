@@ -27,4 +27,8 @@ List<CoursePo> findCourseByUserid(Integer userid);
 
 List<CoursePo> findAll();
 
+void reset();
+
+CoursePo findDefultApply();
+
 }
