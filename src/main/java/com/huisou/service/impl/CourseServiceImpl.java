@@ -73,7 +73,7 @@ public class CourseServiceImpl implements CourseService{
 				}else{
 					courseVo.setIspay(ContextConstant.NO);
 				}
-				courseVo.setRemainNum(Integer.parseInt(courseVo.getCourseMaxNum())-Integer.parseInt(courseVo.getCourseApplyNum()));
+				courseVo.setRemainNum(Integer.parseInt(courseVo.getCourseMaxNum())-Integer.parseInt(courseVo.getCourseApplyNum())-courseVo.getUnderApplyNum());
 				result.add(courseVo);
 			} catch (Exception e) {
 				e.printStackTrace();

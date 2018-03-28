@@ -73,8 +73,18 @@ public class CourseVo implements Serializable{
 	    
 	    private Integer remainNum;
 	    
+
+	    private Integer underApplyNum;
+
 	    
-	    
+		public Integer getUnderApplyNum() {
+			return underApplyNum;
+		}
+
+		public void setUnderApplyNum(Integer underApplyNum) {
+			this.underApplyNum = underApplyNum;
+		}
+
 		public Integer getRemainNum() {
 			return remainNum;
 		}

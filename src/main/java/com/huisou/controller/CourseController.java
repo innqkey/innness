@@ -179,6 +179,8 @@ public class CourseController extends BaseController{
 			String regionsIds = request.getParameter("regionsIds");
 			String beginTime = request.getParameter("beginTime");
 			String endTime = request.getParameter("endTime");
+			String underApplyNum = request.getParameter("underApplyNum");
+			String isStartStatus = request.getParameter("isStartStatus");
 			if( StringUtils.isBlank(beginTime) || StringUtils.isBlank(endTime) || StringUtils.isBlank(regionsIds)){
 				return ResUtils.errRes("102", "请求参数");
 			}
@@ -215,6 +217,7 @@ public class CourseController extends BaseController{
 			if(StringUtils.isBlank(videoAudioIds)){
 				return ResUtils.errRes("102", "请求参数错误");
 			}
+			
 			List<Integer> videoAudioIdList = new ArrayList<Integer>();
 			String[] array = videoAudioIds.split(",");
 			for (String videoAudioId : array) {
@@ -238,6 +241,11 @@ public class CourseController extends BaseController{
 			coursePo.setCourseLogo(courseLogo);
 			coursePo.setCourseDetail(courseDetail);
 			coursePo.setIntrovideoUrl(introvideoUrl);
+			coursePo.setIsStartStatus(isStartStatus);
+			//修改线下报名人数
+			if(StringUtils.isNotBlank(underApplyNum) && StringUtils.isNumeric(underApplyNum)){
+				coursePo.setUnderApplyNum(Integer.parseInt(underApplyNum));
+			}
 			if(StringUtils.isBlank(courseId)){
 				coursePo.setCreateTime(new Date());
 				courseService.addCourse(coursePo);

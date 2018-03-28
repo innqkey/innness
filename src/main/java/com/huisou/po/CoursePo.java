@@ -62,6 +62,12 @@ public class CoursePo {
 
     private String isStartStatus;
 
+    private Integer underApplyNum;
+
+    private String standby4;
+
+    private String standby3;
+
     private String courseIntro;
 
     private String courseDetail;
@@ -202,24 +208,23 @@ public class CoursePo {
         this.courseAddress = courseAddress == null ? null : courseAddress.trim();
     }
 
-    
     public String getCourseMaxNum() {
-		return courseMaxNum;
-	}
+        return courseMaxNum;
+    }
 
-	public void setCourseMaxNum(String courseMaxNum) {
-		this.courseMaxNum = courseMaxNum;
-	}
+    public void setCourseMaxNum(String courseMaxNum) {
+        this.courseMaxNum = courseMaxNum == null ? null : courseMaxNum.trim();
+    }
 
-	public String getCourseApplyNum() {
-		return courseApplyNum;
-	}
+    public String getCourseApplyNum() {
+        return courseApplyNum;
+    }
 
-	public void setCourseApplyNum(String courseApplyNum) {
-		this.courseApplyNum = courseApplyNum;
-	}
+    public void setCourseApplyNum(String courseApplyNum) {
+        this.courseApplyNum = courseApplyNum == null ? null : courseApplyNum.trim();
+    }
 
-	public String getRegionsids() {
+    public String getRegionsids() {
         return regionsids;
     }
 
@@ -273,6 +278,30 @@ public class CoursePo {
 
     public void setIsStartStatus(String isStartStatus) {
         this.isStartStatus = isStartStatus == null ? null : isStartStatus.trim();
+    }
+
+    public Integer getUnderApplyNum() {
+        return underApplyNum;
+    }
+
+    public void setUnderApplyNum(Integer underApplyNum) {
+        this.underApplyNum = underApplyNum;
+    }
+
+    public String getStandby4() {
+        return standby4;
+    }
+
+    public void setStandby4(String standby4) {
+        this.standby4 = standby4 == null ? null : standby4.trim();
+    }
+
+    public String getStandby3() {
+        return standby3;
+    }
+
+    public void setStandby3(String standby3) {
+        this.standby3 = standby3 == null ? null : standby3.trim();
     }
 
     public String getCourseIntro() {

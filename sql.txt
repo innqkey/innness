@@ -1,0 +1,7 @@
+ALTER table busi_course add under_apply_num int(10) DEFAULT 0 NOT NULL COMMENT '添加线下申请人数'
+
+ALTER table busi_course add standby3 VARCHAR(255) DEFAULT NULL COMMENT '备用字段3'
+
+ALTER table busi_course add standby4 VARCHAR(255) DEFAULT NULL COMMENT '备用字段4'
+
+

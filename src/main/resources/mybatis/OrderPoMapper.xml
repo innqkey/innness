@@ -239,8 +239,18 @@
 	<if test="resTitle != null and resTitle !='' " >
       and c.course_title like CONCAT('%', #{resTitle},'%')
     </if>
+    <if test="param != null and param !='' " >
+      and(
+	    	o.order_no like CONCAT('%', #{param},'%')
+	  		or u.username like CONCAT('%', #{param},'%')
+	  		or u.phone like CONCAT('%', #{param},'%')
+	  		)
+    </if>
     <if test="isStartStatus != null and isStartStatus !='' " >
       and c.is_start_status = #{isStartStatus}
+    </if>
+     <if test="courseId != null and courseId !='' " >
+      and c.course_id = #{courseId}
     </if>
     <if test="orderNo != null and orderNo!='' ">
       and o.order_no like CONCAT('%', #{orderNo},'%')

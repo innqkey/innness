@@ -28,6 +28,9 @@
     <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
     <result column="is_start_status" property="isStartStatus" jdbcType="VARCHAR" />
+    <result column="under_apply_num" property="underApplyNum" jdbcType="INTEGER" />
+    <result column="standby4" property="standby4" jdbcType="VARCHAR" />
+    <result column="standby3" property="standby3" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.huisou.po.CoursePo" extends="BaseResultMap" >
     <result column="course_intro" property="courseIntro" jdbcType="LONGVARCHAR" />
@@ -37,7 +40,8 @@
     course_id, course_title, course_price, course_speaker, course_duration, introvideo_url, 
     course_picture, course_logo, create_by, create_time, update_by, update_time, course_status, 
     standby1, standby2, old_money, course_address, course_max_num, course_apply_num, 
-    regionsIds, province, city, area, begin_time, end_time, is_start_status
+    regionsIds, province, city, area, begin_time, end_time, is_start_status, under_apply_num, 
+    standby4, standby3
   </sql>
   <sql id="Blob_Column_List" >
     course_intro, course_detail
@@ -66,7 +70,8 @@
       course_address, course_max_num, course_apply_num, 
       regionsIds, province, city, 
       area, begin_time, end_time, 
-      is_start_status, course_intro, course_detail
+      is_start_status, under_apply_num, standby4, 
+      standby3, course_intro, course_detail
       )
     values (#{courseTitle,jdbcType=VARCHAR}, #{coursePrice,jdbcType=DECIMAL}, #{courseSpeaker,jdbcType=VARCHAR}, 
       #{courseDuration,jdbcType=VARCHAR}, #{introvideoUrl,jdbcType=VARCHAR}, #{coursePicture,jdbcType=VARCHAR}, 
@@ -76,7 +81,8 @@
       #{courseAddress,jdbcType=VARCHAR}, #{courseMaxNum,jdbcType=VARCHAR}, #{courseApplyNum,jdbcType=VARCHAR}, 
       #{regionsids,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
       #{area,jdbcType=VARCHAR}, #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
-      #{isStartStatus,jdbcType=VARCHAR}, #{courseIntro,jdbcType=LONGVARCHAR}, #{courseDetail,jdbcType=LONGVARCHAR}
+      #{isStartStatus,jdbcType=VARCHAR}, #{underApplyNum,jdbcType=INTEGER}, #{standby4,jdbcType=VARCHAR}, 
+      #{standby3,jdbcType=VARCHAR}, #{courseIntro,jdbcType=LONGVARCHAR}, #{courseDetail,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.huisou.po.CoursePo" >
@@ -160,6 +166,15 @@
       <if test="isStartStatus != null" >
         is_start_status,
       </if>
+      <if test="underApplyNum != null" >
+        under_apply_num,
+      </if>
+      <if test="standby4 != null" >
+        standby4,
+      </if>
+      <if test="standby3 != null" >
+        standby3,
+      </if>
       <if test="courseIntro != null" >
         course_intro,
       </if>
@@ -242,6 +257,15 @@
       </if>
       <if test="isStartStatus != null" >
         #{isStartStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="underApplyNum != null" >
+        #{underApplyNum,jdbcType=INTEGER},
+      </if>
+      <if test="standby4 != null" >
+        #{standby4,jdbcType=VARCHAR},
+      </if>
+      <if test="standby3 != null" >
+        #{standby3,jdbcType=VARCHAR},
       </if>
       <if test="courseIntro != null" >
         #{courseIntro,jdbcType=LONGVARCHAR},
@@ -329,6 +353,15 @@
       <if test="isStartStatus != null" >
         is_start_status = #{isStartStatus,jdbcType=VARCHAR},
       </if>
+      <if test="underApplyNum != null" >
+        under_apply_num = #{underApplyNum,jdbcType=INTEGER},
+      </if>
+      <if test="standby4 != null" >
+        standby4 = #{standby4,jdbcType=VARCHAR},
+      </if>
+      <if test="standby3 != null" >
+        standby3 = #{standby3,jdbcType=VARCHAR},
+      </if>
       <if test="courseIntro != null" >
         course_intro = #{courseIntro,jdbcType=LONGVARCHAR},
       </if>
@@ -365,6 +398,9 @@
       begin_time = #{beginTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       is_start_status = #{isStartStatus,jdbcType=VARCHAR},
+      under_apply_num = #{underApplyNum,jdbcType=INTEGER},
+      standby4 = #{standby4,jdbcType=VARCHAR},
+      standby3 = #{standby3,jdbcType=VARCHAR},
       course_intro = #{courseIntro,jdbcType=LONGVARCHAR},
       course_detail = #{courseDetail,jdbcType=LONGVARCHAR}
     where course_id = #{courseId,jdbcType=INTEGER}
@@ -395,11 +431,13 @@
       area = #{area,jdbcType=VARCHAR},
       begin_time = #{beginTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
-      is_start_status = #{isStartStatus,jdbcType=VARCHAR}
+      is_start_status = #{isStartStatus,jdbcType=VARCHAR},
+      under_apply_num = #{underApplyNum,jdbcType=INTEGER},
+      standby4 = #{standby4,jdbcType=VARCHAR},
+      standby3 = #{standby3,jdbcType=VARCHAR}
     where course_id = #{courseId,jdbcType=INTEGER}
   </update>
-  
-  <select id="search" resultMap="BaseResultMap">
+   <select id="search" resultMap="BaseResultMap">
   	SELECT * FROM busi_course 
   	<where>
   		<if test="courseStatus!=null and courseStatus!=''">
@@ -415,7 +453,7 @@
   		and create_time &lt;= #{endDate}
   		</if>
   	</where>
-  	ORDER BY begin_time DESC
+  	ORDER BY is_start_status ASC,begin_time DESC
   </select>
   <select id="findCourseByUserid" resultMap="BaseResultMap">
   	SELECT
@@ -451,9 +489,9 @@
   </update>
   
   <select id="findDefultApply" resultMap="BaseResultMap">
-  	SELECT * FROM busi_course WHERE standby1='2' LIMIT 1
+  	SELECT * FROM busi_course WHERE standby1='2' and course_status='1' LIMIT 1
   </select>
   <select id="findAll" resultMap="BaseResultMap">
-  	SELECT * FROM busi_course
+  	SELECT * FROM busi_course where course_status='1'
   </select>
 </mapper>
