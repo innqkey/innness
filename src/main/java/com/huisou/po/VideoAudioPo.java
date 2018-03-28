@@ -61,9 +61,17 @@ public class VideoAudioPo {
 
     private String standby2;
 
+    private Integer realVideoAudioPayNum;
     
-    
-    public String getVideoAudioUrl() {
+    public Integer getRealVideoAudioPayNum() {
+		return realVideoAudioPayNum;
+	}
+
+	public void setRealVideoAudioPayNum(Integer realVideoAudioPayNum) {
+		this.realVideoAudioPayNum = realVideoAudioPayNum;
+	}
+
+	public String getVideoAudioUrl() {
 		return videoAudioUrl;
 	}
 

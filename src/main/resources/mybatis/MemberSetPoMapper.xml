@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.MemberSetPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.MemberSetPo" >
+    <id column="member_set_id" property="memberSetId" jdbcType="INTEGER" />
+    <result column="member_set_name" property="memberSetName" jdbcType="VARCHAR" />
+    <result column="member_set_money" property="memberSetMoney" jdbcType="DECIMAL" />
+    <result column="create_by" property="createBy" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="member_set_status" property="memberSetStatus" jdbcType="VARCHAR" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    member_set_id, member_set_name, member_set_money, create_by, create_time, member_set_status, 
+    standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_member_set
+    where member_set_id = #{memberSetId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_member_set
+    where member_set_id = #{memberSetId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.MemberSetPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="memberSetId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_member_set (member_set_name, member_set_money, create_by, 
+      create_time, member_set_status, standby1, 
+      standby2)
+    values (#{memberSetName,jdbcType=VARCHAR}, #{memberSetMoney,jdbcType=DECIMAL}, #{createBy,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{memberSetStatus,jdbcType=VARCHAR}, #{standby1,jdbcType=VARCHAR}, 
+      #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.MemberSetPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="memberSetId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_member_set
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="memberSetName != null" >
+        member_set_name,
+      </if>
+      <if test="memberSetMoney != null" >
+        member_set_money,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="memberSetStatus != null" >
+        member_set_status,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="memberSetName != null" >
+        #{memberSetName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberSetMoney != null" >
+        #{memberSetMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="memberSetStatus != null" >
+        #{memberSetStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.MemberSetPo" >
+    update busi_member_set
+    <set >
+      <if test="memberSetName != null" >
+        member_set_name = #{memberSetName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberSetMoney != null" >
+        member_set_money = #{memberSetMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="memberSetStatus != null" >
+        member_set_status = #{memberSetStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where member_set_id = #{memberSetId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.MemberSetPo" >
+    update busi_member_set
+    set member_set_name = #{memberSetName,jdbcType=VARCHAR},
+      member_set_money = #{memberSetMoney,jdbcType=DECIMAL},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      member_set_status = #{memberSetStatus,jdbcType=VARCHAR},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where member_set_id = #{memberSetId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findAll" resultMap="BaseResultMap">
+  	SELECT * FROM busi_member_set WHERE member_set_status='1'
+  </select>
+  
+  <select id="findMinLevelByMoney" parameterType="int" resultMap="BaseResultMap">
+  	select * from busi_member_set
+	where 1=1
+	<![CDATA[ and member_set_money<=#{money}    ]]>
+	ORDER BY member_set_id desc
+	LIMIT 1
+  </select>
+</mapper>

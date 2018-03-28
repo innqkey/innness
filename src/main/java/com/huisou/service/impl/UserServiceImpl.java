@@ -161,10 +161,23 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public PageInfo<CustomerVo> findCustomer(Integer userId, PageTemp pageTemp) {
+	public PageInfo<CustomerVo> findCustomer(Integer userId, PageTemp pageTemp,String userName) {
+		UserPo userPo = userPoMapper.selectByPrimaryKey(userId);
 		PageHelper.startPage(pageTemp.getPageNum(), pageTemp.getPageSize());
-		List<CustomerVo> list = userPoMapper.findCustomer(userId);
+		List<CustomerVo> list = userPoMapper.findCustomer(userId,userPo.getIsAgency(),userName);
 		return new PageInfo<>(list);
+	}
+
+	@Override
+	public PageInfo<UserVo> finCutomerByPara(PageTemp pageTemp, Map<String, String> para) {
+		PageHelper.startPage(pageTemp.getPageNum(),pageTemp.getPageSize());
+		List<UserVo> list = userPoMapper.finCutomerByPara(para);
+		return new PageInfo<>(list);
+	}
+
+	@Override
+	public List<UserPo> findAllUsers() {
+		return userPoMapper.selectAll();
 	}
 
 }

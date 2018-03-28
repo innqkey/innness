@@ -19,8 +19,8 @@ public interface CourseService {
 
  void updateCourse(CoursePo coursePo);
 
-PageInfo<CoursePo> search(String courseTitle, Date startDate, Date endDate,PageTemp pageTemp);
-
+ PageInfo<CoursePo> search(String courseTitle, Date startDate, Date endDate,PageTemp pageTemp);
+ PageInfo<CourseVo> findAllByUserId(Integer userId,PageTemp pageTemp);
 CourseVo findOne(Integer courseId);
 
 List<CoursePo> findCourseByUserid(Integer userid);

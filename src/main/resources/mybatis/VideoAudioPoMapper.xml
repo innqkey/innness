@@ -23,12 +23,13 @@
     <result column="video_audio_status" property="videoAudioStatus" jdbcType="VARCHAR" />
     <result column="standby1" property="standby1" jdbcType="VARCHAR" />
     <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+    <result column="real_video_audio_pay_num" property="realVideoAudioPayNum" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     video_audio_id, video_audio_title, video_audio_price, video_audio_intro, video_audio_logo, 
     video_audio_type,video_audio_url, video_audio_no, course_id, video_audio_iscourse, video_audio_ispay, 
     video_audio_istop, video_audio_isonline, video_audio_pay_num, create_by, create_time, 
-    update_by, update_time, video_audio_status, standby1, standby2
+    update_by, update_time, video_audio_status, standby1, standby2,real_video_audio_pay_num
   </sql>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -51,14 +52,14 @@
       video_audio_ispay, video_audio_istop, video_audio_isonline, 
       video_audio_pay_num, create_by, create_time, 
       update_by, update_time, video_audio_status, 
-      standby1, standby2)
+      standby1, standby2,real_video_audio_pay_num)
     values (#{videoAudioTitle,jdbcType=VARCHAR}, #{videoAudioPrice,jdbcType=DECIMAL}, 
       #{videoAudioIntro,jdbcType=VARCHAR}, #{videoAudioLogo,jdbcType=VARCHAR}, #{videoAudioType,jdbcType=VARCHAR}, 
       #{videoAudioUrl,jdbcType=VARCHAR}, #{videoAudioNo,jdbcType=INTEGER}, #{courseId,jdbcType=INTEGER}, #{videoAudioIscourse,jdbcType=VARCHAR}, 
       #{videoAudioIspay,jdbcType=VARCHAR}, #{videoAudioIstop,jdbcType=VARCHAR}, #{videoAudioIsonline,jdbcType=VARCHAR}, 
       #{videoAudioPayNum,jdbcType=INTEGER}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{videoAudioStatus,jdbcType=VARCHAR}, 
-      #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR})
+      #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}, #{realVideoAudioPayNum,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.huisou.po.VideoAudioPo" >
     <selectKey resultType="java.lang.Integer" keyProperty="videoAudioId" order="AFTER" >
@@ -126,6 +127,9 @@
       <if test="standby2 != null" >
         standby2,
       </if>
+       <if test="realVideoAudioPayNum != null" >
+        real_video_audio_pay_num,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="videoAudioTitle != null" >
@@ -187,6 +191,9 @@
       </if>
       <if test="standby2 != null" >
         #{standby2,jdbcType=VARCHAR},
+      </if>
+       <if test="realVideoAudioPayNum != null" >
+        #{realVideoAudioPayNum,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -253,6 +260,9 @@
       <if test="standby2 != null" >
         standby2 = #{standby2,jdbcType=VARCHAR},
       </if>
+        <if test="realVideoAudioPayNum != null" >
+        real_video_audio_pay_num = #{realVideoAudioPayNum,jdbcType=INTEGER},
+      </if>
     </set>
     where video_audio_id = #{videoAudioId,jdbcType=INTEGER}
   </update>
@@ -277,7 +287,8 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       video_audio_status = #{videoAudioStatus,jdbcType=VARCHAR},
       standby1 = #{standby1,jdbcType=VARCHAR},
-      standby2 = #{standby2,jdbcType=VARCHAR}
+      standby2 = #{standby2,jdbcType=VARCHAR},
+      real_video_audio_pay_num = #{realVideoAudioPayNum,jdbcType=INTEGER}
     where video_audio_id = #{videoAudioId,jdbcType=INTEGER}
   </update>
   
@@ -356,12 +367,7 @@
 	  		<if test="videoAudioIspay!=null and videoAudioIspay!=''">
 	  			and video_audio_ispay=#{videoAudioIspay}
 	  		</if>
-	  	<if test="videoAudioIspay==null">
 	  			ORDER BY video_audio_pay_num DESC
-	  	</if>
-	  	<if test="videoAudioIspay!=null and videoAudioIspay!=''">
-	  			ORDER BY create_time DESC
-	  	</if>
    </select>
    
    <select id="findVideoAudioByPayNum" resultMap="BaseResultMap">

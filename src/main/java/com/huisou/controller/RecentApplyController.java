@@ -131,7 +131,7 @@ public class RecentApplyController extends BaseController{
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/findOrderAndRecentCourseByUserId")
+	/*@RequestMapping(value = "/findOrderAndRecentCourseByUserId")
 	public String findOrderAndRecentCourseByUserId(HttpServletRequest request){
 		try {
 			Map map =super.getPara();
@@ -142,5 +142,6 @@ public class RecentApplyController extends BaseController{
 			e.printStackTrace();
 			return ResUtils.execRes();
 		}
-	}
+	}*/
+	
 }

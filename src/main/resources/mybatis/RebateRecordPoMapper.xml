@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.RebateRecordPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.RebateRecordPo" >
+    <id column="rebate_record_id" property="rebateRecordId" jdbcType="INTEGER" />
+    <result column="res_order_id" property="resOrderId" jdbcType="INTEGER" />
+    <result column="res_order_type" property="resOrderType" jdbcType="VARCHAR" />
+    <result column="res_order_name" property="resOrderName" jdbcType="VARCHAR" />
+    <result column="res_order_no" property="resOrderNo" jdbcType="VARCHAR" />
+    <result column="buy_user_id" property="buyUserId" jdbcType="INTEGER" />
+    <result column="rebate_user_id" property="rebateUserId" jdbcType="INTEGER" />
+    <result column="order_rebate_money" property="orderRebateMoney" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    rebate_record_id, res_order_id, res_order_type, res_order_name, res_order_no, buy_user_id, 
+    rebate_user_id, order_rebate_money, create_time, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_rebate_record
+    where rebate_record_id = #{rebateRecordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_rebate_record
+    where rebate_record_id = #{rebateRecordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.RebateRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="rebateRecordId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_rebate_record (res_order_id, res_order_type, res_order_name, 
+      res_order_no, buy_user_id, rebate_user_id, 
+      order_rebate_money, create_time, standby1, 
+      standby2)
+    values (#{resOrderId,jdbcType=INTEGER}, #{resOrderType,jdbcType=VARCHAR}, #{resOrderName,jdbcType=VARCHAR}, 
+      #{resOrderNo,jdbcType=VARCHAR}, #{buyUserId,jdbcType=INTEGER}, #{rebateUserId,jdbcType=INTEGER}, 
+      #{orderRebateMoney,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{standby1,jdbcType=VARCHAR}, 
+      #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.RebateRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="rebateRecordId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_rebate_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="resOrderId != null" >
+        res_order_id,
+      </if>
+      <if test="resOrderType != null" >
+        res_order_type,
+      </if>
+      <if test="resOrderName != null" >
+        res_order_name,
+      </if>
+      <if test="resOrderNo != null" >
+        res_order_no,
+      </if>
+      <if test="buyUserId != null" >
+        buy_user_id,
+      </if>
+      <if test="rebateUserId != null" >
+        rebate_user_id,
+      </if>
+      <if test="orderRebateMoney != null" >
+        order_rebate_money,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="resOrderId != null" >
+        #{resOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="resOrderType != null" >
+        #{resOrderType,jdbcType=VARCHAR},
+      </if>
+      <if test="resOrderName != null" >
+        #{resOrderName,jdbcType=VARCHAR},
+      </if>
+      <if test="resOrderNo != null" >
+        #{resOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="buyUserId != null" >
+        #{buyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="rebateUserId != null" >
+        #{rebateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="orderRebateMoney != null" >
+        #{orderRebateMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.RebateRecordPo" >
+    update busi_rebate_record
+    <set >
+      <if test="resOrderId != null" >
+        res_order_id = #{resOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="resOrderType != null" >
+        res_order_type = #{resOrderType,jdbcType=VARCHAR},
+      </if>
+      <if test="resOrderName != null" >
+        res_order_name = #{resOrderName,jdbcType=VARCHAR},
+      </if>
+      <if test="resOrderNo != null" >
+        res_order_no = #{resOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="buyUserId != null" >
+        buy_user_id = #{buyUserId,jdbcType=INTEGER},
+      </if>
+      <if test="rebateUserId != null" >
+        rebate_user_id = #{rebateUserId,jdbcType=INTEGER},
+      </if>
+      <if test="orderRebateMoney != null" >
+        order_rebate_money = #{orderRebateMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rebate_record_id = #{rebateRecordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.RebateRecordPo" >
+    update busi_rebate_record
+    set res_order_id = #{resOrderId,jdbcType=INTEGER},
+      res_order_type = #{resOrderType,jdbcType=VARCHAR},
+      res_order_name = #{resOrderName,jdbcType=VARCHAR},
+      res_order_no = #{resOrderNo,jdbcType=VARCHAR},
+      buy_user_id = #{buyUserId,jdbcType=INTEGER},
+      rebate_user_id = #{rebateUserId,jdbcType=INTEGER},
+      order_rebate_money = #{orderRebateMoney,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where rebate_record_id = #{rebateRecordId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findRebateRecordByMap" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_rebate_record
+    <where>
+    	<if test="resOrderNo != null and resOrderNo != ''">
+    		AND res_order_no = #{resOrderNo} 
+    	</if>
+    	<if test="resOrderId != null and resOrderId != ''">
+    		AND res_order_id = #{resOrderId} 
+    	</if>
+    </where>
+  </select>
+</mapper>

@@ -18,6 +18,7 @@ import com.huisou.po.NotificationPo;
 import com.huisou.po.UserPo;
 import com.huisou.service.IntegralRecordService;
 import com.huisou.service.NotificationService;
+import com.huisou.service.UserAuthService;
 import com.huisou.service.UserService;
 import com.huisou.weixin.builder.TextBuilder;
 
@@ -46,6 +47,8 @@ public class SubscribeHandler extends AbstractHandler {
 	private String classTemplateId;
 	@Value("${success.url}")
 	private String successurl;
+	@Autowired
+    private UserAuthService authSer;
     
     @Override
     public WxMpXmlOutMessage handle(WxMpXmlMessage wxMessage,
@@ -85,6 +88,8 @@ public class SubscribeHandler extends AbstractHandler {
     		newUserPo.setOpenid(userWxInfo.getOpenId());
     		newUserPo.setCountry(userWxInfo.getCountry());
     		newUserPo.setSex(userWxInfo.getSex());
+    		
+    		
         	String eventKey = wxMessage.getEventKey();
 	       	if (StringUtils.isNotBlank(eventKey)) {
 	       		eventKey = eventKey.substring(8, eventKey.length());
@@ -107,6 +112,8 @@ public class SubscribeHandler extends AbstractHandler {
 		       			notificationPo.setNotificationContext("邀请用户" + infoNickname + "增加100积分");
 		       			notificationPo.setOpenId(user.getOpenid());
 		       			notificationPo.setNotificationType("FX");
+		       			
+//		       			queueSender.addNotificationSender(notificationPo);
 		       			notificationService.addOne(notificationPo);
 		       			
 		       			//发送模板消息
@@ -136,6 +143,14 @@ public class SubscribeHandler extends AbstractHandler {
 	       	}
    			userService.addOne(newUserPo);
    			
+   			UserPo shareUser = null;
+	    	if(StringUtils.isNotBlank(eventKey)&&!"null".equals(eventKey)){
+	    		logger.info("关注事件设置我的分享人====="+eventKey);
+	    		shareUser = userService.getUserByOpenId(eventKey);
+	    		authSer.shareUserAgent(newUserPo.getUserId(), shareUser);
+	    	}
+	    	
+   			
    			if (integralRecordId != 0){
    				integralRecordService.updateIntegralRecord(integralRecordId,newUserPo.getUserId());
    			}
@@ -148,6 +163,7 @@ public class SubscribeHandler extends AbstractHandler {
 	       	newPo.setNotificationContext("亲爱的" + infoNickname + "，" + ContextConstant.ATTENTION);
 	       	newPo.setOpenId(newUserPo.getOpenid());
 	       	newPo.setNotificationType("GZ");
+	       	//queueSender.addNotificationSender(newPo);
 	       	notificationService.addOne(newPo);
     	}
     	

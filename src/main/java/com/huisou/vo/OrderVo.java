@@ -66,6 +66,35 @@ public class OrderVo {
     
     private String userName;
     
+    private Integer classmateId;
+    private String courseApplicants;
+    private String classmateName;
+    private String classmatePhone;
+    
+	public Integer getClassmateId() {
+		return classmateId;
+	}
+	public void setClassmateId(Integer classmateId) {
+		this.classmateId = classmateId;
+	}
+	public String getClassmateName() {
+		return classmateName;
+	}
+	public void setClassmateName(String classmateName) {
+		this.classmateName = classmateName;
+	}
+	public String getClassmatePhone() {
+		return classmatePhone;
+	}
+	public void setClassmatePhone(String classmatePhone) {
+		this.classmatePhone = classmatePhone;
+	}
+	public String getCourseApplicants() {
+		return courseApplicants;
+	}
+	public void setCourseApplicants(String courseApplicants) {
+		this.courseApplicants = courseApplicants;
+	}
     
 	public String getUserName() {
 		return userName;

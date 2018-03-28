@@ -2,6 +2,8 @@ package com.huisou.weixin.config;
 
 
 
+import org.springframework.stereotype.Component;
+
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -25,11 +27,7 @@ import lombok.NoArgsConstructor;
  *
  * @author <a href="https://github.com/binarywang">Binary Wang</a>
  */
-@EqualsAndHashCode(callSuper = true)
-@Builder(builderMethodName = "newBuilder")
-@NoArgsConstructor
-@AllArgsConstructor
-@XStreamAlias("xml")
+@Component
 public class WxPayRefundRequestTemp extends WxPayRefundRequest {
 
   

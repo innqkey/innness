@@ -32,4 +32,6 @@ public interface OrderPoMapper {
 	Integer getSuccessCount(Map<String, String> maps);
 
 	OrderPo findByTradeNo(String tradeNo);
+	
+	int findPayAllMoney(@Param(value="userId")Integer userId);
 }

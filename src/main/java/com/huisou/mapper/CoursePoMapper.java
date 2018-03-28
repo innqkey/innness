@@ -32,4 +32,6 @@ public interface CoursePoMapper {
 
 	CoursePo findDefultApply();
 
+	List<CoursePo> findAll();
+
 }

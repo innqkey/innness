@@ -1,5 +1,6 @@
 package com.huisou.vo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -8,12 +9,13 @@ import java.util.Date;
 * @version 创建时间：2018年2月9日 下午3:41:52 
 * 类说明 
 */
-public class CourseVo {
+public class CourseVo implements Serializable{
 	  private Integer courseId;
 
 	    private String courseTitle;
 
 	    private BigDecimal coursePrice;
+	    private BigDecimal oldMoney;
 
 	    private String courseIntro;
 
@@ -47,7 +49,128 @@ public class CourseVo {
 	    
 	    private String introvideoUrl;
 	    
+	    private String courseAddress;
+
+	    private String courseMaxNum;
+
+	    private String courseApplyNum;
+
+	    private String regionsids;
+
+	    private String province;
+
+	    private String city;
+
+	    private String area;
+
+	    private Date beginTime;
+
+	    private Date endTime;
+
+	    private String isStartStatus;
 	    
+	    private String ispay;
+	    
+	    private Integer remainNum;
+	    
+	    
+	    
+		public Integer getRemainNum() {
+			return remainNum;
+		}
+
+		public void setRemainNum(Integer remainNum) {
+			this.remainNum = remainNum;
+		}
+
+		public String getIspay() {
+			return ispay;
+		}
+
+		public void setIspay(String ispay) {
+			this.ispay = ispay;
+		}
+
+		public String getCourseAddress() {
+			return courseAddress;
+		}
+
+		public void setCourseAddress(String courseAddress) {
+			this.courseAddress = courseAddress;
+		}
+
+		public String getCourseMaxNum() {
+			return courseMaxNum;
+		}
+
+		public void setCourseMaxNum(String courseMaxNum) {
+			this.courseMaxNum = courseMaxNum;
+		}
+
+		public String getCourseApplyNum() {
+			return courseApplyNum;
+		}
+
+		public void setCourseApplyNum(String courseApplyNum) {
+			this.courseApplyNum = courseApplyNum;
+		}
+
+		public String getRegionsids() {
+			return regionsids;
+		}
+
+		public void setRegionsids(String regionsids) {
+			this.regionsids = regionsids;
+		}
+
+		public String getProvince() {
+			return province;
+		}
+
+		public void setProvince(String province) {
+			this.province = province;
+		}
+
+		public String getCity() {
+			return city;
+		}
+
+		public void setCity(String city) {
+			this.city = city;
+		}
+
+		public String getArea() {
+			return area;
+		}
+
+		public void setArea(String area) {
+			this.area = area;
+		}
+
+		public Date getBeginTime() {
+			return beginTime;
+		}
+
+		public void setBeginTime(Date beginTime) {
+			this.beginTime = beginTime;
+		}
+
+		public Date getEndTime() {
+			return endTime;
+		}
+
+		public void setEndTime(Date endTime) {
+			this.endTime = endTime;
+		}
+
+		public String getIsStartStatus() {
+			return isStartStatus;
+		}
+
+		public void setIsStartStatus(String isStartStatus) {
+			this.isStartStatus = isStartStatus;
+		}
+
 		public String getIntrovideoUrl() {
 			return introvideoUrl;
 		}
@@ -190,6 +313,14 @@ public class CourseVo {
 
 		public void setVideoaudioIds(String videoaudioIds) {
 			this.videoaudioIds = videoaudioIds;
+		}
+
+		public BigDecimal getOldMoney() {
+			return oldMoney;
+		}
+
+		public void setOldMoney(BigDecimal oldMoney) {
+			this.oldMoney = oldMoney;
 		}
 	    
 	    

@@ -19,6 +19,16 @@ public class AgentPo {
     private Integer initialAgentUserId;
 
     private Integer classmateUserId;
+    
+    private Integer classEmpId;
+
+    public Integer getClassEmpId() {
+		return classEmpId;
+	}
+
+	public void setClassEmpId(Integer classEmpId) {
+		this.classEmpId = classEmpId;
+	}
 
     public Integer getId() {
         return id;

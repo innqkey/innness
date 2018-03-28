@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.WithdrawalRecordPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.WithdrawalRecordPo" >
+    <id column="withdrawal_record_id" property="withdrawalRecordId" jdbcType="INTEGER" />
+    <result column="user_bank_id" property="userBankId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="withdraw_account" property="withdrawAccount" jdbcType="DECIMAL" />
+    <result column="user_bank_account" property="userBankAccount" jdbcType="VARCHAR" />
+    <result column="user_bank_name" property="userBankName" jdbcType="VARCHAR" />
+    <result column="user_bank_type" property="userBankType" jdbcType="VARCHAR" />
+    <result column="recore_status" property="recoreStatus" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="audit_by" property="auditBy" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    withdrawal_record_id, user_bank_id, user_id, withdraw_account, user_bank_account, 
+    user_bank_name, user_bank_type, recore_status, create_time, audit_by, update_time, 
+    standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_withdrawal_record
+    where withdrawal_record_id = #{withdrawalRecordId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_withdrawal_record
+    where withdrawal_record_id = #{withdrawalRecordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.WithdrawalRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="withdrawalRecordId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_withdrawal_record (user_bank_id, user_id, withdraw_account, 
+      user_bank_account, user_bank_name, user_bank_type, 
+      recore_status, create_time, audit_by, 
+      update_time, standby1, standby2
+      )
+    values (#{userBankId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{withdrawAccount,jdbcType=DECIMAL}, 
+      #{userBankAccount,jdbcType=VARCHAR}, #{userBankName,jdbcType=VARCHAR}, #{userBankType,jdbcType=VARCHAR}, 
+      #{recoreStatus,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{auditBy,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.WithdrawalRecordPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="withdrawalRecordId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_withdrawal_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userBankId != null" >
+        user_bank_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="withdrawAccount != null" >
+        withdraw_account,
+      </if>
+      <if test="userBankAccount != null" >
+        user_bank_account,
+      </if>
+      <if test="userBankName != null" >
+        user_bank_name,
+      </if>
+      <if test="userBankType != null" >
+        user_bank_type,
+      </if>
+      <if test="recoreStatus != null" >
+        recore_status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="auditBy != null" >
+        audit_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userBankId != null" >
+        #{userBankId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="withdrawAccount != null" >
+        #{withdrawAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="userBankAccount != null" >
+        #{userBankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userBankName != null" >
+        #{userBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="userBankType != null" >
+        #{userBankType,jdbcType=VARCHAR},
+      </if>
+      <if test="recoreStatus != null" >
+        #{recoreStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditBy != null" >
+        #{auditBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.WithdrawalRecordPo" >
+    update busi_withdrawal_record
+    <set >
+      <if test="userBankId != null" >
+        user_bank_id = #{userBankId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="withdrawAccount != null" >
+        withdraw_account = #{withdrawAccount,jdbcType=DECIMAL},
+      </if>
+      <if test="userBankAccount != null" >
+        user_bank_account = #{userBankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userBankName != null" >
+        user_bank_name = #{userBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="userBankType != null" >
+        user_bank_type = #{userBankType,jdbcType=VARCHAR},
+      </if>
+      <if test="recoreStatus != null" >
+        recore_status = #{recoreStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditBy != null" >
+        audit_by = #{auditBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where withdrawal_record_id = #{withdrawalRecordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.WithdrawalRecordPo" >
+    update busi_withdrawal_record
+    set user_bank_id = #{userBankId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      withdraw_account = #{withdrawAccount,jdbcType=DECIMAL},
+      user_bank_account = #{userBankAccount,jdbcType=VARCHAR},
+      user_bank_name = #{userBankName,jdbcType=VARCHAR},
+      user_bank_type = #{userBankType,jdbcType=VARCHAR},
+      recore_status = #{recoreStatus,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      audit_by = #{auditBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where withdrawal_record_id = #{withdrawalRecordId,jdbcType=INTEGER}
+  </update>
+  
+   <select id="findAllByStatus" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_withdrawal_record
+    where user_id = #{userId,jdbcType=INTEGER} 
+    <if test="status != null and status==1">
+    	and recore_status='1'
+    </if>
+    order by create_time asc
+  </select>
+	
+	<select  id="showVipWithdrawRecord"  resultType="com.huisou.po.UniversalPo">
+		SELECT
+			a.withdrawal_record_id  as withdrawalrecordid ,
+			a.recore_status  as recorestatus,
+			a.withdraw_account as withdrawaccount,
+			a.create_time as createtime,
+			b.user_id  as userid ,
+			a.user_bank_account as userbankaccount,
+     		a.user_bank_name as userbankname,
+      		a.user_bank_type as userbanktype,
+			b.username,
+			b.nickname,
+			b.phone,
+			c.member_set_name as membersetname
+		FROM
+			`busi_withdrawal_record` a
+		LEFT JOIN busi_user b ON a.user_id = b.user_id
+		LEFT JOIN busi_member_set c ON b.member_set_id = c.member_set_id
+		
+		where 1=1
+			<if test="phone != null  and phone != ''">
+			and b.phone like CONCAT(#{phone},'%')
+		</if>
+		
+		<if test="status != null and status != 0">
+			and a.recore_status=#{status}
+		</if>
+		
+		<if test="username != null and username != ''">
+			and b.username like CONCAT('%',#{username},'%')
+		</if>
+		order by a.create_time desc
+	</select>
+	
+	
+	  <update id="withdrawOpeartion" >
+		    update busi_withdrawal_record
+		    set  recore_status = #{status}  where withdrawal_record_id = #{recordId}
+  	  </update>
+  	  
+  	  
+  	
+  	  
+  	  <select id= "listByRecords" resultType="com.huisou.po.UniversalPo" >
+	  	  SELECT
+				a.withdrawal_record_id  as withdrawalrecordid ,
+				a.user_bank_account as userbankaccount,
+	     		a.user_bank_name as userbankname,
+	      		a.user_bank_type as userbanktype,
+				a.recore_status  as recorestatus,
+				a.withdraw_account as withdrawaccount,
+				a.create_time as createtime,
+				b.user_id  as userid ,
+				b.username,
+				b.nickname,
+				b.phone,
+				c.member_set_name as membersetname
+			FROM
+				`busi_withdrawal_record` a
+			LEFT JOIN busi_user b ON a.user_id = b.user_id
+			LEFT JOIN busi_member_set c ON b.member_set_id = c.member_set_id
+			
+			where a.withdrawal_record_id in 
+				 <foreach collection="recordIds" index="index" item="item" separator="," open="(" close=")">
+	            		#{item}
+	        	</foreach>
+			
+  	  
+  	  </select>
+  	  
+  	  
+	
+
+</mapper>

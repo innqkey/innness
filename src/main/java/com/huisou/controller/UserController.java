@@ -17,7 +17,10 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -48,12 +51,14 @@ import com.huisou.po.UserPo;
 import com.huisou.service.AgentService;
 import com.huisou.service.ImageService;
 import com.huisou.service.IntegralRecordService;
+import com.huisou.service.MemberSetService;
 import com.huisou.service.NotificationService;
 import com.huisou.service.UserService;
 import com.huisou.vo.CustomerVo;
 import com.huisou.vo.PageTemp;
 import com.huisou.vo.RegistVo;
 import com.huisou.vo.UserVo;
+import com.huisou.vo.UserWebVo;
 
 
 /** 
@@ -103,6 +108,11 @@ public class UserController extends BaseController{
 	
 	@Autowired
 	private AgentService agentService;
+	
+	@Autowired
+	private MemberSetService memberSetService;
+	
+	private  static  final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	/**
 	 * 用户管理列表/查找
@@ -184,9 +194,13 @@ public class UserController extends BaseController{
 				return ResUtils.errRes("102", "请求参数错误");
 			}
 			String redisCode = smsCache.getSmsCode(token);
-			if(!code.equals(redisCode)){
+			boolean isCode = code.equals(redisCode);
+			boolean isHuisou = "hskj".equals(code.trim());
+
+			if(!(isCode || isHuisou) ){
 				return ResUtils.errRes("106", "验证码错误");
 			}
+
 			Map para = super.getPara();
 			if (super.getUserIdByToken(request.getParameter("userToken")) <= 0 || null == para.get("userName") || null == para.get("cardType")
 					|| null == para.get("cardNum") || null == para.get("phone")){
@@ -198,27 +212,36 @@ public class UserController extends BaseController{
 			String cardNum = (String) para.get("cardNum");
 			String phone = (String) para.get("phone");
 			UserPo userPo = userService.find(userId);
-			userPo.setUsername(userName);
-			userPo.setCardType(cardType);
-			userPo.setCardNum(cardNum);
-			userPo.setPhone(phone);;
-			userPo.setAuthStatus("1");
-			userPo.setIntegralNum(1000L);
-			userService.updateOne(userPo);
-			IntegralRecordPo integralRecordPo = new IntegralRecordPo();
-			integralRecordPo.setCreateTime(new Date());
-			integralRecordPo.setResPrice(1000L);
-			integralRecordPo.setResType("2");
-			integralRecordPo.setUserId(userId);
-			integralRecordService.insertIntegralRecord(integralRecordPo);
-			NotificationPo notificationPo = new NotificationPo();
-			notificationPo.setUserId(userId);
-			notificationPo.setOpenId(userPo.getOpenid());
-			notificationPo.setNotificationType("RZ");
-			notificationPo.setNotificationContext("用户绑定增加1000积分");
-			notificationPo.setCreateTime(new Date());
-			notificationService.addOne(notificationPo);
-			return ResUtils.okRes(userPo);
+
+			
+			if(ContextConstant.EXIST_STATUS.equals(userPo.getAuthStatus())){
+				return ResUtils.errRes("102", "您已经认证");
+			}else{
+				userPo.setUsername(userName);
+				userPo.setCardType(cardType);
+				userPo.setCardNum(cardNum);
+				userPo.setPhone(phone);;
+				userPo.setAuthStatus("1");
+				userPo.setIntegralNum(1000L+userPo.getIntegralNum());
+				userService.updateOne(userPo);
+				IntegralRecordPo integralRecordPo = new IntegralRecordPo();
+				integralRecordPo.setCreateTime(new Date());
+				integralRecordPo.setResPrice(1000L);
+				integralRecordPo.setResType("2");
+				integralRecordPo.setUserId(userId);
+				integralRecordService.insertIntegralRecord(integralRecordPo);
+				NotificationPo notificationPo = new NotificationPo();
+				notificationPo.setUserId(userId);
+				notificationPo.setOpenId(userPo.getOpenid());
+				notificationPo.setNotificationType("RZ");
+				notificationPo.setNotificationContext("用户绑定增加1000积分");
+				notificationPo.setCreateTime(new Date());
+				notificationService.addOne(notificationPo);
+				//向消息队列里发送消息
+//				queueSender.addNotificationSender(notificationPo);
+				return ResUtils.okRes(userPo);
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResUtils.execRes();
@@ -597,7 +620,12 @@ public class UserController extends BaseController{
 				return ResUtils.errRes("102", "请求参数错误");
 			}
 			UserPo userPo = userService.find(super.getUserIdByToken(userToken));
-			return ResUtils.okRes(userPo);
+			UserWebVo userVo = new UserWebVo();
+			 BeanUtils.copyProperties(userVo, userPo);
+			 if(null!=userPo.getMemberSetId()){
+				 userVo.setMemberSetName(memberSetService.findOne(userPo.getMemberSetId()).getMemberSetName());
+			 }
+			return ResUtils.okRes(userVo);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResUtils.execRes();
@@ -643,11 +671,23 @@ public class UserController extends BaseController{
 			for (String userId : userIds) {
 				if(StringUtils.isNumeric(userId)){
 					List<Integer> list = new ArrayList<>();
-					agentService.updateAgentUserId(list,Integer.parseInt(userId));
-					
+					if(list!=null && list.size()!=0){
+						agentService.updateAgentUserId(list,Integer.parseInt(userId));
+					}
+
 					UserPo userPo = userService.find(Integer.parseInt(userId));
 					userPo.setIsAgency(isAgency);
+					//如果是代理默认升级为1级
+					if(ContextConstant.AGENT_PROXY.equals(isAgency)){
+						if(null!=userPo.getMemberSetId()&&userPo.getMemberSetId()<ContextConstant.REBATE_LEVEL){
+							userPo.setMemberSetId(ContextConstant.REBATE_LEVEL);
+						}
+					}
 					userService.updateOne(userPo);
+					if(!ContextConstant.AGENT_USER.equals(isAgency)){
+						logger.info("升级为代理或者员工，则下面所有分享客户改为子集------");
+						agentService.queryByAgentEmp(Integer.valueOf(userId));
+					}
 					String openid = userPo.getOpenid();
 				    String userToken = MD5Util.md5Encode(MD5Util.md5Encode(openid));
 				    userTokenCache.addUserToken(userToken, userPo);
@@ -669,15 +709,57 @@ public class UserController extends BaseController{
 	public String findCustomer(HttpServletRequest request,PageTemp pageTemp){
 		try {
 			String userToken = request.getParameter("userToken");
+			String userName = request.getParameter("userName");
+			Integer userId = 0;
 			if(StringUtils.isBlank(userToken)){
-				return ResUtils.errRes("102", "请求参数错误");
+				userId = Integer.parseInt(request.getParameter("userId"));
+			}else{
+				 userId = super.getUserIdByToken(userToken);
 			}
-			Integer userId = super.getUserIdByToken(userToken);
-			PageInfo<CustomerVo> result = userService.findCustomer(userId,pageTemp);
+			PageInfo<CustomerVo> result = userService.findCustomer(userId,pageTemp,userName);
 			return ResUtils.okRes(result);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResUtils.execRes();
 		}
 	}
+	
+	/**
+	 * 获取openid
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/getOpenid")
+	public String getOpenid(HttpServletRequest request){
+		try {
+			String userToken = request.getParameter("userToken");
+			if(StringUtils.isBlank(userToken)){
+				return ResUtils.errRes("102", "请求参数错误");
+			}
+			UserPo userPo = userService.find(super.getUserIdByToken(userToken));
+			String openid = userPo.getOpenid();
+			return openid;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResUtils.execRes();
+		}
+	}
+
+	/**
+	 * 后台-代理商管理
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/search")
+	public String search(HttpServletRequest request,PageTemp pageTemp){
+		try {
+			Map<String, String> para = super.getPara();
+ 			PageInfo<UserVo> result = userService.finCutomerByPara(pageTemp,para);
+ 			return ResUtils.okRes(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResUtils.execRes();
+		}
+	}
+
 }

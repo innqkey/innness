@@ -27,6 +27,8 @@ import com.huisou.po.VideoAudioPo;
 import com.huisou.service.OrderService;
 import com.huisou.vo.OrderVo;
 import com.huisou.vo.PageTemp;
+import com.huisou.mapper.UserPoMapper;
+import com.huisou.po.UserPo;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -46,12 +48,32 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private OrderDetailPoMapper orderDetailPoMapper;
 	
+	@Autowired
+	private UserPoMapper userPoMapper;
+	
 	@Override
 	public PageInfo<OrderVo> orderCourseList(Map paraMap,PageTemp pageTemp) {
 		// TODO Auto-generated method stub
 		PageHelper.startPage(pageTemp.getPageNum(), pageTemp.getPageSize());
-		List<OrderVo> list = orderPoMapper.orderCourseList(paraMap);
-		return new PageInfo<OrderVo>(list);
+//		List<OrderVo> list = orderPoMapper.orderCourseList(paraMap);
+//		return new PageInfo<OrderVo>(list);
+		
+		List<OrderVo> orderVos = orderPoMapper.orderCourseList(paraMap);
+		if (null != orderVos && orderVos.size() > 0){
+			for(int i = 0; i < orderVos.size(); i++){
+				OrderVo orderVo = orderVos.get(i);
+				Integer classmateId = orderVo.getClassmateId();
+				if (null != classmateId){
+					UserPo findOne = userPoMapper.selectByPrimaryKey(classmateId);
+					if (null != findOne){
+						orderVo.setClassmateName(findOne.getUsername());
+						orderVo.setClassmatePhone(findOne.getPhone());
+					}
+				}
+			}
+		}
+		return new PageInfo<OrderVo>(orderVos);
+		
 	}
 	@Override
 	public PageInfo<OrderVo> orderVideoAudioList(Map paraMap, PageTemp pageTemp) {
@@ -111,7 +133,7 @@ public class OrderServiceImpl implements OrderService {
 		orderPo.setOrderNo(orderNo);
 		orderPo.setResId(courseId);
 		orderPo.setResType("KC");
-		orderPo.setOrderPay(coursePo.getCoursePrice().multiply(new BigDecimal(list.size())));
+		orderPo.setOrderPay(new BigDecimal(coursePo.getCoursePrice()*list.size()));
 		orderPo.setPayStatus(ContextConstant.PAY_STATUS_NO);
 		orderPo.setUserId(userId);
 //		orderPo.setPhone(phone);
@@ -151,4 +173,13 @@ public class OrderServiceImpl implements OrderService {
 		
 	}
 
+	/**
+	 * 所有支付成功的定单
+	 */
+	@Override
+	public List<OrderVo> successOrderCourseList(Map paraMap) {
+		
+		List<OrderVo> list = orderPoMapper.orderCourseList(paraMap);
+		return list;
+	}
 }

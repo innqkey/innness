@@ -54,8 +54,18 @@ public class UserPo {
     private String standby2;
     
     private String isAgency;
+    
+    private Integer memberSetId;
+    
+    public Integer getMemberSetId() {
+		return memberSetId;
+	}
 
-    public String getIsAgency() {
+	public void setMemberSetId(Integer memberSetId) {
+		this.memberSetId = memberSetId;
+	}
+
+	public String getIsAgency() {
 		return isAgency;
 	}
 

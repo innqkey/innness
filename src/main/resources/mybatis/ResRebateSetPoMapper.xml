@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.ResRebateSetPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.ResRebateSetPo" >
+    <id column="res_rebate_id" property="resRebateId" jdbcType="INTEGER" />
+    <result column="res_id" property="resId" jdbcType="INTEGER" />
+    <result column="res_type" property="resType" jdbcType="VARCHAR" />
+    <result column="res_rebate_money" property="resRebateMoney" jdbcType="DECIMAL" />
+    <result column="member_set_id" property="memberSetId" jdbcType="INTEGER" />
+    <result column="member_set_name" property="memberSetName" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="ResRebateSetVoMap" type="com.huisou.vo.ResRebateSetVo" >
+    <result column="memberId" property="memberId" jdbcType="INTEGER" />
+    <result column="memberName" property="memberName" jdbcType="VARCHAR" />
+    <result column="memberSetMoney" property="memberSetMoney" jdbcType="DECIMAL" />
+    <result column="res_rebate_id" property="resRebateId" jdbcType="INTEGER" />
+    <result column="res_id" property="resId" jdbcType="INTEGER" />
+    <result column="res_type" property="resType" jdbcType="VARCHAR" />
+    <result column="res_rebate_money" property="resRebateMoney" jdbcType="DECIMAL" />
+    <result column="member_set_id" property="memberSetId" jdbcType="INTEGER" />
+    <result column="member_set_name" property="memberSetName" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    res_rebate_id, res_id, res_type, res_rebate_money, member_set_id, member_set_name, create_by, create_time, 
+    update_by, update_time, standby1, standby2
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_res_rebate_set
+    where res_rebate_id = #{resRebateId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_res_rebate_set
+    where res_rebate_id = #{resRebateId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.ResRebateSetPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="resRebateId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_res_rebate_set (res_id, res_type, res_rebate_money, member_set_id, 
+      member_set_name, create_by, create_time, 
+      update_by, update_time, standby1, 
+      standby2)
+    values (#{resId,jdbcType=INTEGER}, #{resType,jdbcType=VARCHAR}, #{resRebateMoney,jdbcType=DECIMAL}, #{memberSetId,jdbcType=INTEGER}, 
+      #{memberSetName,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{standby1,jdbcType=VARCHAR}, 
+      #{standby2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.ResRebateSetPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="resRebateId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_res_rebate_set
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="resId != null" >
+        res_id,
+      </if>
+      <if test="resType != null" >
+        res_type,
+      </if>
+       <if test="resRebateMoney != null" >
+        res_rebate_money,
+      </if>
+      <if test="memberSetId != null" >
+        member_set_id,
+      </if>
+      <if test="memberSetName != null" >
+        member_set_name,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="standby1 != null" >
+        standby1,
+      </if>
+      <if test="standby2 != null" >
+        standby2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="resId != null" >
+        #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resType != null" >
+        #{resType,jdbcType=VARCHAR},
+      </if>
+      <if test="resRebateMoney != null" >
+        #{resRebateMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="memberSetId != null" >
+        #{memberSetId,jdbcType=INTEGER},
+      </if>
+      <if test="memberSetName != null" >
+        #{memberSetName,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        #{standby2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.ResRebateSetPo" >
+    update busi_res_rebate_set
+    <set >
+      <if test="resId != null" >
+        res_id = #{resId,jdbcType=INTEGER},
+      </if>
+      <if test="resType != null" >
+        res_type = #{resType,jdbcType=VARCHAR},
+      </if>
+       <if test="resRebateMoney != null" >
+        res_rebate_money=#{resRebateMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="memberSetId != null" >
+        member_set_id = #{memberSetId,jdbcType=INTEGER},
+      </if>
+      <if test="memberSetName != null" >
+        member_set_name = #{memberSetName,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="standby1 != null" >
+        standby1 = #{standby1,jdbcType=VARCHAR},
+      </if>
+      <if test="standby2 != null" >
+        standby2 = #{standby2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where res_rebate_id = #{resRebateId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.ResRebateSetPo" >
+    update busi_res_rebate_set
+    set res_id = #{resId,jdbcType=INTEGER},
+      res_type = #{resType,jdbcType=VARCHAR},
+      res_rebate_money=#{resRebateMoney,jdbcType=DECIMAL},
+      member_set_id = #{memberSetId,jdbcType=INTEGER},
+      member_set_name = #{memberSetName,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      standby1 = #{standby1,jdbcType=VARCHAR},
+      standby2 = #{standby2,jdbcType=VARCHAR}
+    where res_rebate_id = #{resRebateId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="findAll" resultMap="ResRebateSetVoMap">
+  	SELECT
+		t1.member_set_id memberId,
+		t1.member_set_name memberName,
+		t1.member_set_money memberSetMoney,
+		t2.*
+	FROM
+		busi_member_set t1
+	LEFT JOIN busi_res_rebate_set t2 ON t1.member_set_id = t2.member_set_id
+	<if test="resId != null and resId != 0 ">
+	AND t2.res_id = #{resId} AND t2.res_type=#{resType}
+	</if>
+	<if test="resId == null ">
+	AND t2.res_id =0 AND t2.res_type='KC'
+	</if>
+	<if test=" resId == 0">
+	 AND t2.res_id =0 AND t2.res_type='KC'
+	</if>
+	WHERE
+	t1.member_set_status = '1'
+  </select>
+  
+  <select id="findByPara" parameterType="Map" resultMap="BaseResultMap">
+  	 select 
+    <include refid="Base_Column_List" />
+    from busi_res_rebate_set.
+    where standby1 = '1'
+   	<if test="resId != null and resId != ''">
+   	AND res_id = #{resId} 
+   	</if>
+   	<if test="resType != null and resType != ''">
+   	AND res_type = #{resType} 
+   	</if>
+   	<if test="memberSetId != null and memberSetId != ''">
+   	AND member_set_id = #{memberSetId} 
+   	</if>
+  </select>
+</mapper>

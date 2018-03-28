@@ -3,6 +3,8 @@ package com.huisou.service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.huisou.po.UserPo;
+
 /*
  * 1 第一步：用户同意授权，获取code
  * 2 第二步：通过code换取网页授权access_token
@@ -24,5 +26,8 @@ public interface UserAuthService {
 	public void getAuthOpenId(String code, String state, HttpServletRequest request, HttpServletResponse response);
 	
 	public String getUserinfo(String accessToken, String openId, String shareOpenId);
+
+
+	void shareUserAgent(Integer userId, UserPo shareUser);
 	
 }

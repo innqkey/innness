@@ -8,8 +8,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.huisou.constant.ContextConstant;
+import com.huisou.mapper.CoursePoMapper;
 import com.huisou.mapper.RecentApplyPoMapper;
 import com.huisou.mapper.RecentCoursePoMapper;
+import com.huisou.po.CoursePo;
 import com.huisou.po.RecentCoursePo;
 
 /** 
@@ -26,7 +28,10 @@ public class TimedTask {
 	@Autowired
 	private RecentApplyPoMapper recentApplyPoMapper;
 	
-	@Scheduled(cron="0 0 0 * * ?")
+	@Autowired
+	private CoursePoMapper coursePoMapper;
+	
+	/*@Scheduled(cron="0 0 0 * * ?")
 	public void updateStatus(){
 		Date date = new Date();
 		List<RecentCoursePo> list = recentCoursePoMapper.findAll();
@@ -37,6 +42,22 @@ public class TimedTask {
 				recentCoursePo.setRecentCourseStatus(ContextConstant.DELETE_STATUS);
 				recentCoursePoMapper.updateByPrimaryKeySelective(recentCoursePo);
 				recentApplyPoMapper.updateRecentCourseStatus(recentCoursePo.getRecentCourseId());
+			}
+		}
+	}*/
+	/**
+	 * 修改课程的上课状态
+	 */
+	@Scheduled(cron="0 0 0 * * ?")
+	public void updateStatus(){
+		Date date = new Date();
+		List<CoursePo> list = coursePoMapper.findAll();
+		for (CoursePo coursePo : list) {
+			Date beginTime = coursePo.getBeginTime();
+			if(date.after(beginTime)){
+				//设置是否已上课
+				coursePo.setIsStartStatus(ContextConstant.DELETE_STATUS);
+				coursePoMapper.updateByPrimaryKeySelective(coursePo);
 			}
 		}
 	}

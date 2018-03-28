@@ -40,10 +40,16 @@
             <generatedKey column="messageid" sqlStatement="Mysql" identity="true"/>
         </table> -->
         
-         <table schema="huisou_business_school" tableName="common_user_set" domainObjectName="CommonUserSetPo" enableCountByExample="false"  
+         <table schema="huisou_business_school" tableName="busi_course" domainObjectName="CoursePo" enableCountByExample="false"  
         enableDeleteByExample="false" enableSelectByExample="false"  
         enableUpdateByExample="false">
-            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+            <generatedKey column="course_id" sqlStatement="Mysql" identity="true"/>
         </table>
+     <!--    <table schema="huisou_business_school" tableName="busi_rebate_record" domainObjectName="RebateRecordPo" enableCountByExample="false"  
+        enableDeleteByExample="false" enableSelectByExample="false"  
+        enableUpdateByExample="false">
+            <generatedKey column="rebate_record_id" sqlStatement="Mysql" identity="true"/>
+        </table> -->
+        
     </context>
 </generatorConfiguration>

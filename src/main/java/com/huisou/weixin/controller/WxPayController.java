@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.common.JacksonUtil;
 import com.common.ResUtils;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
@@ -33,10 +34,12 @@ import com.github.binarywang.wxpay.constant.WxPayConstants.TradeType;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.huisou.constant.ContextConstant;
+import com.huisou.jms.sender.WxMpPayCourseSender;
 import com.huisou.mapper.WeixinCallbackRecordPoMapper;
 import com.huisou.mapper.WeixinRefundApplyRecordPoMapper;
 import com.huisou.mapper.WeixinRefundNotifyRecordPoMapper;
 import com.huisou.po.AwardRecordPo;
+import com.huisou.po.CoursePo;
 import com.huisou.po.OrderPo;
 import com.huisou.po.PayRecordPo;
 import com.huisou.po.RefundPo;
@@ -44,9 +47,11 @@ import com.huisou.po.WeixinCallbackRecordPo;
 import com.huisou.po.WeixinRefundApplyRecordPo;
 import com.huisou.po.WeixinRefundNotifyRecordPo;
 import com.huisou.service.AwardRecordService;
+import com.huisou.service.CourseService;
 import com.huisou.service.OrderService;
 import com.huisou.service.PayRecordService;
 import com.huisou.service.RefundService;
+import com.huisou.vo.CourseVo;
 import com.huisou.weixin.config.WxPayProperties;
 import com.huisou.weixin.config.WxPayRefundRequestTemp;
 
@@ -75,7 +80,8 @@ public class WxPayController   {
   private OrderService orderService;
   @Autowired
   private PayRecordService payRecordService;
-  
+  @Autowired
+  private WxMpPayCourseSender wxMpPayCourseSender;
   
   @Value("${wechat.pay.reward.notifyUrl}")
   private String rewardNotifyUrl;
@@ -96,6 +102,8 @@ public class WxPayController   {
   @Autowired
   private WeixinRefundNotifyRecordPoMapper weixinRefundNotifyRecordPoMapper;
   
+  @Autowired
+  private CourseService courseService;
   
   
   /**
@@ -191,8 +199,8 @@ public class WxPayController   {
     	refundPo.setRefundNotifyId(weixinRefundNotifyRecordPo.getRefundNotifyId());
     	refundService.updateStatus(refundPo);
     	return  WxPayNotifyResponse.success("ok");
-    	
     }
+    
     return WxPayNotifyResponse.fail("fail");
   }
   
@@ -264,13 +272,23 @@ public class WxPayController   {
 							int payedValue = totalFee.intValue();
 							int payOrderValue = (int) (order.getOrderPay().floatValue()) * 100;
 							if (payedValue == payOrderValue) {
-								
 								logger.info("支付成功");
 								//说明成功，更改数据库的状态，并且保存支付信息
 								OrderPo orderPo = new OrderPo();
 								orderPo.setOrderId(order.getOrderId());
 								orderPo.setPayStatus(ContextConstant.PAY_STATUS_SUCCESS);
 								orderService.update(orderPo);
+								
+								//支付成功，修改课程的报名人数
+								CourseVo courseVo = courseService.findOne(order.getResId());
+								CoursePo coursePo = new CoursePo();
+								coursePo.setCourseId(courseVo.getCourseId());
+								Integer applyNum = Integer.parseInt(courseVo.getCourseApplyNum())+1;
+								coursePo.setCourseApplyNum(applyNum.toString());
+								courseService.updateCourse(coursePo);
+								
+								//向队列发消息，客户消息推送
+								wxMpPayCourseSender.payCourseSender(outTradeNo);
 								//保存对应的支付信息
 								payRecordPo.setUserId(order.getUserId());
 								payRecordPo.setOrderId(order.getOrderId());
@@ -469,8 +487,5 @@ public class WxPayController   {
 	
 	return ResUtils.execRes();
   }
-  
-
-
 }
 

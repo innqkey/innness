@@ -44,4 +44,10 @@ public interface OrderService {
 
 	OrderPo findByoutTradeNo(String outTradeNo);
 
+	/**
+	 * 返回所有成功的定单课程
+	 * @param payStatus
+	 * @return
+	 */
+	List<OrderVo> successOrderCourseList(Map paraMap);
 }

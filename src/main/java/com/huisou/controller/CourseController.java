@@ -19,7 +19,10 @@ import com.github.pagehelper.PageInfo;
 import com.google.zxing.oned.rss.RSSUtils;
 import com.huisou.constant.ContextConstant;
 import com.huisou.po.CoursePo;
+import com.huisou.po.RecentCoursePo;
+import com.huisou.po.RegionPo;
 import com.huisou.service.CourseService;
+import com.huisou.service.RegionService;
 import com.huisou.service.VideoAudioService;
 import com.huisou.vo.CourseVo;
 import com.huisou.vo.PageTemp;
@@ -39,6 +42,9 @@ public class CourseController extends BaseController{
 	@Autowired
 	private VideoAudioService videoAudioService;
 	
+	@Autowired
+	private RegionService regionService;
+	
 	/**
 	 * 添加课程(添加课程的时候选择对应的视频)
 	 * @param request
@@ -49,6 +55,7 @@ public class CourseController extends BaseController{
 		try {
 			String courseTitle = request.getParameter("courseTitle");
 			String coursePrice = request.getParameter("coursePrice");
+			String oldMoney = request.getParameter("oldMoney");
 			String courseIntro = request.getParameter("courseIntro");
 			String courseSpeaker = request.getParameter("courseSpeaker");
 			String courseDuration = request.getParameter("courseDuration");
@@ -66,7 +73,8 @@ public class CourseController extends BaseController{
 			Date createTime = new Date();
 			CoursePo coursePo = new CoursePo();
 			coursePo.setCourseTitle(courseTitle);
-			coursePo.setCoursePrice(new BigDecimal(coursePrice));
+			coursePo.setCoursePrice(Long.parseLong(coursePrice));
+			coursePo.setOldMoney(Long.parseLong(oldMoney));
 			coursePo.setCourseIntro(courseIntro);
 			coursePo.setCourseSpeaker(courseSpeaker);
 			coursePo.setCourseDuration(courseDuration);
@@ -90,12 +98,13 @@ public class CourseController extends BaseController{
 	 * @param videoAudioIds
 	 * @return
 	 */
-	@RequestMapping(value = "/addAndUpdate")
+	/*@RequestMapping(value = "/addAndUpdate")
 	public String addAndUpdate(HttpServletRequest request){
 		try {
 			String courseId = request.getParameter("courseId");
 			String courseTitle = request.getParameter("courseTitle");
 			String coursePrice = request.getParameter("coursePrice");
+			String oldMoney = request.getParameter("oldMoney");
 			String courseIntro = request.getParameter("courseIntro");
 			String courseSpeaker = request.getParameter("courseSpeaker");
 			String courseDuration = request.getParameter("courseDuration");
@@ -117,7 +126,8 @@ public class CourseController extends BaseController{
 			}
 			CoursePo coursePo = new CoursePo();
 			coursePo.setCourseTitle(courseTitle);
-			coursePo.setCoursePrice(new BigDecimal(coursePrice));
+			coursePo.setCoursePrice(Long.parseLong(coursePrice));
+			coursePo.setOldMoney(Long.parseLong(oldMoney));
 			coursePo.setCourseIntro(courseIntro);
 			coursePo.setCourseSpeaker(courseSpeaker);
 			coursePo.setCourseDuration(courseDuration);
@@ -136,6 +146,110 @@ public class CourseController extends BaseController{
 			}
 			videoAudioService.resettingCourseId(Integer.parseInt(courseId));
 			videoAudioService.updateCourseId(videoAudioIdList, Integer.parseInt(courseId));
+			super.addAndUpdate(request, Integer.parseInt(courseId), "KC");
+			return ResUtils.okRes();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResUtils.execRes();
+		}
+	}*/
+	
+	/**
+	 * 修改之后的添加和修改
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/addAndUpdate")
+	public String addAndUpdate(HttpServletRequest request){
+		try {
+			String courseId = request.getParameter("courseId");
+			String courseTitle = request.getParameter("courseTitle");
+			String coursePrice = request.getParameter("coursePrice");
+			String oldMoney = request.getParameter("oldMoney");
+			String courseIntro = request.getParameter("courseIntro");
+			String courseSpeaker = request.getParameter("courseSpeaker");
+			String courseDuration = request.getParameter("courseDuration");
+			String coursePicture = request.getParameter("coursePicture");
+			String courseLogo = request.getParameter("courseLogo");
+			String introvideoUrl = request.getParameter("introvideoUrl");
+			String courseDetail = request.getParameter("courseDetail");
+			String videoAudioIds = request.getParameter("videoAudioIds");
+			String courseAddress = request.getParameter("courseAddress");
+			String courseMaxNum = request.getParameter("courseMaxNum");
+			String regionsIds = request.getParameter("regionsIds");
+			String beginTime = request.getParameter("beginTime");
+			String endTime = request.getParameter("endTime");
+			if( StringUtils.isBlank(beginTime) || StringUtils.isBlank(endTime) || StringUtils.isBlank(regionsIds)){
+				return ResUtils.errRes("102", "请求参数");
+			}
+			CoursePo coursePo = new CoursePo();
+			String[] ids= regionsIds.split(",");
+			if(ids.length==1){
+				RegionPo provinceRegionPo = regionService.findRegionById(ids[0]);
+				if(null != provinceRegionPo){
+					coursePo.setProvince(provinceRegionPo.getName());
+				}
+			}else if(ids.length==2){
+				RegionPo provinceRegionPo = regionService.findRegionById(ids[0]);
+				if(null != provinceRegionPo){
+					coursePo.setProvince(provinceRegionPo.getName());
+				}
+				RegionPo cityRegionPo = regionService.findRegionById(ids[1]);
+				if(null != cityRegionPo){
+					coursePo.setCity(cityRegionPo.getName());
+				}
+			}else if(ids.length==3){
+				RegionPo provinceRegionPo = regionService.findRegionById(ids[0]);
+				if(null != provinceRegionPo){
+					coursePo.setProvince(provinceRegionPo.getName());
+				}
+				RegionPo cityRegionPo = regionService.findRegionById(ids[1]);
+				if(null != cityRegionPo){
+					coursePo.setCity(cityRegionPo.getName());
+				}
+				RegionPo areaRegionPo = regionService.findRegionById(ids[2]);
+				if(null != areaRegionPo){
+					coursePo.setArea(areaRegionPo.getName());
+				}
+			}
+			if(StringUtils.isBlank(videoAudioIds)){
+				return ResUtils.errRes("102", "请求参数错误");
+			}
+			List<Integer> videoAudioIdList = new ArrayList<Integer>();
+			String[] array = videoAudioIds.split(",");
+			for (String videoAudioId : array) {
+				if(!StringUtils.isNumeric(videoAudioId)){
+					return ResUtils.errRes("102", "请求参数错误");
+				}
+				videoAudioIdList.add(Integer.parseInt(videoAudioId));
+			}
+			coursePo.setBeginTime(DateUtils.formatStringToDate(beginTime, DateUtils.Y_M_D_HMS));
+			coursePo.setEndTime(DateUtils.formatStringToDate(endTime, DateUtils.Y_M_D_HMS));
+			coursePo.setCourseAddress(courseAddress);
+			coursePo.setRegionsids(regionsIds);
+			coursePo.setCourseMaxNum(courseMaxNum);
+			coursePo.setCourseTitle(courseTitle);
+			coursePo.setCoursePrice(Long.parseLong(coursePrice));
+			coursePo.setOldMoney(Long.parseLong(oldMoney));
+			coursePo.setCourseIntro(courseIntro);
+			coursePo.setCourseSpeaker(courseSpeaker);
+			coursePo.setCourseDuration(courseDuration);
+			coursePo.setCoursePicture(coursePicture);
+			coursePo.setCourseLogo(courseLogo);
+			coursePo.setCourseDetail(courseDetail);
+			coursePo.setIntrovideoUrl(introvideoUrl);
+			if(StringUtils.isBlank(courseId)){
+				coursePo.setCreateTime(new Date());
+				courseService.addCourse(coursePo);
+				 courseId =coursePo.getCourseId().toString();
+			}else{
+				coursePo.setCourseId(Integer.parseInt(courseId));
+				coursePo.setUpdateTime(new Date());
+				courseService.updateCourse(coursePo);
+			}
+			videoAudioService.resettingCourseId(Integer.parseInt(courseId));
+			videoAudioService.updateCourseId(videoAudioIdList, Integer.parseInt(courseId));
+			super.addAndUpdate(request, Integer.parseInt(courseId), "KC");
 			return ResUtils.okRes();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,6 +283,29 @@ public class CourseController extends BaseController{
 	}
 	
 	/**
+	 * 课程-所有课程（我的班级）
+	 * @param request
+	 * @param pageTemp
+	 * @return
+	 */
+	@RequestMapping(value = "/findAllByUserId")
+	public String findAllByUserId(HttpServletRequest request,PageTemp pageTemp){
+		try {
+			String userToken = request.getParameter("userToken");
+			if(StringUtils.isBlank(userToken)){
+				return ResUtils.errRes("102", "请求参数错误");
+			}
+			Integer userId = super.getUserIdByToken(userToken);
+			PageInfo<CourseVo> result = courseService.findAllByUserId(userId,pageTemp);
+			return ResUtils.okRes(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResUtils.execRes();
+		}
+	}
+	
+	
+	/**
 	 * 按条件搜索课程列表首页
 	 * @param request
 	 * @param pageTemp
@@ -196,7 +333,6 @@ public class CourseController extends BaseController{
 			return ResUtils.execRes();
 		}
 	}
-	
 	
 	/**
 	 * 查看详情

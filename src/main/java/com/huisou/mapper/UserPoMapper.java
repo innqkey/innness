@@ -42,6 +42,12 @@ public interface UserPoMapper {
 
 		List<String> findAllOpenid();
 
-		List<CustomerVo> findCustomer(@Param("userId")Integer userId);
+		List<CustomerVo> findCustomer(@Param("userId")Integer userId,@Param("isAgency")String isAgency,@Param("userName")String userName);
+		
+		List<UserPo> findAllUserByMap(Map para);
+
+		List<UserVo> finCutomerByPara(Map<String, String> para);
+
+		List<UserPo> selectAll();
 
 }

@@ -22,33 +22,13 @@
     <result column="standby1" property="standby1" jdbcType="VARCHAR" />
     <result column="standby2" property="standby2" jdbcType="VARCHAR" />
     <result column="is_agency" property="isAgency" jdbcType="VARCHAR" />
-  </resultMap>
-  
-  <resultMap id="CustomerVoResultMap" type="com.huisou.vo.CustomerVo" >
-    <result column="order_id" property="orderId" jdbcType="INTEGER" />
-    <result column="order_pay" property="orderPay" jdbcType="DECIMAL" />
-    <result column="pay_status" property="payStatus" jdbcType="VARCHAR" />
-    <result column="order_person_num" property="orderPersonNum" jdbcType="INTEGER" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="course_id" property="courseId" jdbcType="INTEGER" />
-    <result column="course_title" property="courseTitle" jdbcType="VARCHAR" />
-    <result column="course_price" property="coursePrice" jdbcType="DECIMAL" />
-    <result column="course_intro" property="courseIntro" jdbcType="VARCHAR" />
-    <result column="course_speaker" property="courseSpeaker" jdbcType="VARCHAR" />
-    <result column="course_duration" property="courseDuration" jdbcType="VARCHAR" />
-    <result column="introvideo_url" property="introvideoUrl" jdbcType="VARCHAR" />
-    <result column="course_picture" property="coursePicture" jdbcType="VARCHAR" />
-    <result column="course_logo" property="courseLogo" jdbcType="VARCHAR" />
-    <result column="course_detail" property="courseDetail" jdbcType="LONGVARCHAR" />
-    <result column="user_id" property="userId" jdbcType="INTEGER" />
-    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
-    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="member_set_id" property="memberSetId" jdbcType="INTEGER" />
   </resultMap>
   
   <sql id="Base_Column_List" >
     user_id, openid, nickname, sex, province, city, country, headimgurl, username, integral_num, 
     auth_status, user_status, card_type, classmate_user_id, card_num, phone, create_time, 
-    standby1, standby2, is_agency
+    standby1, standby2, is_agency,member_set_id
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -69,14 +49,15 @@
       headimgurl, username, integral_num, 
       auth_status, user_status, card_type, 
       classmate_user_id, card_num, phone, 
-      create_time, standby1, standby2
+      create_time, standby1, standby2, is_agency,member_set_id
       )
     values (#{openid,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
       #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, 
       #{headimgurl,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{integralNum,jdbcType=DECIMAL}, 
       #{authStatus,jdbcType=VARCHAR}, #{userStatus,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, 
       #{classmateUserId,jdbcType=INTEGER}, #{cardNum,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}
+      #{createTime,jdbcType=TIMESTAMP}, #{standby1,jdbcType=VARCHAR}, #{standby2,jdbcType=VARCHAR}, 
+      #{isAgency,jdbcType=VARCHAR}, #{memberSetId,jdbcType=INTEGER}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.huisou.po.UserPo" >
@@ -139,6 +120,12 @@
       <if test="standby2 != null" >
         standby2,
       </if>
+      <if test="isAgency != null" >
+        is_agency,
+      </if>
+      <if test="memberSetId != null" >
+        member_set_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="openid != null" >
@@ -194,6 +181,12 @@
       </if>
       <if test="standby2 != null" >
         #{standby2,jdbcType=VARCHAR},
+      </if>
+      <if test="isAgency != null" >
+        #{isAgency,jdbcType=VARCHAR},
+      </if>
+      <if test="memberSetId != null" >
+        #{memberSetId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -254,8 +247,11 @@
       <if test="standby2 != null" >
         standby2 = #{standby2,jdbcType=VARCHAR},
       </if>
-       <if test="standby2 != null" >
+       <if test="isAgency != null" >
         is_agency = #{isAgency,jdbcType=VARCHAR},
+      </if>
+      <if test="memberSetId != null" >
+        member_set_id = #{memberSetId,jdbcType=INTEGER},
       </if>
     </set>
     where user_id = #{userId,jdbcType=INTEGER}
@@ -279,11 +275,43 @@
       phone = #{phone,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       standby1 = #{standby1,jdbcType=VARCHAR},
-      standby2 = #{standby2,jdbcType=VARCHAR}
+      standby2 = #{standby2,jdbcType=VARCHAR},
+      is_agency = #{isAgency,jdbcType=VARCHAR},
+      member_set_id = #{memberSetId,jdbcType=INTEGER}
     where user_id = #{userId,jdbcType=INTEGER}
   </update>
   
     <select id="findAllUser" resultMap="BaseResultMap" parameterType="Map">
+    select 
+    <include refid="Base_Column_List" />,(select CONCAT(u.username,'/',u.phone) from busi_user u where u.user_id = o.classmate_user_id) as classmateName 
+    from busi_user o
+    where user_status = 1
+    <if test='userName != null and userName !=""'>
+    and(
+    	o.username like CONCAT('%', #{userName},'%')
+  		or o.nickname like CONCAT('%', #{userName},'%')
+  		or o.phone like CONCAT('%', #{userName},'%')
+  		)
+  	</if>
+  	<if test='authStatus != null and authStatus !=""'>
+  		and o.auth_status = #{authStatus}
+  	</if>
+  	<if test='isAgency != null and isAgency !=""'>
+  		and o.is_agency = #{isAgency}
+  	</if>
+    <if test='beginDate!=null and beginDate!=""'>
+    	<![CDATA[   and DATE_FORMAT(o.create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
+	</if>
+	<if test='openid != null and openid != ""'>
+    	and o.openid = #{openid}
+    </if>
+	<if test='endDate!=null and endDate!=""'>
+   		<![CDATA[  and DATE_FORMAT(o.create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
+	</if>
+	order by o.create_time desc
+  </select>
+  
+  <select id="findAllUserByMap" resultMap="BaseResultMap" parameterType="Map">
     select 
     <include refid="Base_Column_List" />
     from busi_user
@@ -298,17 +326,30 @@
   	<if test='authStatus != null and authStatus !=""'>
   		and auth_status = #{authStatus}
   	</if>
+  	<if test='isAgency != null and isAgency !=""'>
+  		and is_agency = #{isAgency}
+  	</if>
+  	<!--agent如果有值就查代理商  -->
+  	<if test='agent != null and agent !=""'>
+  		<![CDATA[ and is_agency<>1 ]]>
+  	</if>
     <if test='beginDate!=null and beginDate!=""'>
     	<![CDATA[   and DATE_FORMAT(create_time, '%Y-%m-%d')>=  DATE_FORMAT(#{beginDate}, '%Y-%m-%d')   ]]>
 	</if>
 	<if test='openid != null and openid != ""'>
     	and openid = #{openid}
     </if>
-	<if test='endDate!=null and endDate!=""'>
-   		<![CDATA[  and DATE_FORMAT(create_time, '%Y-%m-%d') <= DATE_FORMAT(#{endDate}, '%Y-%m-%d')    ]]>
-	</if>
-	order by create_time desc
+    <if test='userId != null and userId != ""'>
+    	and user_id = #{userId}
+    </if>
+    <if test='classmateUserId != null and classmateUserId != ""'>
+    	and classmate_user_id = #{classmateUserId}
+    </if>
+    <if test='classIdNull != null and classIdNull != ""'>
+    	and classmate_user_id is null;
+    </if>
   </select>
+  
   <update id="deleteOne" parameterType="java.util.List">
   	update busi_user
   	set user_status = '2'
@@ -356,26 +397,28 @@
   		select openid FROM busi_user where standby1='1' and standby2='2'
   	</select>
   	
-  	<select id="findCustomer" resultMap="CustomerVoResultMap">
+  	<select id="findCustomer" resultType="com.huisou.vo.CustomerVo">
   		SELECT
 			t1.order_id orderId,
 			t1.pay_status payStatus,
 			t1.order_pay orderPay,
 			t1.order_person_num orderPersonNum,
 			t1.create_time createTime,
-			t2.course_id courseId,
-			t2.course_status courseTitle,
-			t2.course_price coursePrice,
-			t2.course_intro courseIntro,
-			t2.course_speaker courseSpeaker,
-			t2.course_duration courseDuration,
+			t2.course_id id,
+			t2.course_title title,
+			t2.course_price price,
+			t2.course_intro intro,
+			t2.course_speaker speaker,
+			t2.course_duration duration,
 			t2.introvideo_url introvideoUrl,
-			t2.course_picture coursePicture,
-			t2.course_logo courseLogo,
-			t2.course_detail courseDetail,
+			t2.course_picture picture,
+			t2.course_logo logo,
+			t2.course_detail detail,
 			t3.user_id userId,
 			t3.nickname,
-			t3.username
+			t3.username,
+			t3.is_agency isAgency,
+			t3.phone
 		FROM
 			busi_order t1
 		LEFT JOIN busi_course t2 ON t1.res_id = t2.course_id
@@ -385,7 +428,114 @@
 			t1.res_type = 'KC'
 		AND t1.pay_status = '2'
 		AND t1.order_status = '1'
+		<if test="isAgency !='3'">
 		AND t4.agent_user_id = #{userId}
+		</if>
+		<if test="isAgency=='3'">
+		AND t4.class_emp_id = #{userId}
+		</if>
+		<if test='userName != null and userName !=""'>
+	    and(
+	    	t3.username like CONCAT('%', #{userName},'%')
+	  		or t3.phone like CONCAT('%', #{userName},'%')
+	  		)
+	  	</if>
+		
+		UNION ALL
+			SELECT
+				t1.order_id orderId,
+				t1.pay_status payStatus,
+				t1.order_pay orderPay,
+				t1.order_person_num orderPersonNum,
+				t1.create_time createTime,
+				t2.video_audio_id id,
+				t2.video_audio_title title,
+				t2.video_audio_price price,
+				t2.video_audio_intro intro,
+				NULL speaker,
+				NULL duration,
+				NULL introvideoUrl,
+				NULL picture,
+				t2.video_audio_logo logo,
+				NULL detail,
+				t3.user_id userId,
+				t3.nickname,
+				t3.username,
+				t3.is_agency isAgency,
+				t3.phone
+			FROM
+				busi_order t1
+			LEFT JOIN busi_video_audio t2 ON t1.res_id = t2.video_audio_id
+			LEFT JOIN busi_user t3 ON t1.user_id = t3.user_id
+			LEFT JOIN busi_agent t4 ON t1.user_id = t4.user_id
+			WHERE
+				<![CDATA[ t1.res_type <> 'KC' ]]>
+			AND t1.pay_status = '2'
+			AND t1.order_status = '1'
+			<if test="isAgency !='3'">
+			AND t4.agent_user_id = #{userId}
+			</if>
+			<if test="isAgency=='3'">
+			AND t4.class_emp_id = #{userId}
+			</if>
+			<if test='userName != null and userName !=""'>
+		    and(
+		    	t3.username like CONCAT('%', #{userName},'%')
+	  			or t3.phone like CONCAT('%', #{userName},'%')
+		  		)
+	  	</if>
   	</select>
   	
+  	<select id="finCutomerByPara" parameterType="Map" resultType="com.huisou.vo.UserVo">
+  		SELECT
+			t1.user_id userId,
+			t1.openid,
+			t1.nickname,
+			t1.sex,
+			t1.province,
+			t1.city,
+			t1.country,
+			t1.headimgurl,
+			t1.username,
+			t1.integral_num integralNum,
+			t1.auth_status authStatus,
+			t1.user_status userStatus,
+			t1.card_type cardType,
+			t1.card_num cardNum,
+			t1.create_time createTime,
+			t1.classmate_user_id classmateUserId,
+			t1.phone,
+			t1.standby1,
+			t1.standby2,
+			t1.is_agency isAgency,
+			t1.member_set_id memberSetId,
+			t2.member_set_name memberSetName
+		FROM
+			busi_user t1
+		LEFT JOIN busi_member_set t2 ON t1.member_set_id = t2.member_set_id
+		where t1.user_status = 1
+	    <if test='userName != null and userName !=""'>
+	    and(
+	    	t1.username like CONCAT('%', #{userName},'%')
+	  		or t1.nickname like CONCAT('%', #{userName},'%')
+	  		or t1.phone like CONCAT('%', #{userName},'%')
+	  		)
+	  	</if>
+	  	<if test='authStatus != null and authStatus !=""'>
+	  		and t1.auth_status = #{authStatus}
+	  	</if>
+	  	<if test='isAgency != null and isAgency !=""'>
+	  		and t1.is_agency = #{isAgency}
+	  	</if>
+	  	<if test='memberSetName != null and memberSetName !=""'>
+	  		and t2.member_set_name like CONCAT('%', #{memberSetName},'%')
+	  	</if>
+	  	ORDER BY t1.create_time DESC
+  	</select>
+  	<select id="selectAll" resultMap="BaseResultMap">
+  		select * 
+  		from busi_user t1 
+  		where 1 =1 
+  		and t1.user_status = '1'
+  	</select>
 </mapper>

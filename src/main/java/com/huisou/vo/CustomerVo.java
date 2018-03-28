@@ -12,27 +12,25 @@ import com.huisou.po.CoursePo;
 * 类说明 
 */
 public class CustomerVo implements Serializable{
-		private Integer courseId;
+		private Integer id;
 
-	    private String courseTitle;
+	    private String title;
 
-	    private BigDecimal coursePrice;
+	    private BigDecimal price;
 
-	    private String courseIntro;
+	    private String intro;
 
-	    private String courseSpeaker;
+	    private String speaker;
 
-	    private String courseDuration;
+	    private String duration;
 
 	    private String introvideoUrl;
 
-	    private String coursePicture;
+	    private String picture;
 
-	    private String courseLogo;
+	    private String logo;
 	    
-	    private String courseStatus;
-	    
-	    private String courseDetail;
+	    private String Detail;
 	    
 	    private Integer userId;
 
@@ -50,52 +48,74 @@ public class CustomerVo implements Serializable{
 	    
 	    private Date createTime;
 
-		public Integer getCourseId() {
-			return courseId;
+	    private Integer memberSetId;
+	    
+	    private String phone;
+	    
+	    private String isAgency;
+	    
+		public String getIsAgency() {
+			return isAgency;
 		}
 
-		public void setCourseId(Integer courseId) {
-			this.courseId = courseId;
+		public void setIsAgency(String isAgency) {
+			this.isAgency = isAgency;
 		}
 
-		public String getCourseTitle() {
-			return courseTitle;
+		public String getPhone() {
+			return phone;
 		}
 
-		public void setCourseTitle(String courseTitle) {
-			this.courseTitle = courseTitle;
+		public void setPhone(String phone) {
+			this.phone = phone;
 		}
 
-		public BigDecimal getCoursePrice() {
-			return coursePrice;
+		public Integer getId() {
+			return id;
 		}
 
-		public void setCoursePrice(BigDecimal coursePrice) {
-			this.coursePrice = coursePrice;
+		public void setId(Integer id) {
+			this.id = id;
 		}
 
-		public String getCourseIntro() {
-			return courseIntro;
+		public String getTitle() {
+			return title;
 		}
 
-		public void setCourseIntro(String courseIntro) {
-			this.courseIntro = courseIntro;
+		public void setTitle(String title) {
+			this.title = title;
 		}
 
-		public String getCourseSpeaker() {
-			return courseSpeaker;
+		public BigDecimal getPrice() {
+			return price;
 		}
 
-		public void setCourseSpeaker(String courseSpeaker) {
-			this.courseSpeaker = courseSpeaker;
+		public void setPrice(BigDecimal price) {
+			this.price = price;
 		}
 
-		public String getCourseDuration() {
-			return courseDuration;
+		public String getIntro() {
+			return intro;
 		}
 
-		public void setCourseDuration(String courseDuration) {
-			this.courseDuration = courseDuration;
+		public void setIntro(String intro) {
+			this.intro = intro;
+		}
+
+		public String getSpeaker() {
+			return speaker;
+		}
+
+		public void setSpeaker(String speaker) {
+			this.speaker = speaker;
+		}
+
+		public String getDuration() {
+			return duration;
+		}
+
+		public void setDuration(String duration) {
+			this.duration = duration;
 		}
 
 		public String getIntrovideoUrl() {
@@ -106,36 +126,28 @@ public class CustomerVo implements Serializable{
 			this.introvideoUrl = introvideoUrl;
 		}
 
-		public String getCoursePicture() {
-			return coursePicture;
+		public String getPicture() {
+			return picture;
 		}
 
-		public void setCoursePicture(String coursePicture) {
-			this.coursePicture = coursePicture;
+		public void setPicture(String picture) {
+			this.picture = picture;
 		}
 
-		public String getCourseLogo() {
-			return courseLogo;
+		public String getLogo() {
+			return logo;
 		}
 
-		public void setCourseLogo(String courseLogo) {
-			this.courseLogo = courseLogo;
+		public void setLogo(String logo) {
+			this.logo = logo;
 		}
 
-		public String getCourseStatus() {
-			return courseStatus;
+		public String getDetail() {
+			return Detail;
 		}
 
-		public void setCourseStatus(String courseStatus) {
-			this.courseStatus = courseStatus;
-		}
-
-		public String getCourseDetail() {
-			return courseDetail;
-		}
-
-		public void setCourseDetail(String courseDetail) {
-			this.courseDetail = courseDetail;
+		public void setDetail(String detail) {
+			Detail = detail;
 		}
 
 		public Integer getUserId() {
@@ -201,7 +213,13 @@ public class CustomerVo implements Serializable{
 		public void setCreateTime(Date createTime) {
 			this.createTime = createTime;
 		}
-	    
-	    
+
+		public Integer getMemberSetId() {
+			return memberSetId;
+		}
+
+		public void setMemberSetId(Integer memberSetId) {
+			this.memberSetId = memberSetId;
+		}
 	    
 }

@@ -101,4 +101,5 @@ public class RecentApplyServiceImpl implements RecentApplyService{
 		}
 		return list;
 	}
+
 }

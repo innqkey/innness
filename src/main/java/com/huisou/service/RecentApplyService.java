@@ -26,4 +26,5 @@ public interface RecentApplyService {
 
 	List<OrderAndApplyVo> findOrderAndApplyVo(Map map);
 
+
 }

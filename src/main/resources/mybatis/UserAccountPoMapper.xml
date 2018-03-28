@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huisou.mapper.UserAccountPoMapper" >
+  <resultMap id="BaseResultMap" type="com.huisou.po.UserAccountPo" >
+    <id column="user_account_id" property="userAccountId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="account_all_money" property="accountAllMoney" jdbcType="DECIMAL" />
+    <result column="withdraw_money" property="withdrawMoney" jdbcType="DECIMAL" />
+    <result column="account_money" property="accountMoney" jdbcType="DECIMAL" />
+    <result column="withdraw_over_money" property="withdrawOverMoney" jdbcType="DECIMAL" />
+    <result column="bank_account" property="bankAccount" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_account_id, user_id, account_all_money, withdraw_money, account_money, withdraw_over_money, 
+    bank_account, create_by, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from busi_user_account
+    where user_account_id = #{userAccountId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from busi_user_account
+    where user_account_id = #{userAccountId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.huisou.po.UserAccountPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="userAccountId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_user_account (user_id, account_all_money, withdraw_money, 
+      account_money, withdraw_over_money, bank_account, 
+      create_by, create_time)
+    values (#{userId,jdbcType=INTEGER}, #{accountAllMoney,jdbcType=DECIMAL}, #{withdrawMoney,jdbcType=DECIMAL}, 
+      #{accountMoney,jdbcType=DECIMAL}, #{withdrawOverMoney,jdbcType=DECIMAL}, #{bankAccount,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huisou.po.UserAccountPo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="userAccountId" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into busi_user_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="accountAllMoney != null" >
+        account_all_money,
+      </if>
+      <if test="withdrawMoney != null" >
+        withdraw_money,
+      </if>
+      <if test="accountMoney != null" >
+        account_money,
+      </if>
+      <if test="withdrawOverMoney != null" >
+        withdraw_over_money,
+      </if>
+      <if test="bankAccount != null" >
+        bank_account,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="accountAllMoney != null" >
+        #{accountAllMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawMoney != null" >
+        #{withdrawMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="accountMoney != null" >
+        #{accountMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawOverMoney != null" >
+        #{withdrawOverMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="bankAccount != null" >
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huisou.po.UserAccountPo" >
+    update busi_user_account
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="accountAllMoney != null" >
+        account_all_money = #{accountAllMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawMoney != null" >
+        withdraw_money = #{withdrawMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="accountMoney != null" >
+        account_money = #{accountMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawOverMoney != null" >
+        withdraw_over_money = #{withdrawOverMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="bankAccount != null" >
+        bank_account = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_account_id = #{userAccountId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huisou.po.UserAccountPo" >
+    update busi_user_account
+    set user_id = #{userId,jdbcType=INTEGER},
+      account_all_money = #{accountAllMoney,jdbcType=DECIMAL},
+      withdraw_money = #{withdrawMoney,jdbcType=DECIMAL},
+      account_money = #{accountMoney,jdbcType=DECIMAL},
+      withdraw_over_money = #{withdrawOverMoney,jdbcType=DECIMAL},
+      bank_account = #{bankAccount,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where user_account_id = #{userAccountId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="changeMoneyToWithdraw"  >
+    update busi_user_account
+    set 
+      withdraw_money = #{withdrawAccount},
+      account_money = account_money- #{withdrawAccount}
+    where user_id = #{userId}
+  </update>
+  
+  
+  <select id="getByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  	   select 
+	    <include refid="Base_Column_List" />
+	    from busi_user_account
+	    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  
+  <update id="updateAccountByRebate" >
+    update busi_user_account
+    <set >
+      <if test="rebateMoney!=null and rebateMoney!=''">
+        account_all_money = account_all_money+#{rebateMoney},
+      </if>
+      <if test="rebateMoney!=null and rebateMoney!=''">
+        account_money = account_money+#{rebateMoney}
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  
+  
+    <update id= "changeMoney">
+			UPDATE busi_user_account
+			SET  withdraw_money = 0,
+				withdraw_over_money = withdraw_over_money + #{money}
+			WHERE
+				user_id = #{userId}
+  	  	
+  	 </update>
+  	  
+    <update id= "returnMoney">
+			UPDATE busi_user_account
+			SET  withdraw_money = 0,
+				account_money = account_money +  #{money}
+			WHERE
+				user_id = #{userId}
+  	  	
+  	  </update>
+  
+</mapper>

@@ -54,7 +54,35 @@ public class UserVo implements Serializable{
     
     private String isApply;
     
+    private Integer memberSetId;
     
+    private String isAgency;
+    
+    private String memberSetName;
+    
+    public String getIsAgency() {
+		return isAgency;
+	}
+
+	public void setIsAgency(String isAgency) {
+		this.isAgency = isAgency;
+	}
+
+	public String getMemberSetName() {
+		return memberSetName;
+	}
+
+	public void setMemberSetName(String memberSetName) {
+		this.memberSetName = memberSetName;
+	}
+
+	public Integer getMemberSetId() {
+		return memberSetId;
+	}
+
+	public void setMemberSetId(Integer memberSetId) {
+		this.memberSetId = memberSetId;
+	}
 
     public String getIsApply() {
 		return isApply;

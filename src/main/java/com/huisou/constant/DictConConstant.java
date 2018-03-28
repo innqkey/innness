@@ -208,6 +208,51 @@ public class DictConConstant {
         }
     }
 	
+	/**
+	 * 银行卡类型
+	 * 功能描述：
+	 * @Package: com.huisou.constant 
+	 * @author: Administrator   
+	 * @date: 2018年3月23日 下午7:26:38
+	 */
+	public enum BankType{
+		BankType1("YH","银行卡"),BankType2("ZFB","支付宝"),BankType3("WX","微信");
+		private String i;
+        private String val;
+        BankType(String i,String val) {
+			this.i = i;
+			this.val=val;
+		}
+		public String getVal() {
+	            return val;
+        }
+        public String getI() {
+            return i;
+	    }
+	}
+	
+	/**
+	 * 提现审核状态
+	 * 功能描述：
+	 * @Package: com.huisou.constant 
+	 * @author: Administrator   
+	 * @date: 2018年3月23日 下午7:26:30
+	 */
+	public enum  AuditingStatus{
+		AuditingStatus1("1","未审核"),AuditingStatus2("2","审核成功"),AuditingStatus3("3","审核失败");
+		private String i;
+        private String val;
+        AuditingStatus(String i,String val) {
+			this.i = i;
+			this.val=val;
+		}
+		public String getVal() {
+	            return val;
+        }
+        public String getI() {
+            return i;
+	    }
+	}
 	
 	public enum MesType{
 		MesType1("1","text"), MesType2("2","image");
@@ -274,6 +319,20 @@ public class DictConConstant {
 		
 		if(DictConConstant.MesType.class.getName().toUpperCase().contains(type)){
 			for(MesType itmeType : MesType.values()){
+				if(itmeType.i.equals(typeVal)){
+					return itmeType.val;
+				}
+			}
+		}
+		if(DictConConstant.BankType.class.getName().toUpperCase().contains(type)){
+			for(BankType itmeType : BankType.values()){
+				if(itmeType.i.equals(typeVal)){
+					return itmeType.val;
+				}
+			}
+		}
+		if(DictConConstant.AuditingStatus.class.getName().toUpperCase().contains(type)){
+			for(AuditingStatus itmeType : AuditingStatus.values()){
 				if(itmeType.i.equals(typeVal)){
 					return itmeType.val;
 				}

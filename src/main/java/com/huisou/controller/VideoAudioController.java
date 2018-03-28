@@ -113,10 +113,12 @@ public class VideoAudioController extends BaseController{
 			String videoAudioId = request.getParameter("videoAudioId");
 			String videoAudioUrl = request.getParameter("videoAudioUrl");
 			String videoAudioType = request.getParameter("videoAudioType");
+			String videoAudioPayNum = request.getParameter("videoAudioPayNum");
 			VideoAudioPo videoAudioPo = new VideoAudioPo();
 			if(StringUtils.isNotBlank(videoAudioId)){
 				videoAudioPo.setVideoAudioId(Integer.parseInt(videoAudioId));
 			}
+			videoAudioPo.setVideoAudioPayNum(Integer.parseInt(videoAudioPayNum));
 			videoAudioPo.setVideoAudioTitle(videoAudioTitle);
 			videoAudioPo.setVideoAudioPrice(new BigDecimal(videoAudioPrice));
 			videoAudioPo.setVideoAudioIntro(videoAudioIntro);
@@ -132,6 +134,7 @@ public class VideoAudioController extends BaseController{
 				videoAudioPo.setVideoAudioIspay(ContextConstant.YES);
 			}
 			videoAudioService.addAndUpdate(videoAudioPo);
+			super.addAndUpdate(request, videoAudioPo.getVideoAudioId(), videoAudioPo.getVideoAudioType());
 			return ResUtils.okRes();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -429,6 +432,7 @@ public class VideoAudioController extends BaseController{
 			}
 			VideoAudioPo videoAudioPo = videoAudioService.findOne(Integer.parseInt(videoAudioId));
 			videoAudioPo.setVideoAudioPayNum(videoAudioPo.getVideoAudioPayNum()+1);
+			videoAudioPo.setRealVideoAudioPayNum(videoAudioPo.getRealVideoAudioPayNum()+1);
 			videoAudioService.update(videoAudioPo);
 			VisitRecordPo visitRecordPo = new VisitRecordPo();
 			visitRecordPo.setResId(videoAudioPo.getVideoAudioId());
@@ -467,4 +471,5 @@ public class VideoAudioController extends BaseController{
 			return ResUtils.execRes();
 		}
 	}
+	
 }

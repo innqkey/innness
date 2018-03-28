@@ -230,13 +230,17 @@
     	<include refid="Order_Column_List" />
     	c.course_title resTitle,
     	c.course_logo courseLogo,
-    	u.username
+    	u.username,
+    	u.classmate_user_id as classmateId
     from busi_order o
 	LEFT JOIN busi_course c on o.res_id = c.course_id
 	LEFT JOIN busi_user u on o.user_id = u.user_id
 	WHERE res_type = 'kc'  and order_status = '1'
 	<if test="resTitle != null and resTitle !='' " >
       and c.course_title like CONCAT('%', #{resTitle},'%')
+    </if>
+    <if test="isStartStatus != null and isStartStatus !='' " >
+      and c.is_start_status = #{isStartStatus}
     </if>
     <if test="orderNo != null and orderNo!='' ">
       and o.order_no like CONCAT('%', #{orderNo},'%')
@@ -359,7 +363,13 @@
   		from busi_order where order_no = #{tradeNo}
   </select>
   
-  
+  <select id="findPayAllMoney"  resultType="int">
+  		select COALESCE(SUM(order_pay),0) payAllMoney from busi_order
+		where pay_status = 2
+		<if test="userId != null and userId !=''" >
+	        and user_id = #{userId,jdbcType=INTEGER}
+	    </if>
+  </select>
   
   
 </mapper>

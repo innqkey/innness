@@ -21,8 +21,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huisou.cache.RedisUserTokenCache;
 import com.huisou.constant.ContextConstant;
+import com.huisou.po.AgentPo;
+import com.huisou.po.UserAccountPo;
 import com.huisou.po.UserPo;
 import com.huisou.po.VisitRecordPo;
+import com.huisou.service.AgentService;
+import com.huisou.service.UserAccountService;
 import com.huisou.service.UserAuthService;
 import com.huisou.service.UserService;
 import com.huisou.service.VisitRecordService;
@@ -52,6 +56,12 @@ public class UserAuthServiceImpl implements UserAuthService {
 	
 	@Autowired
 	private VisitRecordService visitSer;
+	
+	@Autowired
+	private AgentService agentSer;
+	
+	@Autowired
+	private UserAccountService userAccountService;
 	
 	@Override
 	public void authCode(String state,HttpServletResponse response){
@@ -101,7 +111,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 		
 		logger.info("----userToken is null----"+userToken+";"+(StringUtils.isEmpty(userToken)||"null".equals(userToken)));
 		
-		if(StringUtils.isEmpty(userToken)||"null".equals(userToken)){
+//		if(StringUtils.isEmpty(userToken)||"null".equals(userToken)){
 			String codeUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid={appId}&secret={secret}&code={code}&grant_type=authorization_code";
 			String result = restTemplate.getForObject(codeUrl, String.class, codeReqMap);
 			logger.info("获取access_token接口返回===result"+result);
@@ -130,7 +140,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 					
 				}
 			}
-		}
+//		}
 		
 		logger.info("----userToken执行完成----"+userToken);
 		//跳转项目连接，链接传userToken参数
@@ -147,6 +157,7 @@ public class UserAuthServiceImpl implements UserAuthService {
 	@Override
 	public String getUserinfo(String accessToken, String openId, String shareOpenId) {
 		// TODO Auto-generated method stub
+		logger.info("getUserinfo==========shareOpenId=="+shareOpenId);
 		if(StringUtils.isBlank(accessToken)&&StringUtils.isBlank(openId)){
 			return null;
 		}
@@ -161,6 +172,35 @@ public class UserAuthServiceImpl implements UserAuthService {
 		para.put("openid", openId);
 		UserPo userOne = userService.find(para);
 		if(null!=userOne){
+			UserPo shareUser = null;
+			//如果分享人不为空，并且不是自己，则设置分享人
+	    	if(StringUtils.isNotBlank(shareOpenId)&&!"null".equals(shareOpenId)&&!openId.equals(shareOpenId)&&ContextConstant.AGENT_USER.equals(userOne.getIsAgency())){
+	    		logger.info("设置我的分享人====="+shareOpenId);
+	    		shareUser = userService.getUserByOpenId(shareOpenId);
+	    		
+	    		String curClassId = String.valueOf(userOne.getClassmateUserId());
+	    		if(("null".equals(curClassId)||StringUtils.isEmpty(curClassId))&&"3".equals(shareUser.getIsAgency())){
+	    			userOne.setClassmateUserId(shareUser.getUserId());
+		    		synchronized(userOne.getOpenid().intern()){
+		    			userService.updateOne(userOne);
+			    	}
+	    		}
+	    		
+	    		String oneClassId = String.valueOf(userOne.getClassmateUserId());
+		    	logger.info("oneClassId==============="+oneClassId);
+		    	if(!("null".equals(oneClassId)||StringUtils.isEmpty(oneClassId))&&"3".equals(shareUser.getIsAgency())){
+		    		logger.info("员工和空用户建立关系userOne=="+userOne.getUserId()+"分享人id=="+shareUser.getUserId());
+		    		AgentPo po = new AgentPo();
+		    		po.setUserId(userOne.getUserId());
+		    		po.setInitialAgentUserId(shareUser.getUserId());
+		    		po.setAgentUserId(shareUser.getUserId());
+		    		po.setClassmateUserId(shareUser.getUserId());
+		    		po.setClassEmpId(shareUser.getUserId());
+		    		agentSer.insertAgent(po);
+		    	}
+	    	}
+	    	
+	    	
 			logger.info("已经获取用户信息，不调用微信接口，放入缓存,userToken=="+userToken);
 			//放入redis缓存
 			userTokenCache.addUserToken(userToken, userOne);
@@ -184,12 +224,22 @@ public class UserAuthServiceImpl implements UserAuthService {
 			    	userPo.setCountry(jsonObject.getString("country"));
 			    	userPo.setSex(jsonObject.getString("sex"));
 			    	
-			    	if(StringUtils.isNotBlank(shareOpenId)){
-			    		logger.info("设置我的分享人=====");
-			    		UserPo shareUser = userService.getUserByOpenId(shareOpenId);
+			    	UserPo shareUser = null;
+			    	if(StringUtils.isNotBlank(shareOpenId)&&!"null".equals(shareOpenId)&&!openId.equals(shareOpenId)){
+			    		logger.info("设置我的分享人====="+shareOpenId);
+			    		shareUser = userService.getUserByOpenId(shareOpenId);
 				    	userPo.setClassmateUserId(shareUser.getUserId());
+				    	
 			    	}
 			    	userService.addOne(userPo);
+			    	//新用户信息保存到user_account
+			    	UserAccountPo userAccountPo = new UserAccountPo();
+			    	userAccountPo.setUserId(userPo.getUserId());
+			    	userAccountPo.setCreateTime(new Date());
+			    	userAccountService.insertOne(userAccountPo);
+			    	
+			    	shareUserAgent(userPo.getUserId(), shareUser);
+			    	
 			    	//放入redis缓存
 					userTokenCache.addUserToken(userToken, userPo);
 				}
@@ -197,5 +247,61 @@ public class UserAuthServiceImpl implements UserAuthService {
 		}
 		logger.info("userToken---------------------"+userToken);
 		return userToken;
+	}
+
+	@Override
+	public void shareUserAgent(Integer userId, UserPo shareUser) {
+		//判断分享人，如果分享人不为空，并且分享人和插入人userid不一样，则插入关系
+		if(null!=shareUser&&!String.valueOf(userId).equals(shareUser.getUserId())){
+			logger.info("判断分享人，如果分享人不为空，并且分享人和插入人userid不一样，则插入关系");
+			AgentPo shareAgent = agentSer.queryByUserId(shareUser.getUserId());
+			//如果分享人是公司员工
+			if(ContextConstant.AGENT_EMP.equals(shareUser.getIsAgency())){
+				logger.info("分享人是员工===");
+				AgentPo po = new AgentPo();
+				po.setUserId(userId);
+				po.setInitialAgentUserId(shareUser.getUserId());
+				po.setAgentUserId(shareUser.getUserId());
+				po.setClassmateUserId(shareUser.getUserId());
+				po.setClassEmpId(shareUser.getUserId());
+				agentSer.insertAgent(po);
+			}
+			else if(ContextConstant.AGENT_PROXY.equals(shareUser.getIsAgency())){
+				AgentPo po = new AgentPo();
+				po.setUserId(userId);
+				po.setInitialAgentUserId(shareUser.getUserId());
+				po.setAgentUserId(shareUser.getUserId());
+				po.setClassmateUserId(shareUser.getUserId());
+				if(null!=shareAgent){
+					logger.info("分享人是代理人，shareAgent不为null===");
+					po.setClassEmpId(shareAgent.getClassEmpId());
+				}
+				agentSer.insertAgent(po);
+			}
+			else{
+				AgentPo po = new AgentPo();
+				po.setUserId(userId);
+				logger.info("分享人是普通用户===");
+				
+				
+				if(null!=shareUser.getMemberSetId()&&shareUser.getMemberSetId()>0){
+					po.setAgentUserId(shareUser.getUserId());
+				}
+				
+				if(null!=shareAgent){
+					if(null==shareUser.getMemberSetId()){
+						po.setAgentUserId(shareAgent.getAgentUserId());
+					}
+		    		po.setInitialAgentUserId(shareAgent.getInitialAgentUserId());
+		    		po.setClassmateUserId(shareUser.getUserId());
+		    		po.setClassEmpId(shareAgent.getClassEmpId());
+				}else{
+					po.setInitialAgentUserId(shareUser.getUserId());
+		    		po.setAgentUserId(shareUser.getUserId());
+		    		po.setClassmateUserId(shareUser.getUserId());
+				}
+				agentSer.insertAgent(po);
+			}
+		}
 	}
 }

@@ -1,6 +1,5 @@
 package com.huisou.po;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.GeneratedValue;
@@ -15,9 +14,7 @@ public class CoursePo {
 
     private String courseTitle;
 
-    private BigDecimal coursePrice;
-
-    private String courseIntro;
+    private Long coursePrice;
 
     private String courseSpeaker;
 
@@ -43,6 +40,30 @@ public class CoursePo {
 
     private String standby2;
 
+    private Long oldMoney;
+
+    private String courseAddress;
+
+    private String courseMaxNum;
+
+    private String courseApplyNum;
+
+    private String regionsids;
+
+    private String province;
+
+    private String city;
+
+    private String area;
+
+    private Date beginTime;
+
+    private Date endTime;
+
+    private String isStartStatus;
+
+    private String courseIntro;
+
     private String courseDetail;
 
     public Integer getCourseId() {
@@ -61,20 +82,12 @@ public class CoursePo {
         this.courseTitle = courseTitle == null ? null : courseTitle.trim();
     }
 
-    public BigDecimal getCoursePrice() {
+    public Long getCoursePrice() {
         return coursePrice;
     }
 
-    public void setCoursePrice(BigDecimal coursePrice) {
+    public void setCoursePrice(Long coursePrice) {
         this.coursePrice = coursePrice;
-    }
-
-    public String getCourseIntro() {
-        return courseIntro;
-    }
-
-    public void setCourseIntro(String courseIntro) {
-        this.courseIntro = courseIntro == null ? null : courseIntro.trim();
     }
 
     public String getCourseSpeaker() {
@@ -171,6 +184,103 @@ public class CoursePo {
 
     public void setStandby2(String standby2) {
         this.standby2 = standby2 == null ? null : standby2.trim();
+    }
+
+    public Long getOldMoney() {
+        return oldMoney;
+    }
+
+    public void setOldMoney(Long oldMoney) {
+        this.oldMoney = oldMoney;
+    }
+
+    public String getCourseAddress() {
+        return courseAddress;
+    }
+
+    public void setCourseAddress(String courseAddress) {
+        this.courseAddress = courseAddress == null ? null : courseAddress.trim();
+    }
+
+    
+    public String getCourseMaxNum() {
+		return courseMaxNum;
+	}
+
+	public void setCourseMaxNum(String courseMaxNum) {
+		this.courseMaxNum = courseMaxNum;
+	}
+
+	public String getCourseApplyNum() {
+		return courseApplyNum;
+	}
+
+	public void setCourseApplyNum(String courseApplyNum) {
+		this.courseApplyNum = courseApplyNum;
+	}
+
+	public String getRegionsids() {
+        return regionsids;
+    }
+
+    public void setRegionsids(String regionsids) {
+        this.regionsids = regionsids == null ? null : regionsids.trim();
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province == null ? null : province.trim();
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city == null ? null : city.trim();
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area == null ? null : area.trim();
+    }
+
+    public Date getBeginTime() {
+        return beginTime;
+    }
+
+    public void setBeginTime(Date beginTime) {
+        this.beginTime = beginTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getIsStartStatus() {
+        return isStartStatus;
+    }
+
+    public void setIsStartStatus(String isStartStatus) {
+        this.isStartStatus = isStartStatus == null ? null : isStartStatus.trim();
+    }
+
+    public String getCourseIntro() {
+        return courseIntro;
+    }
+
+    public void setCourseIntro(String courseIntro) {
+        this.courseIntro = courseIntro == null ? null : courseIntro.trim();
     }
 
     public String getCourseDetail() {

@@ -1,13 +1,22 @@
 package com.huisou.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +35,8 @@ import com.huisou.service.RegistService;
 import com.huisou.service.VideoAudioService;
 import com.huisou.vo.OrderVo;
 import com.huisou.vo.PageTemp;
+import com.huisou.service.UserService;
+import com.huisou.po.UserPo;
 
 /** 
 * @author 作者 :caoxt 
@@ -47,6 +58,9 @@ public class OrderController extends BaseController{
 	
 	@Autowired
 	private RedisSmsCodeCache smsCache;
+	
+	@Autowired
+	private UserService userService;
 	
 	@RequestMapping(value = "/orderCourseList")
 	public String orderCourseList(HttpServletRequest request,PageTemp pageTemp){
@@ -80,6 +94,29 @@ public class OrderController extends BaseController{
 	 */
 	@RequestMapping(value = "/findOrderByParamers")
 	public String findOrderByParamers(HttpServletRequest request){
+		try {
+			Map map = this.getPara();
+			String userToken = map.get("userToken").toString();
+			if(StringUtils.isBlank(userToken)){
+				return ResUtils.errRes("102", "请求参数错误");
+			}
+			map.put("userId", super.getUserIdByToken(userToken));
+			List<OrderVo> list = orderService.findOrderByParamers(map);
+			return ResUtils.okRes(list);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return ResUtils.execRes();
+		}
+	}
+	
+	/**
+	 * 查询已支付或未支付的课程订单
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/findOrderByPayStatus")
+	public String findOrderByPayStatus(HttpServletRequest request){
 		try {
 			Map map = this.getPara();
 			String userToken = map.get("userToken").toString();
@@ -225,5 +262,138 @@ public class OrderController extends BaseController{
 			e.printStackTrace();
 			return ResUtils.execRes();
 		}
+	}
+	
+	/**
+	 * 导出已支付的课程定单
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/exportExcel")
+	public String exportExcel(HttpServletRequest request,
+			HttpServletResponse response){
+		Map<String, String> map = new HashMap<>();
+		map.put("payStatus", "2");
+		List<OrderVo> orderVos = orderService.successOrderCourseList(map);
+		if (null != orderVos && orderVos.size() > 0){
+			for(int i = 0; i < orderVos.size(); i++){
+				OrderVo orderVo = orderVos.get(i);
+				Integer classmateId = orderVo.getClassmateId();
+				Integer orderId = orderVo.getOrderId();
+				StringBuffer stringBuffer = new StringBuffer();
+				if (null != classmateId){
+					UserPo findOne = userService.find(classmateId);
+					if (null != findOne){
+						orderVo.setClassmateName(findOne.getUsername());
+						orderVo.setClassmatePhone(findOne.getPhone());
+					}
+				}
+				if (null != orderId){
+					List<RegistPo> list = registService.findRegistByorderId(orderId);
+					if (null != list && list.size() > 0){
+						for (RegistPo registPo : list) {
+							stringBuffer.append(registPo.getRegistName());
+							stringBuffer.append("/");
+							stringBuffer.append(registPo.getCardPhone());
+							stringBuffer.append(";");
+						}
+						int index = stringBuffer.indexOf(";", stringBuffer.length() - 2);
+						if (-1 != index){
+							stringBuffer.replace(index, stringBuffer.length(), "");
+						}
+						if (null != stringBuffer){
+							orderVo.setCourseApplicants(stringBuffer.toString());
+						}
+					}
+				}
+			}
+			OutputStream outputStream = null;
+			try {
+				HSSFWorkbook hssfBook = exportTrainingList(orderVos);
+				response.setContentType("application/vnd.ms-excel;charset=utf-8");
+				response.setHeader("Content-disposition", "attachment;filename="
+						+ new String(("已支付课程订单" + ".xls").getBytes(), "iso-8859-1"));
+				outputStream = response.getOutputStream();
+				hssfBook.write(outputStream);
+				outputStream.flush();
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				try {
+					outputStream.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		} 
+		return ResUtils.okRes();
+	}
+	
+	public HSSFWorkbook exportTrainingList(List<OrderVo> list) {
+		String[] excelHeader = { "订单号", "课程名称", "分享人名字", "分享人手机号","用户名", "报名人数", "订单状态", "生成时间",
+				"报名人"};
+		HSSFWorkbook wb = new HSSFWorkbook();
+		HSSFSheet sheet = wb.createSheet("已支付课程订单");
+		// 设置列的宽度
+		HSSFCellStyle style = wb.createCellStyle();
+		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		HSSFRow row = sheet.createRow((int) 0);
+		for (int i = 0; i < excelHeader.length; i++) {
+			HSSFCell cell = row.createCell(i);
+			cell.setCellValue(excelHeader[i]);
+			cell.setCellStyle(style);
+		}
+		sheet.autoSizeColumn(4, true);
+		for (int i = 0; i < list.size(); i++) {
+			OrderVo orderVo = list.get(i);
+			row = sheet.createRow(i + 1);
+			HSSFCell createCell = row.createCell(0);
+			createCell.setCellValue(orderVo.getOrderNo());
+			createCell.setCellStyle(style);
+
+			HSSFCell createCell1 = row.createCell(1);
+			createCell1.setCellValue(orderVo.getResTitle());
+			createCell1.setCellStyle(style);
+
+			HSSFCell createCell2 = row.createCell(2);
+			createCell2.setCellValue(orderVo.getClassmateName());
+			createCell2.setCellStyle(style);
+
+			HSSFCell createCell3 = row.createCell(3);
+			createCell3.setCellValue(orderVo.getClassmatePhone());
+			createCell3.setCellStyle(style);
+
+			HSSFCell createCell4 = row.createCell(4);
+			createCell4.setCellValue(orderVo.getUserName());
+			createCell4.setCellStyle(style);
+
+			HSSFCell createCell5 = row.createCell(5);
+			createCell5.setCellValue(orderVo.getOrderPersonNum());
+			createCell5.setCellStyle(style);
+
+			HSSFCell createCell6 = row.createCell(6);
+			createCell6.setCellValue(orderVo.getPayStatusName());
+			createCell6.setCellStyle(style);
+
+			HSSFCell createCell7 = row.createCell(7);
+			createCell7.setCellValue(DateUtils.format(orderVo.getCreateTime(), DateUtils.Y_M_D_HMS));
+			createCell7.setCellStyle(style);
+			
+			HSSFCell createCell8 = row.createCell(8);
+			createCell8.setCellValue(orderVo.getCourseApplicants());
+			createCell8.setCellStyle(style);
+			
+		}
+		sheet.setColumnWidth(0, 256 * 40 );
+		sheet.setColumnWidth(1, 256 * 30 + 184);
+		sheet.setColumnWidth(2, 256 * 20 + 184);
+		sheet.setColumnWidth(3, 256 * 20 + 184);
+		sheet.setColumnWidth(4, 256 * 20 + 184);
+		sheet.setColumnWidth(5, 256 * 14 );
+		sheet.setColumnWidth(6, 256 * 14 );
+		sheet.setColumnWidth(7, 256 * 30 + 184);
+		sheet.autoSizeColumn(8, true);
+		return wb;
 	}
 }

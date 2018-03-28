@@ -19,5 +19,11 @@ public interface AgentPoMapper {
 
     int updateByPrimaryKey(AgentPo record);
 
+    
+    public String queryAgentIdsByAgentId(Integer agentId);
+
+
 	void updateAgentUserId(@Param(value="list")List<Integer> list,@Param(value="userId")Integer userId);
+
+	List<AgentPo> selectPoByUserId(Integer userId);
 }

@@ -84,6 +84,10 @@ public interface UserService {
 	
 	List<String> findAllOpenid();
 
-	PageInfo<CustomerVo> findCustomer(Integer userId, PageTemp pageTemp);
+	PageInfo<CustomerVo> findCustomer(Integer userId, PageTemp pageTemp,String userName);
+
+	PageInfo<UserVo> finCutomerByPara(PageTemp pageTemp, Map<String, String> para);
+
+	List<UserPo> findAllUsers();
 
 }

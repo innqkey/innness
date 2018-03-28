@@ -1,6 +1,7 @@
 package com.huisou.service.impl;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,8 +13,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.huisou.constant.ContextConstant;
 import com.huisou.mapper.CoursePoMapper;
+import com.huisou.mapper.OrderPoMapper;
 import com.huisou.mapper.VideoAudioPoMapper;
 import com.huisou.po.CoursePo;
+import com.huisou.po.OrderPo;
 import com.huisou.po.VideoAudioPo;
 import com.huisou.service.CourseService;
 import com.huisou.vo.CourseVo;
@@ -32,6 +35,9 @@ public class CourseServiceImpl implements CourseService{
 	@Autowired
 	private VideoAudioPoMapper videoAudioPoMapper;
 	
+	@Autowired
+	private OrderPoMapper orderPoMapper;
+	
 	@Override
 	public Integer addCourse(CoursePo coursePo) {
 		coursePoMapper.insertSelective(coursePo);
@@ -44,13 +50,37 @@ public class CourseServiceImpl implements CourseService{
 		coursePoMapper.updateByPrimaryKeySelective(coursePo);
 	}
 
-	@Override
+
+ 	@Override
 	public PageInfo<CoursePo> search(String courseTitle, Date startDate, Date endDate,PageTemp pageTemp) {
 		PageHelper.startPage(pageTemp.getPageNum(), pageTemp.getPageSize());
 		List<CoursePo> list = coursePoMapper.search(courseTitle,startDate,endDate,ContextConstant.EXIST_STATUS);
 		return new PageInfo<>(list);
 	}
 
+	@Override
+	public PageInfo<CourseVo> findAllByUserId(Integer userId,PageTemp pageTemp) {
+		PageHelper.startPage(pageTemp.getPageNum(), pageTemp.getPageSize());
+		List<CoursePo> list = coursePoMapper.search(null,null,null,ContextConstant.EXIST_STATUS);
+		List<CourseVo> result = new ArrayList<>();
+		for (CoursePo coursePo : list) {
+			try {
+				CourseVo courseVo = new CourseVo();
+				BeanUtils.copyProperties(courseVo, coursePo);
+				List<OrderPo> orderPoList = orderPoMapper.findByUserIdAndResId(userId, coursePo.getCourseId(), "KC",ContextConstant.PAY_STATUS_SUCCESS);
+				if(orderPoList != null && orderPoList.size()!=0){
+					courseVo.setIspay(ContextConstant.YES);
+				}else{
+					courseVo.setIspay(ContextConstant.NO);
+				}
+				courseVo.setRemainNum(Integer.parseInt(courseVo.getCourseMaxNum())-Integer.parseInt(courseVo.getCourseApplyNum()));
+				result.add(courseVo);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return new PageInfo<>(result);
+	}
 	@Override
 	public CourseVo findOne(Integer courseId) {
 		CoursePo coursePo = coursePoMapper.selectByPrimaryKey(courseId);

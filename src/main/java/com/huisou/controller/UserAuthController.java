@@ -39,24 +39,24 @@ public class UserAuthController extends BaseController{
 			state = "index";
 		}
 		
-		String userToken = String.valueOf(null!=request.getSession().getAttribute("userToken")?request.getSession().getAttribute("userToken"):"");
-		if(StringUtils.isNotBlank(userToken)){
-			logger.info("session----userToken----"+userToken);
-			//跳转项目连接，链接传userToken参数
-			try {
-				logger.info("session存在userToken----跳转首页连接----");
-				if(state.contains(";")){
-					logger.info("state为跳转页面和openid拼接");
-					String[] strs = state.split(";");
-					state = strs[0];
-				}
-				response.sendRedirect(stateUrl+userToken+"&state="+state);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return;
-		}
+//		String userToken = String.valueOf(null!=request.getSession().getAttribute("userToken")?request.getSession().getAttribute("userToken"):"");
+//		if(StringUtils.isNotBlank(userToken)){
+//			logger.info("session----userToken----"+userToken);
+//			//跳转项目连接，链接传userToken参数
+//			try {
+//				logger.info("session存在userToken----跳转首页连接----");
+//				if(state.contains(";")){
+//					logger.info("state为跳转页面和openid拼接");
+//					String[] strs = state.split(";");
+//					state = strs[0];
+//				}
+//				response.sendRedirect(stateUrl+userToken+"&state="+state);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			return;
+//		}
 			
 		if(!para.containsKey("code")||StringUtils.isBlank(para.get("code"))){
 			authService.authCode(state,response);

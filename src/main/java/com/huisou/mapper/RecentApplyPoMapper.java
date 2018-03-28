@@ -29,4 +29,5 @@ public interface RecentApplyPoMapper {
 	List<OrderAndApplyVo> findOrderAndApplyVo(Map map);
 
 	void updateRecentCourseStatus(@Param(value="recentCourseId")Integer recentCourseId);
+
 }

@@ -86,8 +86,14 @@ public class ContextConstant {
   	public static final Pattern EMOJI = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]" ,
   	         Pattern.UNICODE_CASE|Pattern.CASE_INSENSITIVE);
 
-    
+  	//用户类型:1,普通员工;2,代理人;3,员工
+  	public static final String AGENT_USER="1";
+  	public static final String AGENT_PROXY="2";
+  	public static final String AGENT_EMP="3";
  
+  	//默认返现级别:代理人、员工默认返现级别，默认返回1
+  	public static final Integer REBATE_LEVEL=1;
+  	
 	//新用户关注后发送的信息
 	public static final String ATTENTION = "恭喜您已经关注会搜商学院网络服务。在此，我们为您精心准备了大量的培训视频、音频和何耀东老师的经典语录，"
 			+ "以及海量的“移动互联网实战运营干货”和“行业资料”。应《中华人民共和国网络安全法》要求，同时为了倡导绿色、安全的网络学习环境，敬请您进行身份证实名认证，认证后您就可以随心所欲的享受我们为您提供的服务…… "
