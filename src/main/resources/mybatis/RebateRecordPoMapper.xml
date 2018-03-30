@@ -14,6 +14,22 @@
     <result column="standby1" property="standby1" jdbcType="VARCHAR" />
     <result column="standby2" property="standby2" jdbcType="VARCHAR" />
   </resultMap>
+   <resultMap id="RebateRecordVoMap" type="com.huisou.vo.RebateRecordVo" >
+    <result column="rebate_record_id" property="rebateRecordId" jdbcType="INTEGER" />
+    <result column="res_order_id" property="resOrderId" jdbcType="INTEGER" />
+    <result column="res_order_type" property="resOrderType" jdbcType="VARCHAR" />
+    <result column="res_order_name" property="resOrderName" jdbcType="VARCHAR" />
+    <result column="res_order_no" property="resOrderNo" jdbcType="VARCHAR" />
+    <result column="buy_user_id" property="buyUserId" jdbcType="INTEGER" />
+    <result column="rebate_user_id" property="rebateUserId" jdbcType="INTEGER" />
+    <result column="order_rebate_money" property="orderRebateMoney" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="standby1" property="standby1" jdbcType="VARCHAR" />
+    <result column="standby2" property="standby2" jdbcType="VARCHAR" />
+    <result column="headimgurl" property="buyUserHeadimgurl" jdbcType="VARCHAR" />
+    <result column="username" property="buyUserName" jdbcType="VARCHAR" />
+    <result column="nickname" property="buyUserNickname" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     rebate_record_id, res_order_id, res_order_type, res_order_name, res_order_no, buy_user_id, 
     rebate_user_id, order_rebate_money, create_time, standby1, standby2
@@ -174,5 +190,17 @@
     		AND res_order_id = #{resOrderId} 
     	</if>
     </where>
+  </select>
+  <select id="findRebateRecordByuserId" resultMap="RebateRecordVoMap">
+  	SELECT
+		t1.*,
+		t2.headimgurl,
+		t2.nickname,
+		t2.username
+	FROM
+		busi_rebate_record t1
+	LEFT JOIN busi_user t2 ON t1.buy_user_id = t2.user_id
+	WHERE
+		t1.rebate_user_id = #{userId}
   </select>
 </mapper>

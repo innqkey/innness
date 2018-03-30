@@ -3,6 +3,7 @@ package com.huisou.service.impl;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,8 +15,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.huisou.constant.ContextConstant;
 import com.huisou.mapper.OrderPoMapper;
+import com.huisou.mapper.ResRebateSetPoMapper;
 import com.huisou.mapper.ResourcesEvalPoMapper;
 import com.huisou.mapper.VideoAudioPoMapper;
+import com.huisou.po.ResRebateSetPo;
 import com.huisou.po.VideoAudioPo;
 import com.huisou.service.VideoAudioService;
 import com.huisou.vo.PageTemp;
@@ -37,6 +40,9 @@ public class VideoAudioServiceImpl implements VideoAudioService{
 	
 	@Autowired
 	private OrderPoMapper orderPoMapper;
+	
+	@Autowired
+	private ResRebateSetPoMapper resRebateSetPoMapper;
 	
 	@Override
 	public void updateCourseId(List<Integer> videoAudioIds, Integer courseId) {
@@ -114,6 +120,12 @@ public class VideoAudioServiceImpl implements VideoAudioService{
 			}
 			Integer avgEvalLevel = resourcesEvalPoMapper.selectavgEvalLevel(videoAudioPo.getVideoAudioId(),videoAudioPo.getVideoAudioType());
 			videoAudioVo.setAvgEvalLevel(avgEvalLevel);
+			
+			Map<String, String> map = new HashMap<>();
+			map.put("resId", videoAudioPo.getVideoAudioId().toString());
+			map.put("resType", videoAudioPo.getVideoAudioType());
+			List<ResRebateSetPo> resRebateSetList = resRebateSetPoMapper.findByPara(map);
+			videoAudioVo.setResRebateSetList(resRebateSetList);
 			vdideoVoList.add(videoAudioVo);
 		}
 		return new PageInfo<>(vdideoVoList);
@@ -182,5 +194,11 @@ public class VideoAudioServiceImpl implements VideoAudioService{
 			voList.add(videoAudioVo);
 		}
 		return new PageInfo(voList);
+	}
+
+	@Override
+	public List<VideoAudioPo> findVideoAndAudioByNoCourse(Integer courseId) {
+		List<VideoAudioPo> list = videoAudioPoMapper.findVideoAndAudioByNoCourse(courseId);
+		return list;
 	}
 }

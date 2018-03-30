@@ -453,7 +453,7 @@
   		and create_time &lt;= #{endDate}
   		</if>
   	</where>
-  	ORDER BY is_start_status ASC,begin_time DESC
+  	ORDER BY is_start_status ASC,begin_time ASC
   </select>
   <select id="findCourseByUserid" resultMap="BaseResultMap">
   	SELECT

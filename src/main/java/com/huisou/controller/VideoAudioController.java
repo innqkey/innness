@@ -18,13 +18,17 @@ import com.common.DateUtils;
 import com.common.ResUtils;
 import com.github.pagehelper.PageInfo;
 import com.huisou.constant.ContextConstant;
+import com.huisou.po.UserPo;
 import com.huisou.po.VideoAudioPo;
 import com.huisou.po.VisitRecordPo;
 import com.huisou.service.OrderService;
+import com.huisou.service.UserService;
 import com.huisou.service.VideoAudioService;
 import com.huisou.service.VisitRecordService;
 import com.huisou.vo.PageTemp;
 import com.huisou.vo.VideoAudioVo;
+
+import me.chanjar.weixin.mp.bean.message.WxMpXmlOutVideoMessage.Video;
 
 /** 
 * @author 作者 :yuhao 
@@ -40,6 +44,9 @@ public class VideoAudioController extends BaseController{
 	
 	@Autowired
 	private OrderService orderService;
+	
+	@Autowired
+	private UserService userService;
 	
 	//未支付或者支付失败返回的视频资源路径
 	@Value(value = "${nopay.res.video.url}")
@@ -277,12 +284,15 @@ public class VideoAudioController extends BaseController{
 			}
 			String videoAudioType = request.getParameter("videoAudioType");
 			String videoAudioIspay = request.getParameter("videoAudioIspay");
+			UserPo userPo = userService.find(super.getUserIdByToken(userToken));
 			PageInfo<VideoAudioVo> pageInfo = videoAudioService.findVideoAudio(pageTemp,videoAudioType,videoAudioIspay);
 			List<VideoAudioVo> list = pageInfo.getList();
 			for (VideoAudioVo videoAudioVo : list) {
 				if(orderService.IsPay(super.getUserIdByToken(userToken), videoAudioVo.getVideoAudioId(), videoAudioVo.getVideoAudioType())){
 					videoAudioVo.setIsPlay(ContextConstant.YES);
 				}else if(ContextConstant.NO.equals(videoAudioVo.getVideoAudioIspay())){
+					videoAudioVo.setIsPlay(ContextConstant.YES);
+				}else if(null!=userPo.getMemberSetId()){
 					videoAudioVo.setIsPlay(ContextConstant.YES);
 				}else{
 					videoAudioVo.setIsPlay(ContextConstant.NO);
@@ -472,4 +482,24 @@ public class VideoAudioController extends BaseController{
 		}
 	}
 	
+	/**
+	 * 查找不是属于课程的视频
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/findVideoAndAudioByNoCourse")
+	public String findVideoAndAudioByNoCourse(HttpServletRequest request){
+		try {
+			String courseId = request.getParameter("courseId");
+			Integer id = null;
+			if(StringUtils.isNotBlank(courseId) && StringUtils.isNumeric(courseId)){
+				id = Integer.parseInt(courseId);
+			}
+			List<VideoAudioPo> list = videoAudioService.findVideoAndAudioByNoCourse(id);
+			return ResUtils.okRes(list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResUtils.execRes();
+		}
+	}
 }

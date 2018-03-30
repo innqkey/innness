@@ -90,4 +90,12 @@ public interface UserService {
 
 	List<UserPo> findAllUsers();
 
+	/**
+	 * 查看我的团队
+	 * @param userId
+	 * @param pageTemp
+	 * @return
+	 */
+	PageInfo<UserVo> findAllByAgentUser(Integer userId, PageTemp pageTemp);
+
 }

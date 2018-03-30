@@ -42,4 +42,6 @@ public interface VideoAudioPoMapper {
 
 	List<VideoAudioPo> findVideoAudioByUserIdBySP(Map map);
 
+	List<VideoAudioPo> findVideoAndAudioByNoCourse(@Param(value = "courseId")Integer courseId);
+
 }

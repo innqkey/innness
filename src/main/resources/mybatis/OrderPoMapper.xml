@@ -31,6 +31,7 @@
     <result column="course_logo" property="courseLogo" jdbcType="VARCHAR" />
     <result column="order_person_num" property="orderPersonNum" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="begin_time" property="beginTime" jdbcType="TIMESTAMP" />
     <result column="order_status" property="orderStatus" jdbcType="VARCHAR" />
     <result column="course_price" property="coursePrice" jdbcType="DECIMAL" />
     <result column="nickname" property="nickname" jdbcType="VARCHAR" />
@@ -230,6 +231,7 @@
     	<include refid="Order_Column_List" />
     	c.course_title resTitle,
     	c.course_logo courseLogo,
+    	c.begin_time,
     	u.username,
     	u.classmate_user_id as classmateId
     from busi_order o

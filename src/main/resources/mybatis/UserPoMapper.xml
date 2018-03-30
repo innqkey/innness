@@ -538,4 +538,20 @@
   		where 1 =1 
   		and t1.user_status = '1'
   	</select>
+  	
+  	<select id="findAllByAgentUser" resultMap="BaseResultMap">
+		SELECT
+			t2.*
+		FROM
+			busi_agent t1
+		LEFT JOIN busi_user t2 ON t1.user_id = t2.user_id
+		<where>
+		<if test="isAgency !='3'">
+		AND t1.agent_user_id = #{userId}
+		</if>
+		<if test="isAgency=='3'">
+		AND t1.class_emp_id = #{userId}
+		</if>
+		</where>
+	</select>
 </mapper>

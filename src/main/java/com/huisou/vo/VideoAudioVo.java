@@ -3,6 +3,9 @@ package com.huisou.vo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
+import com.huisou.po.ResRebateSetPo;
 
 /** 
 * @author 作者 :yuhao 
@@ -71,7 +74,19 @@ public class VideoAudioVo implements Serializable{
     private String IsPlay;
     
     
-    public String getIsPlay() {
+   private List<ResRebateSetPo> resRebateSetList;
+    
+    
+    
+    public List<ResRebateSetPo> getResRebateSetList() {
+	return resRebateSetList;
+}
+
+public void setResRebateSetList(List<ResRebateSetPo> resRebateSetList) {
+	this.resRebateSetList = resRebateSetList;
+}
+
+	public String getIsPlay() {
 		return IsPlay;
 	}
 

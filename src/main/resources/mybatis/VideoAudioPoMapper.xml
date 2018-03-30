@@ -451,4 +451,24 @@
 		AND o.user_id = #{userId}
 		AND o.pay_status = #{payStatus}
    </select>
+   <select id="findVideoAndAudioByNoCourse" resultMap="BaseResultMap">
+   	SELECT
+		*
+	FROM
+		busi_video_audio
+	where
+		
+		 video_audio_type='SP'
+		and video_audio_status='1'
+		<if test="courseId!=null and courseId!=''">
+	  			 and (		course_id=#{courseId} 
+	  					or video_audio_iscourse='N')
+	  	</if>
+	  	<if test="courseId==null">
+	  			and video_audio_iscourse='N'
+	  	</if>
+	  	<if test=" courseId==''">
+	  			and video_audio_iscourse='N'
+	  	</if>
+   </select>
 </mapper>

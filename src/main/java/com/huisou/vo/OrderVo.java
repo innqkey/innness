@@ -71,6 +71,15 @@ public class OrderVo {
     private String classmateName;
     private String classmatePhone;
     
+    private Date beginTime;
+    
+    
+	public Date getBeginTime() {
+		return beginTime;
+	}
+	public void setBeginTime(Date beginTime) {
+		this.beginTime = beginTime;
+	}
 	public Integer getClassmateId() {
 		return classmateId;
 	}

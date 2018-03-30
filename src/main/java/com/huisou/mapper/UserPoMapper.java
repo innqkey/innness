@@ -50,4 +50,6 @@ public interface UserPoMapper {
 
 		List<UserPo> selectAll();
 
+		List<UserPo> findAllByAgentUser(@Param("userId")Integer userId,@Param("isAgency")String isAgency);
+
 }

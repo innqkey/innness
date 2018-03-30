@@ -217,7 +217,7 @@
   <select id="findByPara" parameterType="Map" resultMap="BaseResultMap">
   	 select 
     <include refid="Base_Column_List" />
-    from busi_res_rebate_set.
+    from busi_res_rebate_set
     where standby1 = '1'
    	<if test="resId != null and resId != ''">
    	AND res_id = #{resId} 

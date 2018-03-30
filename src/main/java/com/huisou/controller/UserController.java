@@ -252,12 +252,34 @@ public class UserController extends BaseController{
 	 * 获取同学
 	 * @param request
 	 * @return
-	 */
+	 *//*
 	@RequestMapping("/getclassmate")
 	public String getClassmate(HttpServletRequest request,PageTemp pageTemp){
 		String  openId = super.getOpenIdByToken(request.getParameter("userToken"));
 		PageInfo<UserVo> result = userService.findAllClassmate(openId,pageTemp);
 		return ResUtils.okRes(result);
+	}*/
+	
+	/**
+	 * 获取分销客户（）
+	 * @param request
+	 * @param pageTemp
+	 * @return
+	 */
+	@RequestMapping("/getclassmate")
+	public String getClassmate(HttpServletRequest request,PageTemp pageTemp){
+		try {
+			String userToken = request.getParameter("userToken");
+			if(StringUtils.isBlank(userToken)){
+				return ResUtils.errRes("102", "请求参数错误");
+			}
+			Integer userId = super.getUserIdByToken(userToken);
+			PageInfo<UserVo> result = userService.findAllByAgentUser(userId,pageTemp);
+			return ResUtils.okRes(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResUtils.execRes();
+		}
 	}
 	
 	/**

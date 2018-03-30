@@ -15,9 +15,12 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.huisou.constant.ContextConstant;
+import com.huisou.mapper.AgentPoMapper;
 import com.huisou.mapper.CoursePoMapper;
+import com.huisou.mapper.MemberSetPoMapper;
 import com.huisou.mapper.UserPoMapper;
 import com.huisou.po.CoursePo;
+import com.huisou.po.MemberSetPo;
 import com.huisou.po.UserPo;
 import com.huisou.service.UserService;
 import com.huisou.vo.CustomerVo;
@@ -37,6 +40,12 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private CoursePoMapper coursePoMapper;
+	
+	@Autowired
+	private AgentPoMapper agentPoMapper;
+	
+	@Autowired
+	private MemberSetPoMapper memberSetPoMapper;
 	
 	private  static  final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	
@@ -178,6 +187,28 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<UserPo> findAllUsers() {
 		return userPoMapper.selectAll();
+	}
+
+	@Override
+	public PageInfo<UserVo> findAllByAgentUser(Integer userId, PageTemp pageTemp) {
+		UserPo po = userPoMapper.selectByPrimaryKey(userId);
+		PageHelper.startPage(pageTemp.getPageNum(), pageTemp.getPageSize());
+		List<UserPo> list = userPoMapper.findAllByAgentUser(userId,po.getIsAgency());
+		List<UserVo> result = new ArrayList<>();
+		for (UserPo userPo : list) {
+			UserVo userVo = new UserVo();
+			try {
+				BeanUtils.copyProperties(userVo, userPo);
+				if(null != userPo.getMemberSetId()){
+					MemberSetPo memberSetPo = memberSetPoMapper.selectByPrimaryKey(userPo.getMemberSetId());
+					userVo.setMemberSetName(memberSetPo.getMemberSetName());
+				}
+				result.add(userVo);
+			} catch (IllegalAccessException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		return new PageInfo<>(result);
 	}
 
 }

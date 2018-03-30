@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.huisou.constant.ContextConstant;
 import com.huisou.mapper.AgentPoMapper;
 import com.huisou.mapper.MemberSetPoMapper;
@@ -27,6 +29,8 @@ import com.huisou.po.UserPo;
 import com.huisou.service.AgentService;
 import com.huisou.service.RebateRecordService;
 import com.huisou.service.UserService;
+import com.huisou.vo.PageTemp;
+import com.huisou.vo.RebateRecordVo;
 
 @Service
 public class RebateRecordServiceImpl implements RebateRecordService {
@@ -140,6 +144,12 @@ public class RebateRecordServiceImpl implements RebateRecordService {
 				userSer.updateOne(userPo);
 			}
 		}
+	}
+	@Override
+	public PageInfo<RebateRecordVo> findRebateRecordByuserId(Integer userId, PageTemp pageTemp) {
+		PageHelper.startPage(pageTemp.getPageNum(), pageTemp.getPageSize());
+		List<RebateRecordVo> list = rebRecordPoMapper.findRebateRecordByuserId(userId);
+		return new PageInfo<>(list);
 	}
 
 }
